@@ -37,7 +37,7 @@ pnpm dev
 
 **Cursor**
 
-- `.cursor/rules/` — API, naming, state, Zod, Vitest, shadcn UI, icons
+- `.cursor/rules/` — API, naming, state, Zod, Vitest, shadcn UI, interaction polish, icons
 - `.cursor/skills/` — commit, PR, merge-readiness, shadcn
 - `.cursor/mcp.json` — shadcn registry MCP (enable in Cursor settings)
 
@@ -67,7 +67,7 @@ PR body uses `.github/PULL_REQUEST_TEMPLATE.md` (not Cursor's global PR format).
 | Scope            | Rules                                                                                                         |
 | ---------------- | ------------------------------------------------------------------------------------------------------------- |
 | **Always apply** | `naming-conventions`, `repo-agent-skills`                                                                     |
-| **File-scoped**  | `api-layer`, `icons-and-assets`, `react-state-zustand`, `shadcn-ui-usage`, `vitest-testing`, `zod-validation` |
+| **File-scoped**  | `api-layer`, `icons-and-assets`, `interaction-polish`, `react-state-zustand`, `shadcn-ui-usage`, `vitest-testing`, `zod-validation` |
 
 Details: `.cursor/rules/`. Always-on rules use more tokens per request — tune in Cursor rule settings.
 

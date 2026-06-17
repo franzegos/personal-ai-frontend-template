@@ -1,0 +1,483 @@
+---
+description: Interaction polish — states, feedback, motion intent, keyboard, empty/error UX. Visual look comes from the shadcn preset.
+globs: src/pages/**/*.{ts,tsx},src/components/**/*.{ts,tsx},src/providers/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# Interaction Polish
+
+Premium UIs feel alive because **every action is acknowledged as close to immediate as technically possible** (target: under 100ms) — focus move, loading state, optimistic update, state change, or visual response. This rule covers that layer.
+
+**Not visual theming.** Colors, radius, depth, shadows, and primitive styling come from the shadcn preset and semantic tokens — see `shadcn-ui-usage.mdc` and `src/index.css`. Do not duplicate a parallel visual system here.
+
+## Two layers
+
+| Layer | Source | Owns |
+| ----- | ------ | ---- |
+| **Visual** | shadcn preset + `index.css` tokens | Color, radius, rings/shadows, typography, installed primitive styles |
+| **Interaction** | This rule | States, feedback, motion intent, keyboard, focus, loading/empty/error flows |
+
+**Primitives** (`Button`, `Card`, `Input`, `Dialog`, …) — use installed shadcn components and their built-in hover, press, and focus behavior. Do not override press/hover with conflicting patterns.
+
+**Composed / product UI** (pages, cards with actions, tables, wizards, dashboards) — apply the full interaction contract below.
+
+---
+
+## Philosophy
+
+Optimize for:
+
+- Consistency
+- Immediate feedback
+- State-driven interactions
+- Spatial continuity
+- Keyboard parity
+- Accessibility
+- Performance
+- Information throughput (on desktop dashboards)
+
+Never optimize for decoration. Human taste owns the preset; agents own interaction completeness.
+
+Products like Linear, Cursor, GitHub, and Stripe optimize for: never wait silently, never lose focus, never lose context, never leave actions unacknowledged — not hardcoded visual taste.
+
+---
+
+## 1. Acknowledge every interaction immediately
+
+When the user does something, the UI **acknowledges** it as close to immediate as technically possible (**target: under 100ms**). React renders, network latency, and heavy state updates can exceed that — still acknowledge as soon as the event is handled. The intent matters more than the exact number.
+
+Acknowledgement is not necessarily animation. It can be:
+
+- Focus move
+- Loading state on the control
+- Optimistic update
+- State change
+- Visual response
+
+Never leave an action unacknowledged. A UI that acknowledges instantly feels premium; a UI that waits feels broken.
+
+Applies to: click, drag, keyboard shortcut, selection, submit, copy, delete, toggle, navigation.
+
+---
+
+## 2. Perceived performance
+
+Never make users wait **silently**.
+
+If an action may exceed **~300ms**, communicate that work is happening:
+
+- Progress indicator
+- Skeleton matching layout
+- Optimistic state
+- Background activity signal (subtle pulse, stale-while-revalidate)
+
+**Fast + silent** = okay. **Slow + silent** = broken.
+
+Pair with TanStack Query (`isPending`, `isFetching`, `placeholderData`) so in-flight work is always visible somewhere.
+
+---
+
+## 3. State-driven design
+
+Define **all** states before shipping. Do not stop at the happy path.
+
+**Button (composed or wrapped):** idle, hover, pressed, loading, disabled, success
+
+**Input / field:** idle, focus, typing, error, disabled
+
+**Selectable row / card:** idle, hover, focus, selected, loading
+
+**List / table:** loading, empty, error, populated
+
+**Page / section:** loading, empty, error, ready
+
+For primitives, use shadcn variants and `aria-*` attributes. For product UI, wire loading, empty, error, and success explicitly.
+
+---
+
+## 4. Micro-feedback everywhere
+
+Every action should acknowledge itself:
+
+| Action | Feedback |
+| ------ | -------- |
+| Save | Brief success state or checkmark |
+| Copy | “Copied” toast or inline label |
+| Submit | Loading → success or error on the control |
+| Drag | Handle / row reacts while dragging |
+| Upload | Progress indicator |
+| Delete | Item animates out or undo toast |
+
+Users should never wonder: “Did it work?”
+
+---
+
+## 5. Selection should be obvious
+
+Every selectable element needs hover, focus, and selected states.
+
+Selected state must **not** rely on color alone. Combine:
+
+- Background shift
+- Border or ring accent
+- Icon or weight change
+- `aria-selected` / `data-selected` for assistive tech
+
+Users should identify selection instantly.
+
+---
+
+## 6. Intent before animation
+
+Do not animate for decoration. Every animation must answer:
+
+- **What changed?**
+- **Why did it change?**
+- **Where did it go?**
+
+**Bad:** random fade, bounce, or slide with no meaning.
+
+**Good:** selected item moves into a toolbar; card morphs into a detail panel; button transitions into loading state.
+
+Users should never lose context.
+
+---
+
+## 7. Preserve spatial memory
+
+When something changes location, **animate the change**. Never teleport content.
+
+**Bad:** remove item → re-render list → content appears elsewhere with no transition.
+
+**Good:** FLIP transitions, morph, or position interpolation — e.g. email slides toward archive and collapses.
+
+Use `transform` and `opacity` (see §23). Respect `prefers-reduced-motion` (see §22).
+
+---
+
+## 8. Expand / collapse
+
+Never use `max-height` hacks for show/hide.
+
+Prefer:
+
+```css
+display: grid;
+grid-template-rows: 0fr; /* collapsed */
+grid-template-rows: 1fr; /* expanded */
+```
+
+with `overflow: hidden` on the inner wrapper.
+
+---
+
+## 9. Draggable and snap (when applicable)
+
+For sliders, sortable lists, boards, timelines, and handles:
+
+- Velocity, momentum, friction, overscroll resistance, spring-back where appropriate
+- Magnetic snap when values have meaningful positions (pull-in zone, release zone, subtle snap feedback)
+
+Skip this section for static forms and read-only views.
+
+---
+
+## 10. Loading: skeletons over spinners
+
+| Context | Prefer |
+| ------- | ------ |
+| Page, card, table, chart layout | Skeleton matching final layout |
+| Inline refresh | Stale content + subtle progress |
+| Button / single action | Short loading state on the control |
+
+Avoid a lone center-screen spinner when structure can be preserved. Skeletons reduce perceived wait and prevent layout jump.
+
+Shimmer and animated labels are fine for custom loading UI. Install shadcn `Skeleton` when missing.
+
+---
+
+## 11. Progressive rendering
+
+Do not block the entire page waiting for all data. Render available content immediately; reveal slower sections as they arrive.
+
+Example dashboard:
+
+- Header and shell render first
+- Sidebar and primary cards load independently
+- Charts and secondary panels stream in when ready
+
+Use separate TanStack Query hooks per region (`useSuspenseQuery` only when a boundary is intentional). Never gate the full layout on the slowest request.
+
+---
+
+## 12. Layout stability
+
+Avoid unexpected layout shifts. Users should never lose their reading position because data arrived.
+
+When loading:
+
+- Reserve space with skeletons that match final dimensions
+- Preserve previous content size where stale-while-revalidate applies
+- Avoid content jumping after fetches complete
+
+Prefer stable layouts over dramatic reflow. This is one of the biggest gaps between enterprise software and polished software.
+
+Pair with §10 (skeletons) and §11 (progressive rendering).
+
+---
+
+## 13. Latency masking
+
+When an operation is slow, keep the interface alive:
+
+- Optimistically update where safe
+- Animate meaningful transitions (see §6)
+- Preserve existing content (stale-while-revalidate)
+- Show in-place progress — not a frozen screen
+
+Users often perceive **400ms + motion + preserved context** as faster than **200ms + full freeze**.
+
+Never blank the UI while waiting unless there is no prior content to show.
+
+---
+
+## 14. Optimistic UI
+
+When safe, **do not wait for the server** before updating the UI.
+
+Example: task checked → instant checkmark; sync in background; revert on failure with clear error + retry.
+
+Pair with TanStack Query `onMutate` / rollback or local optimistic overlays (see `react-state-zustand.mdc`). The UI should feel faster than the network.
+
+---
+
+## 15. Empty states are product features
+
+Never ship bare “No data”.
+
+Explain:
+
+- What this section does
+- Why it is empty
+- What to do next (primary action)
+
+Empty states are part of the product, not an afterthought.
+
+---
+
+## 16. Error recovery
+
+Every error should answer:
+
+- **What happened?**
+- **Why?** (when useful)
+- **What now?** (retry, go back, contact support)
+
+**Bad:** “Something went wrong.”
+
+**Good:** “Connection lost. Retrying…” with automatic retry and manual fallback.
+
+Reduce panic; preserve context where possible.
+
+---
+
+## 17. Network resilience
+
+Assume networks fail. Error recovery (§16) covers messaging; this section covers **ongoing safety** while online is unreliable.
+
+For fetches and mutations:
+
+- Show retry actions and automatic retry where appropriate
+- Preserve user input and drafts — never discard on transient failure
+- Avoid data loss; queue or roll back optimistics clearly
+- Communicate sync status (syncing, saved, offline, failed)
+
+The user should feel safe even when the network is unreliable. Pair with TanStack Query `retry`, `networkMode`, and mutation error handlers.
+
+---
+
+## 18. Undo over confirmation dialogs
+
+Avoid “Are you sure?” for reversible actions.
+
+Prefer: act immediately + **undo toast** (Sonner supports this pattern).
+
+Use confirmation dialogs only for destructive, irreversible, or high-stakes actions.
+
+---
+
+## 19. Contextual actions
+
+Do not show every action at all times. Reveal on hover, selection, or focus.
+
+Example list row: idle shows title only; hover or selection reveals edit, duplicate, delete.
+
+Reduces noise; keeps power available. Use `DropdownMenu` or row action slots from shadcn when appropriate.
+
+---
+
+## 20. Progressive disclosure
+
+Show complexity only when needed.
+
+**Bad:** dozens of controls visible upfront.
+
+**Good:** essential controls first; advanced options behind expand, tabs, or “More”.
+
+---
+
+## 21. Density awareness
+
+Optimize for **information throughput** on desktop dashboards and data-heavy screens.
+
+Avoid:
+
+- Oversized cards with little content
+- Excessive whitespace and giant empty sections
+- Mobile-first spacing applied unchanged on wide viewports
+
+Desktop users should see meaningful information immediately. Prefer compact tables, tight but readable row height, and purposeful padding — not airy marketing layouts on admin surfaces.
+
+Density is interaction polish: less scrolling, faster scanning, more context per screen.
+
+---
+
+## 22. Accessibility and reduced motion
+
+Respect `prefers-reduced-motion`:
+
+- Disable decorative animation
+- Remove looping effects
+- Reduce transitions to near-instant
+
+Keyboard and screen-reader support are part of polish, not optional (see §24–§25).
+
+---
+
+## 23. Motion performance
+
+Prefer animating **transform** and **opacity**.
+
+Avoid excessive animation of width, height, box-shadow, and filter — especially in large lists.
+
+When adding custom motion, use theme-aligned durations from Tailwind / `tw-animate-css` rather than arbitrary values. Never use abrupt state changes for appearance/disappearance.
+
+---
+
+## 24. Keyboard first
+
+Every feature should be usable without a mouse:
+
+- **Enter** confirms primary action
+- **Esc** closes overlays
+- **Arrow keys** navigate lists, menus, tabs where expected
+- **Tab** reaches all interactive elements in logical order
+
+If a workflow requires a mouse only, reconsider the design. Consider a command palette (`Cmd+K` / `Ctrl+K`) for search-heavy apps.
+
+---
+
+## 25. Smart focus management
+
+After an action, move focus where the user expects:
+
+| Action | Focus |
+| ------ | ----- |
+| Create item | New item’s title field |
+| Close modal / sheet | Return to trigger |
+| Delete row | Next row, or list container |
+| Submit form | First invalid field on error |
+
+Radix primitives handle much of this; verify in composed flows and wizards.
+
+---
+
+## 26. Fast paths for power users
+
+Repeated actions should offer shortcuts:
+
+- Keyboard shortcut
+- Bulk selection + action
+- Command palette entry
+- Shift+click / modifier patterns where conventional
+
+Power users should not be forced through the slow path every time.
+
+---
+
+## 27. Metric changes (only when it matters)
+
+Animate numeric changes **only** when users should notice the update — e.g. a headline KPI on a dashboard summary.
+
+**Do not animate:**
+
+- Routine or high-frequency updates
+- Every cell in a dense table
+- Values that change on a timer or live stream
+
+Hard value swaps are fine for most data. Over-animating numbers feels noisy (crypto-dashboard syndrome). Respect reduced motion.
+
+---
+
+## 28. Reward completion
+
+Important completions deserve subtle cues — not confetti:
+
+- Checkmark animation
+- Brief success state on the control
+- Progress fill completing
+- State transition (e.g. done → archived)
+
+Tiny rewards increase engagement without noise.
+
+---
+
+## 29. Consistency over creativity
+
+If two similar components behave differently, it is a bug.
+
+Match patterns across lists, forms, modals, and empty states. Novelty in one screen creates inconsistency everywhere else.
+
+---
+
+## 30. Discoverability and efficiency
+
+New users must be able to **discover** features. Power users must be able to **execute** them quickly. Provide both — not one at the expense of the other.
+
+- **Visible actions** — primary flows are findable without memorizing shortcuts
+- **Keyboard shortcuts** — for repeated actions (see §26)
+- **Context menus** — secondary actions on right-click or row menus
+- **Command palette** — search-heavy apps (`Cmd+K` / `Ctrl+K`)
+
+Never hide **critical** functionality behind shortcuts alone. Contextual reveal (§19) is for secondary actions, not core workflows.
+
+This prevents interfaces that feel designed only for power users.
+
+---
+
+## 31. Before shipping UI
+
+Review composed / product UI:
+
+- [ ] Every action is acknowledged immediately (target: under 100ms; not necessarily animated)
+- [ ] Work over ~300ms shows progress, skeleton, or optimistic state — never silent wait
+- [ ] Page regions render progressively; slowest query does not block the shell
+- [ ] Layouts stay stable — no jump when data arrives; skeletons match final size
+- [ ] Slow operations mask latency (preserve content, in-place progress)
+- [ ] Hover, focus, pressed, disabled defined
+- [ ] Loading uses skeleton or inline state (not naked page spinner)
+- [ ] Empty state explains and guides
+- [ ] Error state explains and recovers
+- [ ] Network failures preserve input; retry and sync status are clear
+- [ ] Selection is obvious without color alone
+- [ ] Motion has intent (what / why / where)
+- [ ] Desktop dashboards are dense and scannable — not oversized card stacks
+- [ ] Critical features are discoverable — not shortcut-only
+- [ ] `prefers-reduced-motion` respected
+- [ ] Keyboard path exists; focus moves sensibly after actions
+- [ ] Reversible deletes use undo where appropriate
+- [ ] Optimistic updates where safe; rollback on failure
+- [ ] Metric animation only on high-signal values, not dense tables
+- [ ] Primitives use shadcn preset styles — no conflicting custom press/hover/shadow overrides
+
+Only then consider the interaction layer complete.
