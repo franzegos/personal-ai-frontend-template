@@ -1,5 +1,7 @@
 ---
-alwaysApply: true
+description: Choose between local React state, TanStack Query, and Zustand
+globs: src/**/*.{ts,tsx}
+alwaysApply: false
 ---
 
 # React local state vs Zustand

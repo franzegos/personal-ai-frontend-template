@@ -4,6 +4,13 @@ import { useTheme } from "next-themes";
 import { useDemoPost } from "@/api/queries/use-demo";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { useCounterStore } from "@/lib/stores/counterStore";
 import { DemoErrorTrigger } from "./DemoErrorTrigger";
@@ -78,91 +85,103 @@ export function HomePage() {
         </header>
 
         <div className="flex flex-col gap-4">
-          <section className="bg-card rounded-lg border p-5">
-            <div className="mb-4 flex items-baseline justify-between gap-2">
-              <h2 className="text-sm font-medium">Counter</h2>
+          <Card size="sm">
+            <CardHeader>
+              <CardTitle>Counter</CardTitle>
               <span className="text-2xl font-semibold tabular-nums">
                 {count}
               </span>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <Button type="button" size="sm" onClick={() => increment()}>
-                +1
-              </Button>
-              <Button
-                type="button"
-                size="sm"
-                variant="outline"
-                onClick={() => decrement()}
-              >
-                −1
-              </Button>
-              <Button
-                type="button"
-                size="sm"
-                variant="ghost"
-                onClick={() => reset()}
-              >
-                Reset
-              </Button>
-              <Button
-                type="button"
-                size="sm"
-                variant="ghost"
-                className="text-muted-foreground"
-                onClick={() =>
-                  toast.message("Count", {
-                    description: String(useCounterStore.getState().count),
-                  })
-                }
-              >
-                Toast
-              </Button>
-            </div>
-          </section>
-
-          <section className="bg-card rounded-lg border p-5">
-            <div className="mb-4 flex items-center justify-between gap-2">
-              <h2 className="text-sm font-medium">Sample request</h2>
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                className="text-muted-foreground h-8"
-                disabled={isFetching}
-                onClick={() => refetch()}
-              >
-                {isFetching ? "Refreshing…" : "Refresh"}
-              </Button>
-            </div>
-
-            {isPending && (
-              <p className="text-muted-foreground text-sm">Loading…</p>
-            )}
-            {isError && (
-              <div className="space-y-3">
-                <p className="text-destructive text-sm">{error.message}</p>
-                <Button type="button" size="sm" onClick={() => refetch()}>
-                  Retry
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-wrap gap-2">
+                <Button type="button" size="sm" onClick={() => increment()}>
+                  +1
+                </Button>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  onClick={() => decrement()}
+                >
+                  −1
+                </Button>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => reset()}
+                >
+                  Reset
+                </Button>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="ghost"
+                  className="text-muted-foreground"
+                  onClick={() =>
+                    toast.message("Count", {
+                      description: String(useCounterStore.getState().count),
+                    })
+                  }
+                >
+                  Toast
                 </Button>
               </div>
-            )}
-            {data && (
-              <div className="space-y-2">
-                <p className="text-sm leading-snug font-medium">{data.title}</p>
-                <p className="text-muted-foreground text-sm leading-relaxed">
-                  {data.body}
-                </p>
-              </div>
-            )}
-          </section>
+            </CardContent>
+          </Card>
 
-          <section className="bg-card rounded-lg border p-5">
-            <h2 className="mb-3 text-sm font-medium">Error boundary</h2>
-            <ErrorBoundary layout="embedded">
-              <DemoErrorTrigger />
-            </ErrorBoundary>
-          </section>
+          <Card size="sm">
+            <CardHeader>
+              <CardTitle>Sample request</CardTitle>
+              <CardAction>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="text-muted-foreground h-8"
+                  disabled={isFetching}
+                  onClick={() => refetch()}
+                >
+                  {isFetching ? "Refreshing…" : "Refresh"}
+                </Button>
+              </CardAction>
+            </CardHeader>
+
+            <CardContent>
+              {isPending && (
+                <p className="text-muted-foreground text-sm">Loading…</p>
+              )}
+              {isError && (
+                <div className="space-y-3">
+                  <p className="text-destructive text-sm">{error.message}</p>
+                  <Button type="button" size="sm" onClick={() => refetch()}>
+                    Retry
+                  </Button>
+                </div>
+              )}
+              {data && (
+                <div className="space-y-2">
+                  <p className="text-sm leading-snug font-medium">
+                    {data.title}
+                  </p>
+                  <p className="text-muted-foreground text-sm leading-relaxed">
+                    {data.body}
+                  </p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          <Card size="sm">
+            <CardHeader>
+              <CardTitle>Error boundary</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ErrorBoundary layout="embedded">
+                <DemoErrorTrigger />
+              </ErrorBoundary>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

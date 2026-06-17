@@ -1,6 +1,6 @@
 ---
-description: Vitest tests for lib, schema, services, and queries when adding or changing API/features
-globs: src/api/**/*,src/lib/**/*,src/test/**/*
+description: Vitest tests for API, lib, and high-risk UI changes
+globs: src/api/**/*,src/lib/**/*,src/pages/**/*,src/components/**/*,src/test/**/*
 alwaysApply: false
 ---
 

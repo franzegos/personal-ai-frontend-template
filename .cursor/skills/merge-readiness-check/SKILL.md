@@ -176,6 +176,7 @@ Cite **N/A** when the diff does not touch relevant flows.
 | `zod-validation.mdc`      | `safeParse`/`parse` at boundaries; primitives reuse; optional vs nullable correct for PATCH                                                                                   |
 | `vitest-testing.mdc`      | New/changed `src/lib/` or `src/api/` has matching `src/test/…` tests when logic is non-trivial; no `it.todo` in touched tests                                                 |
 | `naming-conventions.mdc`  | Lowercase `pages/` folders; PascalCase page files; `use-*.ts` hooks; kebab-case asset filenames                                                                               |
+| `shadcn-ui-usage.mdc`     | UI uses shadcn primitives/semantic tokens before custom controls; new custom UI is product-specific composition, not replacement primitives                                   |
 | `icons-and-assets.mdc`    | UI icons via `iconLibrary`; brands via thesvg — no hand-rolled inline SVGs                                                                                                    |
 | `react-state-zustand.mdc` | Server data in TanStack Query; minimal `useEffect` in pages; derived state at render; Zustand only when shared                                                                |
 

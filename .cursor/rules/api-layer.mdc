@@ -1,5 +1,7 @@
 ---
-alwaysApply: true
+description: API services, schemas, query hooks, and frontend/backend integration patterns
+globs: src/api/**/*,src/pages/**/*.{ts,tsx},src/components/**/*.{ts,tsx}
+alwaysApply: false
 ---
 
 # API layer & backend integration

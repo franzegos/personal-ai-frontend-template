@@ -68,13 +68,28 @@ Skills: `.cursor/skills/` · PR body: `.github/PULL_REQUEST_TEMPLATE.md` (not Cu
 
 ### Rules
 
-| Rule                                                                                              | Default in this template                                                        |
-| ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| `api-layer`, `naming-conventions`, `react-state-zustand`, `repo-agent-skills`, `icons-and-assets` | **Always apply** — included in every chat                                       |
-| `vitest-testing`                                                                                  | **Specific files** — `src/api/**`, `src/lib/**`, `src/test/**`                  |
-| `zod-validation`                                                                                  | **Not always** — `@`-mention or enable in rule settings when working on schemas |
+| Rule                                      | Default in this template                                                  |
+| ----------------------------------------- | ------------------------------------------------------------------------- |
+| `naming-conventions`, `repo-agent-skills` | **Always apply** — included in every chat                                 |
+| `api-layer`                               | **Specific files** — `src/api/**`, pages/components that consume API data |
+| `icons-and-assets`                        | **Specific files** — UI files, `src/assets/**`, `components.json`         |
+| `react-state-zustand`                     | **Specific files** — `src/**/*.{ts,tsx}`                                  |
+| `shadcn-ui-usage`                         | **Specific files** — `src/**/*.tsx`, `src/index.css`, `components.json`   |
+| `vitest-testing`                          | **Specific files** — API, lib, pages/components, and `src/test/**`        |
+| `zod-validation`                          | **Specific files** — schemas, env config, forms, API-adjacent UI          |
 
 **Trade-off:** Always-applied rules improve consistency but use **more tokens per request** (they’re sent as context every time). Tune in Cursor → **Always apply** / **Apply intelligently** / **Apply to specific files** / **Apply manually**; edit or delete rules under `.cursor/rules/` to match your project.
+
+### shadcn/ui
+
+This template includes the official shadcn Skill at `.cursor/skills/shadcn` and a Cursor MCP config at `.cursor/mcp.json`. Use them when building UI so the agent can inspect `components.json`, search docs/registries, and install components instead of inventing custom primitives. To refresh the skill later: `pnpm dlx skills add shadcn/ui` and copy the result into `.cursor/skills/shadcn`.
+
+Registry workflow:
+
+- Start with installed components in `src/components/ui/`.
+- Search shadcn docs/registry before writing custom UI.
+- Use community registries when a new app needs a specific vibe or component set.
+- Review installed registry code before keeping it; registry components are source code.
 
 ---
 
@@ -110,4 +125,4 @@ pnpm dlx shadcn@latest add card dialog -y
 
 ## Stack
 
-React 19, Vite 7, TypeScript, Tailwind v4, shadcn/ui (Radix), React Router, TanStack Query, Zustand, Axios, Zod, Sonner, Vercel Analytics. Node **20+** (`package.json` → `engines`).
+React 19, Vite 7, TypeScript, Tailwind v4, shadcn/ui (Radix), React Router, TanStack Query, Zustand, Axios, Zod, Sonner. Node **20+** (`package.json` → `engines`).
