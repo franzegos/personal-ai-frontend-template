@@ -6,7 +6,7 @@ alwaysApply: false
 
 # API layer & backend integration
 
-See also: **`response-mapping.mdc`**, **`async-ui.mdc`**, **`frontend-security.mdc`**, **`route-protection.mdc`**, **`data-ownership.mdc`**, **`frontend-feature-boundaries.mdc`**.
+See also: **`api-error-routing.mdc`**, **`response-mapping.mdc`**, **`async-ui.mdc`**, **`frontend-security.mdc`**, **`route-protection.mdc`**, **`data-ownership.mdc`**, **`frontend-feature-boundaries.mdc`**.
 
 Use this flow whenever you add or change REST endpoints consumed by the web app.
 
@@ -96,6 +96,7 @@ Example: `GET /campaigns`, `POST /campaigns`, `PATCH /campaigns/:id` → all fil
 - **Auth-gated queries:** `enabled: status === 'authenticated'` or shared helper in `src/api/lib/` (`route-protection.mdc`).
 - **Mutations:** Define **`useMutation`** here (not in pages). `useQueryClient`, cache updates, and API toasts belong in this file.
   - Put user-facing copy in **`src/lib/<domain>/`** when messages depend on payload shape.
+  - **Toasts:** business and system errors only — **`isApiValidationError`** → no toast; the form maps `fieldErrors` (`api-error-routing.mdc`).
   - **Orchestration hooks** (e.g. `useSubmitCampaignCreate`) — validation, navigation, `isSubmitting` live in the feature query module.
   - Pages may pass **`mutate(..., { onSuccess })`** only for **local UI** — not for API toasts.
   - **Do not** wrap **`mutateAsync`** in try/catch solely for toasts.
@@ -140,6 +141,7 @@ Generated code stays dumb; **feature folders own app behavior** (Query, invalida
 - [ ] Mappers and non-schema helpers live under **`src/lib/<domain>/`**.
 - [ ] Service functions use the shared **`client`**; hooks are what pages/components import.
 - [ ] Pages and **`src/components/`** do not use **`useQueryClient`** for domain cache logic.
-- [ ] Mutation hooks own API success/error toasts; query keys are exported for invalidation.
+- [ ] Mutation hooks own API success toasts and non-validation error toasts; `VALIDATION_ERROR` is mapped in the form (`api-error-routing.mdc`).
+- [ ] Query keys are exported for invalidation.
 - [ ] Independent async work is not serialized into avoidable waterfalls; cancellable reads forward **`signal`**.
 - [ ] No secrets in the frontend; only `VITE_*` env vars as documented in `.env.example`.

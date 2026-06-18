@@ -6,7 +6,7 @@ alwaysApply: false
 
 # Error handling & async read UX
 
-See also: **`interaction-polish.mdc`** (skeletons, motion, recovery copy), **`async-ui.mdc`** (pending vs fetching), **`accessibility.mdc`** (announcements), **`api-layer.mdc`** (mutation toasts), **`feature-state.mdc`** (derive one status union per surface).
+See also: **`interaction-polish.mdc`** (skeletons, motion, recovery copy), **`async-ui.mdc`** (pending vs fetching), **`accessibility.mdc`** (announcements), **`api-layer.mdc`**, **`api-error-routing.mdc`** (form vs toast for mutations), **`feature-state.mdc`** (derive one status union per surface).
 
 Every **data-driven surface** (page, section, list, table, card region) must implement **four states**: **loading**, **empty**, **error**, and **success** (content ready). Derive a single **`status` union** per surface in hooks or `src/lib/<domain>/` — see **`feature-state.mdc`**. Motion and micro-feedback stay in `interaction-polish.mdc`.
 
@@ -117,7 +117,7 @@ Every error state answers (`interaction-polish.mdc` §16):
 </Alert>
 ```
 
-API mutation errors: toast + rollback in query hooks (`api-layer.mdc`) — not silent `console.error`.
+API mutation errors: non-validation → toast + rollback in query hooks (`api-layer.mdc`, `api-error-routing.mdc`). Validation → map `fieldErrors` in the form; no toast.
 
 ## Empty states
 
