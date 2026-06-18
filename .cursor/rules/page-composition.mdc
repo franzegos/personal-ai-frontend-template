@@ -1,0 +1,98 @@
+---
+description: Page folder composition — split bloated routes into colocated modules
+globs: src/pages/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# Page composition
+
+See also: **`naming-conventions.mdc`**, **`frontend-feature-boundaries.mdc`**, **`feature-state.mdc`**, **`forms-and-drafts.mdc`**, **`api-layer.mdc`**.
+
+Large route files are hard to review, test, and reuse. **One flat `FooPage.tsx` per complex route is a smell** — colocate a **folder per URL area** with a thin page shell and focused children.
+
+## Size limits
+
+| File kind | Soft max | Action when exceeded |
+| --------- | -------- | -------------------- |
+| Page shell (`*Page.tsx`) | **250 lines** | Extract steps, tabs, dialogs, tables |
+| Step / tab / panel component | **400 lines** | Split sub-sections or hooks |
+| Domain orchestration hook (`lib/<domain>/use*.ts`) | **500 lines** | Split by step or concern |
+| Any file under `src/pages/` | **750 lines** | **Must split** before adding features |
+
+Counts are guidelines — a 900-line file with a tracked split PR is OK; a growing 1k+ file is not.
+
+## Folder layout
+
+**One lowercase folder per URL area** under `src/pages/<segment>/`:
+
+```
+src/pages/brand/campaigns/
+  CampaignsPage.tsx
+  new/
+    CreateCampaignPage.tsx       ← route default export (thin)
+    CampaignDetailsStep.tsx
+    CampaignBudgetStep.tsx
+    CampaignReviewStep.tsx
+    CampaignFormDialogs.tsx
+    CreateCampaignWizardContext.tsx   ← thin React provider; hooks in lib/campaigns/
+```
+
+Rules:
+
+- **Page shell** wires layout, route params, and child composition — minimal logic.
+- **Colocate** page-only **components** in the same folder — orchestration hooks belong in `src/lib/<domain>/`.
+- **`index.tsx`** is optional; prefer explicit `*Page.tsx` imports in the router.
+- **Do not** create PascalCase page folders (`pages/CampaignsPage/`).
+- Examples use generic segments (`brand`, `app`, `creator`) — adapt folder names to your product routes.
+
+## What goes where
+
+| Asset | Location | Example |
+| ----- | -------- | ------- |
+| HTTP + TanStack Query | `src/api/features/<domain>/` | `use-campaigns.ts` |
+| API DTOs, Zod schemas, domain client types | `src/api/features/<domain>/` | `campaigns.schema.ts`, `courses.types.ts` |
+| Mappers, validation, domain orchestration hooks | `src/lib/<domain>/` | `mapCampaign.ts`, `useCampaignWizard.ts`, `validateCampaignWizard.ts` |
+| Wizard / step UI orchestration | `src/lib/<domain>/` (camelCase `use*.ts`) | `useCourseWizard.ts`, `useCourseWizardState.ts` |
+| Step, tab, dialog UI | Page folder `PascalCase.tsx` | `CampaignBudgetStep.tsx` |
+| Route-only React context | Page folder `PascalCase.tsx` | `CreateCampaignWizardContext.tsx` |
+| Shared across 2+ features | `src/components/shared/` | dumb props-only UI |
+
+**`src/lib/<domain>/`** is not only mappers — it holds **reusable domain logic**: view-model helpers, validation, multi-step orchestration hooks, and context wiring types (`courseWizardCtx.types.ts`).
+
+**Do not** put route **components** (steps, dialogs, tables) in `lib/` to shrink page files — those stay colocated under `src/pages/`.
+
+## Split triggers
+
+Split when **any** apply:
+
+1. File **> 750 lines**
+2. **Multiple steps, tabs, or wizards** on one route
+3. **3+ modals / drawers** owned by the page
+4. **Distinct regions** each needing their own `feature-state` status
+5. Second engineer (or agent) cannot orient in **< 5 minutes**
+
+## Split recipe
+
+1. Create `pages/<segment>/<area>/` folder.
+2. Move orchestration hooks / validation to `src/lib/<domain>/` if missing.
+3. Move domain client types into `src/api/features/<domain>/*.types.ts` if missing.
+4. Move page orchestration → React context provider in the page folder.
+5. Extract **steps / tabs / dialogs / tables** into PascalCase siblings.
+6. Leave `*Page.tsx` as composition + providers only.
+7. Update route imports in the router (`App.tsx` or route module).
+8. Delete the old flat file — no long-term re-export shim unless a PR is mid-flight.
+
+## Context vs prop drilling
+
+- **Few props (< 8)** → pass explicitly.
+- **Wizard / multi-step** → page-local context (`<CreateCampaignWizardProvider>`) in the same folder; **do not** add global providers for one route.
+- **Never** nest component definitions inside the page shell — hoist to module scope (`naming-conventions.mdc`).
+
+## Checklist
+
+- [ ] No file under `src/pages/` exceeds **750 lines** (except documented follow-up).
+- [ ] Complex routes live in a **folder**, not a single flat `SegmentPage.tsx`.
+- [ ] API hooks remain in `src/api/features/` — page hooks are UI orchestration only.
+- [ ] Wizard orchestration hooks live in `src/lib/<domain>/`; API hooks in `src/api/features/`.
+- [ ] Domain client types live in `src/api/features/<domain>/`, not `src/pages/`.
+- [ ] New work adds to extracted modules, not back into the page shell.

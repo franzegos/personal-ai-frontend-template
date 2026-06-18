@@ -6,7 +6,7 @@ alwaysApply: false
 
 # Frontend feature boundaries
 
-See also: **`naming-conventions.mdc`**, **`api-layer.mdc`**, **`response-mapping.mdc`**.
+See also: **`naming-conventions.mdc`**, **`api-layer.mdc`**, **`response-mapping.mdc`**, **`page-composition.mdc`**.
 
 Mirror backend **module boundaries** on the client. Features own their vertical slice; **avoid cross-feature imports** that create spaghetti (`billing` ↔ `campaigns` ↔ `users`).
 

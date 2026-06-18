@@ -17,10 +17,21 @@ Follow these conventions for all new and renamed files and constants.
 
 ## Hooks (custom hooks & TanStack Query hooks)
 
-### App / UI hooks
+### Domain modules (`src/lib/<domain>/`)
+
+- **File name:** camelCase — `mapCourse.ts`, `validateCourseWizard.ts`, `useCourseWizard.ts`, `courseWizardCtx.types.ts`
+- **Purpose:** Mappers, pure validation, multi-step orchestration hooks, and domain-specific wiring types shared across pages.
+- **Exported hooks:** camelCase with `use` prefix — `useCourseWizard`, `useCourseWizardState`
+- **Do not** use kebab-case `use-*.ts` here — that pattern is for **`src/api/features/`** and **`src/lib/hooks/`** only.
+
+### Page-local hooks (`src/pages/**`)
+
+- **Avoid** — prefer `src/lib/<domain>/` for orchestration hooks. Pages keep **components** and thin **React context providers** only.
+
+### App / shared UI hooks (`src/lib/hooks/`)
 
 - **File name:** kebab-case after the `use-` prefix: `use-<name>.ts`
-- **Examples:** `use-debounce.ts`, `use-auth.ts`
+- **Examples:** `use-debounce.ts`, `use-mobile.tsx`
 - **Location:** `src/lib/hooks/`
 
 ### API feature modules (`src/api/features/<domain>/`)
@@ -85,11 +96,14 @@ Shared-only paths (not feature-owned):
 
 ## Page structure (colocate page-specific components)
 
+See **`page-composition.mdc`** for size limits, folder layout, and split triggers when pages grow past ~750 lines.
+
 - **Folders under `src/pages/` are lowercase** (or kebab-case for multi-word routes) — e.g. `pages/creator/account/`, `pages/home/`, `pages/public/`. **Do not** use PascalCase folders like `pages/HomePage/`.
 - **Page component files** are PascalCase and live in the route folder — e.g. `pages/home/HomePage.tsx`, `pages/creator/account/AccountPage.tsx`.
 - **`index.tsx`** is optional when a page has many colocated children — e.g. `pages/shared/referral/ReferralPage/index.tsx` (folder name may match the page for that pattern only).
 - **One folder per URL area** when routes share a base path — colocate list, detail, and modals (e.g. `pages/app/orders/OrdersPage.tsx`, `OrderDetailPage.tsx`).
-- **Page-only helpers** — Pure functions unlikely to be reused may stay in the page file **below** the default export, using `function helperName() { ... }`. Types used only by that page usually sit **above** the component. **Reusable** logic belongs under **`src/lib/<domain>/`**; **prefer extending an existing related file** before adding a new `lib/<domain>/*.ts` module.
+- **Orchestration hooks** — live in `src/lib/<domain>/` (see **Hooks** above); pages keep components and thin React context providers.
+- **Page-only helpers** — Pure functions unlikely to be reused may stay in the page file **below** the default export, using `function helperName() { ... }`. **Reusable** logic belongs under **`src/lib/<domain>/`**; domain types belong in **`src/api/features/<domain>/`** (not `src/pages/`).
 
 ## Folders
 
@@ -104,12 +118,13 @@ Shared-only paths (not feature-owned):
 | ---------------------------------------------------------- | ------------------------------------------------- | -------------------------- |
 | Page folders (`src/pages/`)                                | lowercase / kebab-case                            | `home`, `creator/account`  |
 | Page component files                                       | PascalCase                                        | `HomePage.tsx`             |
+| Domain orchestration hook (`src/lib/<domain>/`)              | camelCase `use*.ts`                               | `useCourseWizard.ts`       |
 | Layout / component (`.tsx`, except `components/ui`)        | PascalCase                                        | `AppSidebar.tsx`           |
 | API feature folder                                         | `features/<domain>/`                              | `features/campaigns/`      |
 | API service / schema / types (in feature)                  | `<domain>.service.ts`, `.schema.ts`, `.types.ts`  | `campaigns.service.ts`     |
 | API query hook (in feature)                                | `use-<domain>.ts` under `features/<domain>/`      | `use-campaigns.ts`         |
 | Shared API schema / types                                  | `api/schema/`, `api/types/` at root               | `primitives.schema.ts`     |
-| Hook files (app, `lib/hooks`)                              | `use-<kebab>.ts`                                  | `use-auth.ts`              |
+| Hook files (`src/lib/hooks`)                               | `use-<kebab>.ts`                                  | `use-debounce.ts`          |
 | Type modules                                               | `<name>.types.ts`                                 | `auth.types.ts`            |
 | Utility / logic (`.ts`)                                    | camelCase                                         | `mockData.ts`              |
 | Domain helpers (`lib/<domain>/`)                           | camelCase                                         | `buildCheckoutPayload.ts`  |
