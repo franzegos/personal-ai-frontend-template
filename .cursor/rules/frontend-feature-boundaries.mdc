@@ -1,0 +1,94 @@
+---
+description: Feature boundaries — pages, components, hooks, mappers stay inside their feature
+globs: src/pages/**/*,src/components/**/*,src/lib/**/*.{ts,tsx},src/api/**/*
+alwaysApply: false
+---
+
+# Frontend feature boundaries
+
+See also: **`naming-conventions.mdc`**, **`api-layer.mdc`**, **`response-mapping.mdc`**.
+
+Mirror backend **module boundaries** on the client. Features own their vertical slice; **avoid cross-feature imports** that create spaghetti (`billing` ↔ `campaigns` ↔ `users`).
+
+## Feature = product area
+
+A **feature** is a user-facing domain: `billing`, `campaigns`, `users`, `settings`, `onboarding`, etc. Map features to:
+
+- `src/pages/<feature>/` — routes and page-only components
+- `src/components/<Feature>/` or colocated under pages — feature-specific UI
+- `src/lib/<feature>/` — mappers, formatters, message helpers
+- `src/api/services/<feature>.ts` or `services/<segment>/` — HTTP
+- `src/api/queries/use-<feature>.ts` or `queries/<segment>/` — hooks
+- `src/api/schema/<feature>.schema.ts` — Zod for that domain
+
+**Cross-cutting** code (`auth`, `client`, `primitives`, shared UI primitives) lives at **roots** — not inside one feature folder.
+
+## Ownership
+
+Each feature **owns**:
+
+| Asset        | Rule                                                |
+| ------------ | --------------------------------------------------- |
+| Pages        | Under `src/pages/<feature>/`                        |
+| Components   | Colocated in page folder or `components/<Feature>/` |
+| Hooks        | `src/lib/hooks/` only if **shared**; else feature-local or query module |
+| Mappers      | `src/lib/<feature>/`                                |
+| Schemas      | `src/api/schema/<feature>.schema.ts`                |
+| Query hooks  | `src/api/queries/` (segment subfolder if API splits) |
+
+## Import rules
+
+### Allowed
+
+```typescript
+// Feature page imports its own stack + cross-cutting
+import { useCampaigns } from "@/api/queries/campaigns/use-campaigns";
+import { mapCampaignToRow } from "@/lib/campaigns/mapCampaignToRow";
+import { Button } from "@/components/ui/button";
+import { useAuthMe } from "@/api/queries/use-auth";
+```
+
+### Avoid
+
+```typescript
+// Bad — billing page reaches into campaigns internals
+import { CampaignDraftPanel } from "@/pages/campaigns/CampaignDraftPanel";
+import { useCampaignStore } from "@/lib/stores/campaignStore";
+```
+
+```typescript
+// Bad — lib/billing imports lib/campaigns helper
+import { formatCampaignLabel } from "@/lib/campaigns/formatCampaignLabel";
+```
+
+### When features need each other
+
+1. **Shared kernel** — Move truly generic helpers to `src/lib/shared/` or root `src/lib/utils/` (sparingly).
+2. **API composition** — Backend aggregates; frontend consumes one query — do not import another feature’s page components.
+3. **Cross-feature UI** — Extract to `src/components/shared/` only when **two or more** features need the same component; keep it dumb (props in, events out).
+4. **Navigation** — Link by route (`/campaigns/:id`), not by importing another feature’s page.
+
+## `src/api/` segmentation
+
+Align query/service folders with **backend route namespaces** (`admin/`, `app/`) — not with every page folder name, but keep **one segment per API surface**.
+
+Do not put `billing` service functions in `campaigns.ts` “temporarily.”
+
+## `src/components/ui/`
+
+shadcn primitives are **global** — any feature may import `@/components/ui/*`. Do not treat `ui/` as a feature folder.
+
+## Stores
+
+Prefer **feature-scoped** Zustand files: `campaignDraftStore.ts`, not a monolith with every domain. **Do not** import another feature’s store from a different feature’s pages.
+
+## Refactor trigger
+
+If you need a third cross-import between two features, **stop** and extract shared code to an explicit shared module or push aggregation to the API.
+
+## Checklist
+
+- [ ] New work lands under the correct `pages/`, `lib/<feature>/`, and `api/` paths.
+- [ ] No imports from `pages/<other-feature>/` into unrelated features.
+- [ ] No `lib/<featureA>/` importing `lib/<featureB>/` except via documented shared modules.
+- [ ] Shared UI lives in `components/ui/` or `components/shared/` — not leaked from one feature’s page folder.

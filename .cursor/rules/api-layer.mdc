@@ -6,6 +6,8 @@ alwaysApply: false
 
 # API layer & backend integration
 
+See also: **`response-mapping.mdc`**, **`async-ui.mdc`**, **`frontend-security.mdc`**, **`route-protection.mdc`**, **`data-ownership.mdc`**.
+
 Use this flow whenever you add or change REST endpoints consumed by the web app.
 
 ## Folder layout (`src/api/`)

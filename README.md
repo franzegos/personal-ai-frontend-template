@@ -66,10 +66,10 @@ PR body uses `.github/PULL_REQUEST_TEMPLATE.md` (not Cursor's global PR format).
 
 ### Rules
 
-| Scope            | Rules                                                                                                                               |
-| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| **Always apply** | `naming-conventions`, `repo-agent-skills`                                                                                           |
-| **File-scoped**  | `api-layer`, `icons-and-assets`, `interaction-polish`, `react-state-zustand`, `shadcn-ui-usage`, `vitest-testing`, `zod-validation` |
+| Scope            | Rules                                                                                                                                                                                                                                                                                         |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Always apply** | `naming-conventions`, `repo-agent-skills`                                                                                                                                                                                                                                                     |
+| **File-scoped**  | `accessibility`, `api-layer`, `async-ui`, `data-ownership`, `frontend-feature-boundaries`, `frontend-security`, `icons-and-assets`, `interaction-polish`, `performance`, `react-state-zustand`, `response-mapping`, `route-protection`, `shadcn-ui-usage`, `vitest-testing`, `zod-validation` |
 
 Details: `.cursor/rules/`. Always-on rules use more tokens per request — tune in Cursor rule settings.
 

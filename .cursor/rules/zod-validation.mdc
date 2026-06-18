@@ -6,7 +6,7 @@ alwaysApply: false
 
 # Zod validation (webapp)
 
-See also: **`api-layer.mdc`** (where schemas live vs types/services/queries).
+See also: **`api-layer.mdc`** (where schemas live vs types/services/queries), **`frontend-security.mdc`** (client validation is not authorization).
 
 ## Core rule
 

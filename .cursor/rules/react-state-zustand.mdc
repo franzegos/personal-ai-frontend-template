@@ -6,6 +6,8 @@ alwaysApply: false
 
 # React local state vs Zustand
 
+See also: **`data-ownership.mdc`** (authoritative ownership matrix).
+
 Use this to choose between `useState` / `useReducer` and Zustand for **client UI state**. **Server-backed data** belongs in TanStack Query (`useQuery` / `useMutation`), not duplicated in Zustand unless there is a deliberate offline/cache extension pattern.
 
 ## Prefer `useState` or `useReducer` (local state)

@@ -6,6 +6,8 @@ alwaysApply: false
 
 # Interaction Polish
 
+See also: **`accessibility.mdc`**, **`async-ui.mdc`**.
+
 Premium UIs feel alive because **every action is acknowledged as close to immediate as technically possible** (target: under 100ms) — focus move, loading state, optimistic update, state change, or visual response. This rule covers that layer.
 
 **Not visual theming.** Colors, radius, depth, shadows, and primitive styling come from the shadcn preset and semantic tokens — see `shadcn-ui-usage.mdc` and `src/index.css`. Do not duplicate a parallel visual system here.
