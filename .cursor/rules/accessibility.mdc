@@ -6,6 +6,8 @@ alwaysApply: false
 
 # Accessibility
 
+**Deep reference:** [franz-frontend skill](../skills/franz-frontend/SKILL.md) → [a11y.md](../skills/franz-frontend/rules/a11y.md).
+
 See also: **`interaction-polish.mdc`**, **`responsive-design.mdc`**, **`shadcn-ui-usage.mdc`**, **`design-tokens.mdc`**, **`theming.mdc`**, **`forms-and-drafts.mdc`**.
 
 Polish without accessibility is incomplete. AI-generated UIs often look fine but fail keyboard, screen reader, and focus management.

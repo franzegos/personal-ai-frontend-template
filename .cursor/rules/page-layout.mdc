@@ -6,6 +6,8 @@ alwaysApply: false
 
 # Page layout
 
+**Deep reference:** [franz-frontend skill](../skills/franz-frontend/SKILL.md) → [layout.md](../skills/franz-frontend/rules/layout.md).
+
 See also: **`page-composition.mdc`**, **`design-tokens.mdc`**, **`responsive-design.mdc`**, **`interaction-polish.mdc`**, **`error-handling.mdc`**, **`accessibility.mdc`**.
 
 **File splitting** → `page-composition.mdc`. This rule owns **spacing rhythm, column alignment, and visual hierarchy** — not which product features your app has.

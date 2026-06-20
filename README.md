@@ -110,11 +110,12 @@ Mirror tests under `src/test/api/features/<domain>/` — see [vitest-testing](.c
 
 ### Cursor skills
 
-| Skill                    | Example           |
-| ------------------------ | ----------------- |
-| `@commit-changes`        | commit my changes |
-| `@create-pull-request`   | open PR to `main` |
-| `@merge-readiness-check` | ready to merge?   |
+| Skill                    | Example                                   |
+| ------------------------ | ----------------------------------------- |
+| `@franz-frontend`        | page layout, tokens, API errors, UI audit |
+| `@commit-changes`        | commit my changes                         |
+| `@create-pull-request`   | open PR to `main`                         |
+| `@merge-readiness-check` | ready to merge?                           |
 
 PR body uses `.github/PULL_REQUEST_TEMPLATE.md` (not Cursor's global PR format).
 

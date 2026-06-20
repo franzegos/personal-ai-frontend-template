@@ -4,7 +4,9 @@ globs: src/pages/**/*.{ts,tsx},src/components/**/*.{ts,tsx}
 alwaysApply: false
 ---
 
-# Error handling & async read UX
+# Error handling
+
+**Deep reference:** [franz-frontend skill](../skills/franz-frontend/SKILL.md) → [errors.md](../skills/franz-frontend/rules/errors.md).
 
 See also: **`interaction-polish.mdc`** (skeletons, motion, recovery copy), **`async-ui.mdc`** (pending vs fetching), **`accessibility.mdc`** (announcements), **`api-layer.mdc`**, **`api-error-routing.mdc`** (form vs toast for mutations), **`feature-state.mdc`** (derive one status union per surface), **`page-layout.mdc`** (zone rhythm, empty/teaching patterns).
 

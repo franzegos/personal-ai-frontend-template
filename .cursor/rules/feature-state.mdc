@@ -6,6 +6,8 @@ alwaysApply: false
 
 # Feature state
 
+**Deep reference:** [franz-frontend skill](../skills/franz-frontend/SKILL.md) → [state.md](../skills/franz-frontend/rules/state.md).
+
 See also: **`error-handling.mdc`**, **`data-ownership.mdc`**, **`async-ui.mdc`**, **`offline-reconnect.mdc`**, **`api-layer.mdc`**.
 
 Each **feature surface** (list page, detail panel, editor, submit flow) exposes **one derived status** — not a pile of `isLoading`, `isPending`, `isSubmitting`, `isSaving`, `isUpdating` booleans in JSX.

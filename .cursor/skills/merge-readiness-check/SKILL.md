@@ -194,6 +194,8 @@ Cite **N/A** when the diff does not touch relevant flows.
 
 **UI / Impeccable-style gate (when diff touches `src/pages`, `src/components`, `src/layouts`):**
 
+Full checklist: [franz-frontend `audit-checklist.md`](../franz-frontend/rules/audit-checklist.md).
+
 | Dimension     | Block if                                                                                                                                 |
 | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
 | Accessibility | Unlabeled inputs, missing skip link, no `aria-live` on generating-only UI, errors without `aria-describedby`                             |

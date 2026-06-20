@@ -6,6 +6,8 @@ alwaysApply: false
 
 # API error routing
 
+**Deep reference:** [franz-frontend skill](../skills/franz-frontend/SKILL.md) → [api.md](../skills/franz-frontend/rules/api.md).
+
 See also: **`api-layer.mdc`**, **`forms-and-drafts.mdc`**, **`accessibility.mdc`**, **`error-handling.mdc`** (async read UX only).
 
 API failures have **two audiences** with different needs:
