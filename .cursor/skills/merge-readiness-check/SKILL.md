@@ -168,33 +168,31 @@ Cite **N/A** when the diff does not touch relevant flows.
 
 ### 8. Cursor rules compliance (required)
 
-**Read every rule file** under `.cursor/rules/` before judging merge readiness. Do not rely on memory — open each `.mdc` and check the diff against it.
+**Read every rule file** under `.cursor/rules/` (including category subfolders) before judging merge readiness. Do not rely on memory — open each `.mdc` and check the diff against it. Rule index: [`.cursor/skills/SKILL.md`](../SKILL.md).
 
-| Rule file                 | What to verify on this diff                                                                                                                                                                  |
-| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `api-layer.mdc`           | Feature modules in `src/api/features/<domain>/`; shared primitives in `src/api/schema/`; shared wrappers in `src/api/types/`; pages/components do not call `useQueryClient` for domain cache |
-| `zod-validation.mdc`      | `safeParse`/`parse` at boundaries; primitives reuse; optional vs nullable correct for PATCH                                                                                                  |
-| `vitest-testing.mdc`      | New/changed `src/lib/` or `src/api/` has matching `src/test/…` tests when logic is non-trivial; no `it.todo` in touched tests                                                                |
-| `naming-conventions.mdc`  | Lowercase `pages/` folders; PascalCase page files; `use-*.ts` hooks; kebab-case asset filenames                                                                                              |
-| `page-composition.mdc`    | Complex routes in folders; no `src/pages/**` file > 750 lines; thin `*Page.tsx` shell; colocate steps/dialogs/hooks                                                                          |
-| `page-layout.mdc`         | `AppPageShell` when used; width matches route (`narrow` / `default` / `full`); aligned chrome; `gap-8` zones; mobile CTAs; flat lists                                                        |
-| `design-tokens.mdc`       | Semantic tokens only — no arbitrary `text-[…]`/`bg-[…]`/hex; no raw palette or manual `dark:` color pairs; contrast on tinted panels; rebrand via `index.css`                                |
-| `theming.mdc`             | ThemeProvider + user theme toggle when dark tokens exist; light/dark smoke on changed UI                                                                                                     |
-| `responsive-design.mdc`   | No horizontal overflow at 320px; nav collapses below `md`; touch targets ≥ 44×44 on custom controls                                                                                          |
-| `accessibility.mdc`       | Skip link + `#main`; labeled inputs (heading ≠ label); `aria-describedby` errors; `aria-live` on generating; named `TabsList`                                                                |
-| `shadcn-ui-usage.mdc`     | UI uses shadcn primitives/semantic tokens before custom controls; new custom UI is product-specific composition, not replacement primitives                                                  |
-| `icons-and-assets.mdc`    | UI icons via `iconLibrary`; brands via thesvg — no hand-rolled inline SVGs                                                                                                                   |
-| `react-state-zustand.mdc` | Server data in TanStack Query; minimal `useEffect` in pages; derived state at render; Zustand only when shared                                                                               |
-| `error-handling.mdc`      | Data surfaces implement loading, empty, error, success — no `if (!data) return null`; generating states use live regions                                                                     |
-| `forms-and-drafts.mdc`    | Long forms: dirty state, navigation blockers, autosave status, draft recovery; form errors wired for a11y                                                                                    |
-| `offline-reconnect.mdc`   | Cached reads offline, reconnect refetch, no `location.reload` on `online`, global online banner                                                                                              |
-| `feature-state.mdc`       | One `status` union per surface — no `isLoading` + `isSubmitting` + `isSaving` spaghetti in pages                                                                                             |
-| `interaction-polish.mdc`  | No uppercase tracking-widest eyebrows on every section; `prefers-reduced-motion` respected                                                                                                   |
-| `performance.mdc`         | `React.lazy` + `Suspense` per route when 3+ page modules                                                                                                                                     |
+| Rule file                       | What to verify on this diff                                                                                                                                                                  |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `api/api-layer.mdc`             | Feature modules in `src/api/features/<domain>/`; shared primitives in `src/api/schema/`; shared wrappers in `src/api/types/`; pages/components do not call `useQueryClient` for domain cache |
+| `api/zod-validation.mdc`        | `safeParse`/`parse` at boundaries; primitives reuse; optional vs nullable correct for PATCH                                                                                                  |
+| `testing/vitest-testing.mdc`    | New/changed `src/lib/` or `src/api/` has matching `src/test/…` tests when logic is non-trivial; no `it.todo` in touched tests                                                                |
+| `core/naming-conventions.mdc`   | Lowercase `pages/` folders; PascalCase page files; `use-*.ts` hooks; kebab-case asset filenames                                                                                              |
+| `pages/page-composition.mdc`    | Complex routes in folders; no `src/pages/**` file > 750 lines; thin `*Page.tsx` shell; colocate steps/dialogs/hooks                                                                          |
+| `pages/page-layout.mdc`         | `AppPageShell` when used; width matches route (`narrow` / `default` / `full`); aligned chrome; `gap-8` zones; mobile CTAs; flat lists                                                        |
+| `ui/design-tokens.mdc`          | Semantic tokens only — no arbitrary `text-[…]`/`bg-[…]`/hex; no raw palette or manual `dark:` color pairs; contrast on tinted panels; rebrand via `index.css`                                |
+| `ui/theming.mdc`                | ThemeProvider + user theme toggle when dark tokens exist; light/dark smoke on changed UI                                                                                                     |
+| `pages/responsive-design.mdc`   | No horizontal overflow at 320px; nav collapses below `md`; touch targets ≥ 44×44 on custom controls                                                                                          |
+| `forms/accessibility.mdc`       | Skip link + `#main`; labeled inputs (heading ≠ label); `aria-describedby` errors; `aria-live` on generating; named `TabsList`                                                                |
+| `ui/shadcn-ui-usage.mdc`        | UI uses shadcn primitives/semantic tokens before custom controls; new custom UI is product-specific composition, not replacement primitives                                                  |
+| `ui/icons-and-assets.mdc`       | UI icons via `iconLibrary`; brands via thesvg — no hand-rolled inline SVGs                                                                                                                   |
+| `state/react-state-zustand.mdc` | Server data in TanStack Query; minimal `useEffect` in pages; derived state at render; Zustand only when shared                                                                               |
+| `state/error-handling.mdc`      | Data surfaces implement loading, empty, error, success — no `if (!data) return null`; generating states use live regions                                                                     |
+| `forms/forms-and-drafts.mdc`    | Long forms: dirty state, navigation blockers, autosave status, draft recovery; form errors wired for a11y                                                                                    |
+| `state/offline-reconnect.mdc`   | Cached reads offline, reconnect refetch, no `location.reload` on `online`, global online banner                                                                                              |
+| `state/feature-state.mdc`       | One `status` union per surface — no `isLoading` + `isSubmitting` + `isSaving` spaghetti in pages                                                                                             |
+| `ui/interaction-polish.mdc`     | No uppercase tracking-widest eyebrows on every section; `prefers-reduced-motion` respected                                                                                                   |
+| `ui/performance.mdc`            | `React.lazy` + `Suspense` per route when 3+ page modules                                                                                                                                     |
 
 **UI / Impeccable-style gate (when diff touches `src/pages`, `src/components`, `src/layouts`):**
-
-Full checklist: [franz-frontend `audit-checklist.md`](../franz-frontend/rules/audit-checklist.md).
 
 | Dimension     | Block if                                                                                                                                 |
 | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |

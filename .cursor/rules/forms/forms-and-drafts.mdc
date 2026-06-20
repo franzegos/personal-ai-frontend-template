@@ -109,7 +109,7 @@ When drafts must survive refresh or navigation:
 ## Submit flow
 
 1. Client validate — Zod + RHF (`@/api/features/<domain>/*.schema`).
-2. `mutate` / `mutateAsync` from feature query hook.
+2. `mutate` / `mutateAsync` from feature query hook — destructure at call site (`api-layer.mdc`).
 3. On success — `form.reset(data)`, clear draft store, clear blocker, toast optional (hook may own).
 4. On error — keep form values. `VALIDATION_ERROR` → `applyFieldErrorsToForm` (no toast). Other API errors → toast (`api-error-routing.mdc`). Wire **`aria-invalid`** + **`aria-describedby`** to error elements (`accessibility.mdc`).
 

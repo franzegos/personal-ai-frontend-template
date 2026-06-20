@@ -1,13 +1,9 @@
 import { describe, expect, it } from "vitest";
-import type { UseQueryResult } from "@tanstack/react-query";
 import type { DemoPost } from "@/api/features/demo/demo.schema";
-import { getDemoPostStatus } from "@/lib/demo/demoPostStatus";
-
-function mockQuery(
-  partial: Partial<UseQueryResult<DemoPost>>,
-): UseQueryResult<DemoPost> {
-  return partial as UseQueryResult<DemoPost>;
-}
+import {
+  getDemoPostStatus,
+  type DemoPostQuerySlice,
+} from "@/lib/demo/demoPostStatus";
 
 const samplePost: DemoPost = {
   userId: 1,
@@ -16,42 +12,35 @@ const samplePost: DemoPost = {
   body: "Body",
 };
 
+function slice(partial: Partial<DemoPostQuerySlice>): DemoPostQuerySlice {
+  return {
+    isPending: false,
+    isError: false,
+    data: undefined,
+    ...partial,
+  };
+}
+
 describe("getDemoPostStatus", () => {
   it("returns loading when pending", () => {
-    expect(
-      getDemoPostStatus(mockQuery({ isPending: true, isError: false })),
-    ).toBe("loading");
+    expect(getDemoPostStatus(slice({ isPending: true }))).toBe("loading");
   });
 
   it("returns error when failed with no cached data", () => {
-    expect(
-      getDemoPostStatus(
-        mockQuery({ isPending: false, isError: true, data: undefined }),
-      ),
-    ).toBe("error");
+    expect(getDemoPostStatus(slice({ isError: true }))).toBe("error");
   });
 
   it("returns ready when errored but cached data exists", () => {
-    expect(
-      getDemoPostStatus(
-        mockQuery({ isPending: false, isError: true, data: samplePost }),
-      ),
-    ).toBe("ready");
+    expect(getDemoPostStatus(slice({ isError: true, data: samplePost }))).toBe(
+      "ready",
+    );
   });
 
   it("returns empty when success without data", () => {
-    expect(
-      getDemoPostStatus(
-        mockQuery({ isPending: false, isError: false, data: undefined }),
-      ),
-    ).toBe("empty");
+    expect(getDemoPostStatus(slice({}))).toBe("empty");
   });
 
   it("returns ready when data exists", () => {
-    expect(
-      getDemoPostStatus(
-        mockQuery({ isPending: false, isError: false, data: samplePost }),
-      ),
-    ).toBe("ready");
+    expect(getDemoPostStatus(slice({ data: samplePost }))).toBe("ready");
   });
 });

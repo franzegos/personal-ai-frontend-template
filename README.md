@@ -70,9 +70,9 @@ src/api/features/items/
 └── use-items.ts
 ```
 
-Add pages under `src/pages/<domain>/`, mappers under `src/lib/<domain>/`. Follow [api-layer](.cursor/rules/api-layer.mdc) and [frontend-feature-boundaries](.cursor/rules/frontend-feature-boundaries.mdc).
+Add pages under `src/pages/<domain>/`, mappers under `src/lib/<domain>/`. Follow [api-layer](.cursor/rules/api/api-layer.mdc) and [frontend-feature-boundaries](.cursor/rules/api/frontend-feature-boundaries.mdc).
 
-Mirror tests under `src/test/api/features/<domain>/` — see [vitest-testing](.cursor/rules/vitest-testing.mdc).
+Mirror tests under `src/test/api/features/<domain>/` — see [vitest-testing](.cursor/rules/testing/vitest-testing.mdc).
 
 ### Useful scripts
 
@@ -87,45 +87,53 @@ Mirror tests under `src/test/api/features/<domain>/` — see [vitest-testing](.c
 
 ## Documentation
 
-| Doc                                                                 | Contents                                                                                          |
-| ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| [API layer](.cursor/rules/api-layer.mdc)                            | Feature modules, services, Query hooks, OpenAPI-ready layout                                      |
-| [Feature boundaries](.cursor/rules/frontend-feature-boundaries.mdc) | Pages, API, lib ownership; no cross-feature imports                                               |
-| [Error handling](.cursor/rules/error-handling.mdc)                  | Loading, empty, error, success — no silent blank UI                                               |
-| [Forms & drafts](.cursor/rules/forms-and-drafts.mdc)                | Unsaved changes, blockers, autosave, draft recovery                                               |
-| [Offline & reconnect](.cursor/rules/offline-reconnect.mdc)          | Sleep, tab resume, reconnect — cached data + retry                                                |
-| [Feature state](.cursor/rules/feature-state.mdc)                    | One derived `status` per surface — no boolean spaghetti                                           |
-| [Frontend security](.cursor/rules/frontend-security.mdc)            | Permissions are UX only; backend is source of truth                                               |
-| [Data ownership](.cursor/rules/data-ownership.mdc)                  | Query vs RHF vs useState vs Zustand                                                               |
-| [Interaction polish](.cursor/rules/interaction-polish.mdc)          | Motion, feedback, keyboard, perceived performance                                                 |
-| [Page composition](.cursor/rules/page-composition.mdc)              | Split large routes; colocate steps and dialogs                                                    |
-| [Page layout](.cursor/rules/page-layout.mdc)                        | Optional `AppPageShell`; width preset per route; aligned chrome; zone hierarchy; mobile CTAs      |
-| [Design tokens](.cursor/rules/design-tokens.mdc)                    | Semantic colors and Tailwind scale only — no arbitrary values; safe dark mode and rebranding      |
-| [Responsive design](.cursor/rules/responsive-design.mdc)            | Mobile reflow, collapsible nav, 44×44 touch targets                                               |
-| [Theming](.cursor/rules/theming.mdc)                                | ThemeProvider, dark-mode toggle, token validation workflow                                        |
-| [Accessibility](.cursor/rules/accessibility.mdc)                    | Labels, skip link, live regions, form error wiring, keyboard                                      |
-| [Incident log](docs/incident-log.md)                                | Track AI mistakes; promote to rules after 3×                                                      |
-| [Theming](#theming)                                                 | shadcn Create presets                                                                             |
-| [Cursor rules](.cursor/rules/)                                      | Full ruleset — `repo-agent-skills` explains skills; start with `naming-conventions` + `api-layer` |
+| Doc                                                                     | Contents                                                                                                          |
+| ----------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| [Rule index](.cursor/skills/SKILL.md)                                   | Map of all rules by category (`core/`, `api/`, `state/`, `pages/`, `ui/`, …)                                      |
+| [API layer](.cursor/rules/api/api-layer.mdc)                            | Feature modules, services, Query hooks, OpenAPI-ready layout                                                      |
+| [Feature boundaries](.cursor/rules/api/frontend-feature-boundaries.mdc) | Pages, API, lib ownership; no cross-feature imports                                                               |
+| [Error handling](.cursor/rules/state/error-handling.mdc)                | Loading, empty, error, success — no silent blank UI                                                               |
+| [Forms & drafts](.cursor/rules/forms/forms-and-drafts.mdc)              | Unsaved changes, blockers, autosave, draft recovery                                                               |
+| [Offline & reconnect](.cursor/rules/state/offline-reconnect.mdc)        | Sleep, tab resume, reconnect — cached data + retry                                                                |
+| [Feature state](.cursor/rules/state/feature-state.mdc)                  | One derived `status` per surface — no boolean spaghetti                                                           |
+| [Frontend security](.cursor/rules/security/frontend-security.mdc)       | Permissions are UX only; backend is source of truth                                                               |
+| [Data ownership](.cursor/rules/state/data-ownership.mdc)                | Query vs RHF vs useState vs Zustand                                                                               |
+| [Interaction polish](.cursor/rules/ui/interaction-polish.mdc)           | Motion, feedback, keyboard, perceived performance                                                                 |
+| [Page composition](.cursor/rules/pages/page-composition.mdc)            | Split large routes; colocate steps and dialogs                                                                    |
+| [Page layout](.cursor/rules/pages/page-layout.mdc)                      | Optional `AppPageShell`; width preset per route; aligned chrome; zone hierarchy; mobile CTAs                      |
+| [Design tokens](.cursor/rules/ui/design-tokens.mdc)                     | Semantic colors and Tailwind scale only — no arbitrary values; safe dark mode and rebranding                      |
+| [Responsive design](.cursor/rules/pages/responsive-design.mdc)          | Mobile reflow, collapsible nav, 44×44 touch targets                                                               |
+| [Theming](.cursor/rules/ui/theming.mdc)                                 | ThemeProvider, dark-mode toggle, token validation workflow                                                        |
+| [Accessibility](.cursor/rules/forms/accessibility.mdc)                  | Labels, skip link, live regions, form error wiring, keyboard                                                      |
+| [Incident log](docs/incident-log.md)                                    | Track AI mistakes; promote to rules after 3×                                                                      |
+| [Theming](#theming)                                                     | shadcn Create presets                                                                                             |
+| [Cursor rules](.cursor/rules/)                                          | Categorized rules — start with [SKILL.md](.cursor/skills/SKILL.md) or `core/naming-conventions` + `api/api-layer` |
 
 ### Cursor skills
 
-| Skill                    | Example                                   |
-| ------------------------ | ----------------------------------------- |
-| `@franz-frontend`        | page layout, tokens, API errors, UI audit |
-| `@commit-changes`        | commit my changes                         |
-| `@create-pull-request`   | open PR to `main`                         |
-| `@merge-readiness-check` | ready to merge?                           |
+| Skill                                                | Example                           |
+| ---------------------------------------------------- | --------------------------------- |
+| [`.cursor/skills/SKILL.md`](.cursor/skills/SKILL.md) | rule index — which `.mdc` applies |
+| `@commit-changes`                                    | commit my changes                 |
+| `@create-pull-request`                               | open PR to `main`                 |
+| `@merge-readiness-check`                             | ready to merge?                   |
 
 PR body uses `.github/PULL_REQUEST_TEMPLATE.md` (not Cursor's global PR format).
 
-### Cursor rules (file-scoped)
+### Cursor rules (by folder)
 
-`accessibility`, `api-layer`, `async-ui`, `data-ownership`, `design-tokens`, `error-handling`, `feature-state`, `forms-and-drafts`, `frontend-feature-boundaries`, `frontend-security`, `icons-and-assets`, `interaction-polish`, `offline-reconnect`, `page-layout`, `performance`, `react-state-zustand`, `response-mapping`, `responsive-design`, `route-protection`, `shadcn-ui-usage`, `theming`, `vitest-testing`, `zod-validation`
+| Folder      | Rules                                                                                                       |
+| ----------- | ----------------------------------------------------------------------------------------------------------- |
+| `core/`     | `naming-conventions`, `repo-agent-skills` (always apply)                                                    |
+| `api/`      | `api-layer`, `api-error-routing`, `zod-validation`, `response-mapping`, `frontend-feature-boundaries`       |
+| `state/`    | `feature-state`, `data-ownership`, `react-state-zustand`, `error-handling`, `async-ui`, `offline-reconnect` |
+| `pages/`    | `page-composition`, `page-layout`, `responsive-design`                                                      |
+| `ui/`       | `design-tokens`, `theming`, `shadcn-ui-usage`, `icons-and-assets`, `interaction-polish`, `performance`      |
+| `forms/`    | `forms-and-drafts`, `accessibility`                                                                         |
+| `security/` | `route-protection`, `frontend-security`                                                                     |
+| `testing/`  | `vitest-testing`                                                                                            |
 
-**Always apply:** `naming-conventions`, `repo-agent-skills`
-
-Tune always-on rules in Cursor settings — they use more tokens per request.
+Full map: [`.cursor/skills/SKILL.md`](.cursor/skills/SKILL.md).
 
 ### shadcn/ui
 

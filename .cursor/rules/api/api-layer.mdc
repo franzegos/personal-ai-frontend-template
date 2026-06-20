@@ -124,7 +124,116 @@ Generated code stays dumb; **feature folders own app behavior** (Query, invalida
 
 ## Pages & components
 
-- Prefer **`const { mutate, isPending } = useX()`** from **`@/api/features/<domain>/use-<domain>`**.
+**Destructure TanStack hooks at the call site** — queries and mutations. Pull flags and handlers from the return value. Do not keep a whole hook result in one variable and branch on `.isPending`.
+
+### Query hooks (reads)
+
+Do not assign `const query = useX()` or name the whole result after the data (`const items = useItems()` reads like `Item[]`, not a query result).
+
+```tsx
+// Bad — query object
+const query = useItems();
+if (query.isPending) return <ItemsSkeleton />;
+
+// Bad — whole result named like data
+const items = useItems();
+if (items.isPending) ...
+```
+
+```tsx
+// Good — single hook (plain names, or alias data for readability)
+const { data, isPending, isError, refetch, isFetching, error } = useItems();
+// or: const { data: post, isPending, ... } = useDemoPost();
+```
+
+**Multiple query hooks on one page** — alias overlapping names:
+
+```tsx
+const {
+  data: items,
+  isPending: isItemsPending,
+  isError: isItemsError,
+  refetch: refetchItems,
+  isFetching: isItemsFetching,
+  error: itemsError,
+} = useItems();
+
+const {
+  data: profile,
+  isPending: isProfilePending,
+  refetch: refetchProfile,
+} = useProfile();
+```
+
+Branching on read flags (loading / error / empty / success) → **`error-handling.mdc`**. Status unions from slices → **`feature-state.mdc`**.
+
+### Mutation hooks (writes)
+
+Same rules: **destructure** from the feature hook return. Do not use `const save = useSaveItem()` then `save.isPending` — `save` reads like an action, not the hook result.
+
+```tsx
+// Bad — whole hook result with action-like name
+const save = useSaveItem();
+<Button disabled={save.isPending}>...</Button>
+
+// Bad — mutation object
+const mutation = useCreateItem();
+mutation.mutate(values);
+```
+
+```tsx
+// Good — destructure mutate + flags (or use orchestration hook below)
+const {
+  mutate: saveItem,
+  isPending: isSavingItem,
+  isError: isSaveError,
+  error: saveError,
+} = useSaveItem();
+
+<Button
+  disabled={isSavingItem}
+  aria-busy={isSavingItem}
+  onClick={() => saveItem(getValues())}
+>
+  {isSavingItem ? "Saving…" : "Save"}
+</Button>
+```
+
+**Multiple mutations on one page** — alias every overlapping field:
+
+```tsx
+const { mutate: createItem, isPending: isCreatingItem } = useCreateItem();
+const { mutate: deleteItem, isPending: isDeletingItem } = useDeleteItem();
+
+<Button disabled={isCreatingItem}>Create</Button>
+<Button disabled={isDeletingItem}>Delete</Button>
+```
+
+**Orchestration hooks** (`useSubmitItem`, `useSaveItemDraft`) may expose a derived **`submitStatus`** union — pages destructure that hook the same way:
+
+```tsx
+const { submit, submitStatus } = useSubmitItem();
+// not: const submitItem = useSubmitItem(); submitItem.submitStatus
+```
+
+Inside **`use-<domain>.ts`**, destructure `useMutation` before building the return object — do not pass through a raw `mutation` object to pages:
+
+```typescript
+const { mutate, isPending, isError, isSuccess } = useMutation({ ... });
+
+const submitStatus: SubmitStatus = isPending
+  ? "submitting"
+  : isSuccess
+    ? "success"
+    : isError
+      ? "error"
+      : "idle";
+
+return { submit: mutate, submitStatus, isPending, isError };
+```
+
+Form submit + server `fieldErrors` → **`api-error-routing.mdc`**. One `submitStatus` per surface → **`feature-state.mdc`**.
+
 - **Do not** call **`useQueryClient()`** in **`src/pages/`** or **`src/components/`** — cache logic lives in **`src/api/features/**`**.
 - Client-side validation toasts (Zod before submit) may stay in the page.
 - Local UI state stays in component state or `src/lib/hooks/` — not in services.
@@ -140,6 +249,7 @@ Generated code stays dumb; **feature folders own app behavior** (Query, invalida
 - [ ] Shared Zod primitives use `src/api/schema/primitives.schema.ts`; shared wrappers use `src/api/types/global.types.ts`.
 - [ ] Mappers and non-schema helpers live under **`src/lib/<domain>/`**.
 - [ ] Service functions use the shared **`client`**; hooks are what pages/components import.
+- [ ] Pages **destructure** query and mutation hooks at the call site; alias when multiple hooks share a page (see **Pages & components** above).
 - [ ] Pages and **`src/components/`** do not use **`useQueryClient`** for domain cache logic.
 - [ ] Mutation hooks own API success toasts and non-validation error toasts; `VALIDATION_ERROR` is mapped in the form (`api-error-routing.mdc`).
 - [ ] Query keys are exported for invalidation.

@@ -2,7 +2,7 @@
 
 Components reference semantic CSS variable tokens. Change the variables to change every component.
 
-**In app code:** use tokens only — no arbitrary `text-[…]` / `bg-[…]` / hex in components ([design-tokens.mdc](../../rules/design-tokens.mdc), [theming.mdc](../../rules/theming.mdc), [responsive-design.mdc](../../rules/responsive-design.mdc)). Extend the theme here in `src/index.css`, not per-component overrides.
+**In app code:** use tokens only — no arbitrary `text-[…]` / `bg-[…]` / hex in components ([design-tokens.mdc](../../rules/ui/design-tokens.mdc), [theming.mdc](../../rules/ui/theming.mdc), [responsive-design.mdc](../../rules/pages/responsive-design.mdc)). Extend the theme here in `src/index.css`, not per-component overrides.
 
 ## Contents
 

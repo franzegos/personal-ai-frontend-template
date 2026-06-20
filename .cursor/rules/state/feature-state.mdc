@@ -6,9 +6,7 @@ alwaysApply: false
 
 # Feature state
 
-**Deep reference:** [franz-frontend skill](../skills/franz-frontend/SKILL.md) → [state.md](../skills/franz-frontend/rules/state.md).
-
-See also: **`error-handling.mdc`**, **`data-ownership.mdc`**, **`async-ui.mdc`**, **`offline-reconnect.mdc`**, **`api-layer.mdc`**.
+See also: **`error-handling.mdc`**, **`data-ownership.mdc`**, **`async-ui.mdc`**, **`offline-reconnect.mdc`**, **`api-layer.mdc`**. Index: [`skills/SKILL.md`](../../skills/SKILL.md).
 
 Each **feature surface** (list page, detail panel, editor, submit flow) exposes **one derived status** — not a pile of `isLoading`, `isPending`, `isSubmitting`, `isSaving`, `isUpdating` booleans in JSX.
 
@@ -28,7 +26,6 @@ No XState required. Use a **small union type** and derive it in **one place** (q
 
 ```typescript
 // src/lib/items/itemListStatus.ts
-import type { UseQueryResult } from "@tanstack/react-query";
 import type { Item } from "@/api/features/items/items.schema";
 
 export type ItemListStatus =
@@ -37,33 +34,41 @@ export type ItemListStatus =
   | "empty"
   | "ready";
 
-export function getItemListStatus(
-  query: UseQueryResult<Item[]>,
-): ItemListStatus {
-  if (query.isPending) return "loading";
-  if (query.isError) return "error";
-  if (!query.data?.length) return "empty";
+export type ItemListQuerySlice = {
+  isPending: boolean;
+  isError: boolean;
+  data: Item[] | undefined;
+};
+
+export function getItemListStatus({
+  isPending,
+  isError,
+  data,
+}: ItemListQuerySlice): ItemListStatus {
+  if (isPending) return "loading";
+  if (isError) return "error";
+  if (!data?.length) return "empty";
   return "ready";
 }
 ```
 
 ```tsx
-// Page — one branch per status
-const query = useItems();
-const status = getItemListStatus(query);
+// Page — destructure the hook, then branch on status
+const { data, isPending, isError, isFetching, refetch } = useItems();
+const status = getItemListStatus({ isPending, isError, data });
 
 switch (status) {
   case "loading":
     return <ItemsSkeleton />;
   case "error":
-    return <ItemsError onRetry={() => void query.refetch()} />;
+    return <ItemsError onRetry={() => void refetch()} />;
   case "empty":
     return <ItemsEmpty />;
   case "ready":
     return (
       <ItemTable
-        rows={query.data}
-        isRefreshing={query.isFetching}
+        rows={data}
+        isRefreshing={isFetching}
       />
     );
 }
@@ -82,17 +87,17 @@ export type SubmitStatus = "idle" | "submitting" | "success" | "error";
 
 // Orchestration hook in src/api/features/items/use-submit-item.ts
 export function useSubmitItem() {
-  const mutation = useMutation({ ... });
+  const { mutate, isPending, isSuccess, isError } = useMutation({ ... });
 
-  const submitStatus: SubmitStatus = mutation.isPending
+  const submitStatus: SubmitStatus = isPending
     ? "submitting"
-    : mutation.isSuccess
+    : isSuccess
       ? "success"
-      : mutation.isError
+      : isError
         ? "error"
         : "idle";
 
-  return { submit: mutation.mutate, submitStatus, ... };
+  return { submit: mutate, submitStatus, isPending, isError };
 }
 ```
 
@@ -103,6 +108,8 @@ const { submit, submitStatus } = useSubmitItem();
   {submitStatus === "submitting" ? "Saving…" : "Save"}
 </Button>
 ```
+
+Pages may also destructure **`mutate` + `isPending`** directly from a mutation hook when there is no orchestration wrapper — same aliasing rules as queries (`api-layer.mdc`).
 
 **Do not** add `isSaving`, `isUpdating`, and `isSubmitting` as three parallel booleans — one `submitStatus` union.
 
@@ -150,7 +157,7 @@ Each **region** gets its own status — not one global boolean for the whole pag
 
 ```tsx
 case "ready":
-  return <ItemTable rows={data} isRefreshing={query.isFetching} />;
+  return <ItemTable rows={data} isRefreshing={isFetching} />;
 ```
 
 ## Testing
@@ -159,6 +166,9 @@ Unit-test `getXxxStatus` with table-driven Query result shapes — no render (`v
 
 ## Checklist
 
+- [ ] Query hooks are **destructured** at the call site — no `const query = useX()` branching (`api-layer.mdc`).
+- [ ] **Mutation hooks** are **destructured** too — no `const save = useSaveItem()` then `.isPending` (`api-layer.mdc`).
+- [ ] **Multiple hooks** on one page use aliased names for queries and mutations — `api-layer.mdc`.
 - [ ] Pages avoid inline combos of `isPending` / `isLoading` / `isFetching` for branching.
 - [ ] Each data surface exports or uses one read `status` union.
 - [ ] Submit flows use one `submitStatus` (or named action status) — not parallel `isSaving` flags.

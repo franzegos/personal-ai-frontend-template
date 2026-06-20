@@ -6,7 +6,7 @@ alwaysApply: false
 
 # Theming
 
-See also: **`design-tokens.mdc`**, **`shadcn-ui-usage.mdc`**, shadcn skill [`customization.md`](../skills/shadcn/customization.md).
+See also: **`design-tokens.mdc`**, **`shadcn-ui-usage.mdc`**, shadcn skill [`customization.md`](../../skills/shadcn/customization.md).
 
 Dark mode and rebranding are **token workflows** — not per-component color overrides.
 

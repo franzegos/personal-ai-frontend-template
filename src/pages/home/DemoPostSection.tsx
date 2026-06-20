@@ -148,12 +148,19 @@ function DemoPostReady({
 }
 
 export function DemoPostSection() {
-  const query = useDemoPost();
-  const status = getDemoPostStatus(query);
+  const {
+    data: post,
+    isPending,
+    isError,
+    isFetching,
+    refetch,
+    error,
+  } = useDemoPost();
+  const status = getDemoPostStatus({ isPending, isError, data: post });
   const isOnline = useOnlineStatus();
 
   const handleRetry = () => {
-    void query.refetch();
+    void refetch();
   };
 
   return (
@@ -166,11 +173,11 @@ export function DemoPostSection() {
             variant="ghost"
             size="sm"
             className="text-muted-foreground h-8"
-            disabled={status === "loading" || query.isFetching}
-            aria-busy={query.isFetching}
+            disabled={status === "loading" || isFetching}
+            aria-busy={isFetching}
             onClick={handleRetry}
           >
-            {query.isFetching ? "Refreshing…" : "Refresh"}
+            {isFetching ? "Refreshing…" : "Refresh"}
           </Button>
         </CardAction>
       </CardHeader>
@@ -179,21 +186,21 @@ export function DemoPostSection() {
         {status === "loading" && <DemoPostSkeleton />}
         {status === "error" && (
           <DemoPostError
-            message={query.error?.message ?? ""}
+            message={error?.message ?? ""}
             offline={!isOnline}
             onRetry={handleRetry}
-            isRetrying={query.isFetching}
+            isRetrying={isFetching}
           />
         )}
         {status === "empty" && (
-          <DemoPostEmpty onRetry={handleRetry} isRetrying={query.isFetching} />
+          <DemoPostEmpty onRetry={handleRetry} isRetrying={isFetching} />
         )}
-        {status === "ready" && query.data && (
+        {status === "ready" && post && (
           <DemoPostReady
-            {...mapDemoPostToCard(query.data)}
-            isRefreshing={query.isFetching && isOnline}
-            showStaleWarning={query.isError}
-            refreshErrorMessage={query.error?.message}
+            {...mapDemoPostToCard(post)}
+            isRefreshing={isFetching && isOnline}
+            showStaleWarning={isError}
+            refreshErrorMessage={error?.message}
           />
         )}
       </CardContent>

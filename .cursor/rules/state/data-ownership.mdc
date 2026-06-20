@@ -83,7 +83,7 @@ Do not mirror full server lists into a store “for convenience.”
 | ------------------ | ------------------------------------------------------- |
 | `*.service.ts`     | HTTP, parsing response DTOs                             |
 | `use-*.ts` in feature | Keys, fetch, cache, mutations, toasts, optimistic patch |
-| `pages/` / UI      | Render `data`, `isPending`, `error`; call `mutate`      |
+| `pages/` / UI      | Destructure `data`, `isPending`, `mutate`, `isError`, …; call `mutate` — see `api-layer.mdc` |
 | `lib/<domain>/`    | Pure mappers, message helpers — **no** fetched caches |
 
 **Pages do not** call `useQueryClient` for domain cache logic (`api-layer.mdc`).

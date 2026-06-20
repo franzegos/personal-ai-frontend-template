@@ -105,7 +105,7 @@ Prefer Query’s built-in behavior over hand-rolled `requestId` when data is ser
 | Initial load           | `isPending` + skeleton                                 |
 | Background refetch     | Keep stale data visible; subtle `isFetching` indicator |
 | Filter change          | Prefer `placeholderData: keepPreviousData` or skeleton swap when UX needs it |
-| Mutation in flight     | `isPending` on button; disable double-submit             |
+| Mutation in flight     | Destructure `isPending`; disable button; guard double-submit (`api-layer.mdc`) |
 
 **Do not** clear the list to `[]` on every refetch unless product requires it — causes layout flash (`interaction-polish.mdc` §12).
 

@@ -6,9 +6,7 @@ alwaysApply: false
 
 # Design tokens
 
-**Deep reference:** [franz-frontend skill](../skills/franz-frontend/SKILL.md) → [tokens.md](../skills/franz-frontend/rules/tokens.md).
-
-See also: **`shadcn-ui-usage.mdc`**, **`theming.mdc`**, **`interaction-polish.mdc`**, **`src/index.css`**, shadcn skill [`styling.md`](../skills/shadcn/rules/styling.md).
+See also: **`shadcn-ui-usage.mdc`**, **`theming.mdc`**, **`interaction-polish.mdc`**, **`src/index.css`**, shadcn skill [`styling.md`](../../skills/shadcn/rules/styling.md). Index: [`skills/SKILL.md`](../../skills/SKILL.md).
 
 **All visual styling must flow through the theme** — semantic Tailwind classes backed by CSS variables in `src/index.css`. This keeps light/dark mode correct and makes rebranding a token change, not a repo-wide find-and-replace.
 

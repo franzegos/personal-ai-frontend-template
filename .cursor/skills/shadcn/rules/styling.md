@@ -15,7 +15,7 @@ See [customization.md](../customization.md) for theming, CSS variables, and addi
 - Use cn() for conditional classes
 - No manual z-index on overlay components
 
-Project rule: [design-tokens.mdc](../../../rules/design-tokens.mdc) — full token table and checklist.
+Project rule: [design-tokens.mdc](../../../rules/ui/design-tokens.mdc) — full token table and checklist.
 
 ---
 
@@ -65,7 +65,7 @@ If you need a success/positive color that doesn't exist as a semantic token, use
 
 ## No arbitrary Tailwind values
 
-Use the **design scale** and **semantic tokens** — not one-off bracket classes. Required for dark mode and rebranding ([design-tokens.mdc](../../../rules/design-tokens.mdc)).
+Use the **design scale** and **semantic tokens** — not one-off bracket classes. Required for dark mode and rebranding ([design-tokens.mdc](../../../rules/ui/design-tokens.mdc)).
 
 **Incorrect:**
 

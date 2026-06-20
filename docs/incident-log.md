@@ -4,11 +4,11 @@ Track mistakes AI (or humans) make while building on this template. **Rules grow
 
 ## When to add a rule
 
-| Occurrences | Action                                          |
-| ----------- | ----------------------------------------------- |
-| **1×**      | Log it here only — fix the PR, no new rule      |
-| **2×**      | Log it — mention in PR review / merge-readiness |
-| **3×**      | Add or strengthen a `.cursor/rules/*.mdc` file  |
+| Occurrences | Action                                            |
+| ----------- | ------------------------------------------------- |
+| **1×**      | Log it here only — fix the PR, no new rule        |
+| **2×**      | Log it — mention in PR review / merge-readiness   |
+| **3×**      | Add or strengthen a `.cursor/rules/**/*.mdc` file |
 
 Do not add rules for one-off mistakes. Do not add generic architecture rules (CQRS, DDD, SOLID, etc.) — keep rules tied to bugs you have actually seen.
 
