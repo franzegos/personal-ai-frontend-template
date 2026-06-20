@@ -25,19 +25,19 @@ No XState required. Use a **small union type** and derive it in **one place** (q
 ## Read surfaces (lists, details)
 
 ```typescript
-// src/lib/campaigns/campaignListStatus.ts
+// src/lib/items/itemListStatus.ts
 import type { UseQueryResult } from "@tanstack/react-query";
-import type { Campaign } from "@/api/features/campaigns/campaigns.schema";
+import type { Item } from "@/api/features/items/items.schema";
 
-export type CampaignListStatus =
+export type ItemListStatus =
   | "loading"
   | "error"
   | "empty"
   | "ready";
 
-export function getCampaignListStatus(
-  query: UseQueryResult<Campaign[]>,
-): CampaignListStatus {
+export function getItemListStatus(
+  query: UseQueryResult<Item[]>,
+): ItemListStatus {
   if (query.isPending) return "loading";
   if (query.isError) return "error";
   if (!query.data?.length) return "empty";
@@ -47,19 +47,19 @@ export function getCampaignListStatus(
 
 ```tsx
 // Page — one branch per status
-const query = useCampaigns();
-const status = getCampaignListStatus(query);
+const query = useItems();
+const status = getItemListStatus(query);
 
 switch (status) {
   case "loading":
-    return <CampaignsSkeleton />;
+    return <ItemsSkeleton />;
   case "error":
-    return <CampaignsError onRetry={() => void query.refetch()} />;
+    return <ItemsError onRetry={() => void query.refetch()} />;
   case "empty":
-    return <CampaignsEmpty />;
+    return <ItemsEmpty />;
   case "ready":
     return (
-      <CampaignTable
+      <ItemTable
         rows={query.data}
         isRefreshing={query.isFetching}
       />
@@ -78,8 +78,8 @@ Separate **read status** from **submit status**:
 ```typescript
 export type SubmitStatus = "idle" | "submitting" | "success" | "error";
 
-// Orchestration hook in src/api/features/campaigns/use-submit-campaign.ts
-export function useSubmitCampaign() {
+// Orchestration hook in src/api/features/items/use-submit-item.ts
+export function useSubmitItem() {
   const mutation = useMutation({ ... });
 
   const submitStatus: SubmitStatus = mutation.isPending
@@ -95,7 +95,7 @@ export function useSubmitCampaign() {
 ```
 
 ```tsx
-const { submit, submitStatus } = useSubmitCampaign();
+const { submit, submitStatus } = useSubmitItem();
 
 <Button disabled={submitStatus === "submitting"}>
   {submitStatus === "submitting" ? "Saving…" : "Save"}
@@ -138,8 +138,8 @@ if (loading && !busy) ...
 Each **region** gets its own status — not one global boolean for the whole page:
 
 ```tsx
-<CampaignsSummary status={summaryStatus} />
-<ActivityFeed status={activityStatus} />
+<ItemsSummary status={summaryStatus} />
+<ActivityPanel status={activityStatus} />
 ```
 
 ## Background refresh
@@ -148,7 +148,7 @@ Each **region** gets its own status — not one global boolean for the whole pag
 
 ```tsx
 case "ready":
-  return <CampaignTable rows={data} isRefreshing={query.isFetching} />;
+  return <ItemTable rows={data} isRefreshing={query.isFetching} />;
 ```
 
 ## Testing

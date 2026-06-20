@@ -82,24 +82,24 @@ if (!isOnline) return <OfflineBanner />; // non-blocking strip, not full-page un
 ## Reads while offline
 
 ```tsx
-const { data, isPending, isError, isFetching, error } = useCampaigns();
+const { data, isPending, isError, isFetching, error } = useItems();
 const isOnline = useOnlineStatus();
 
-if (isPending) return <CampaignsSkeleton />;
+if (isPending) return <ItemsSkeleton />;
 if (isError && !data) {
-  return <CampaignsError error={error} offline={!isOnline} onRetry={refetch} />;
+  return <ItemsError error={error} offline={!isOnline} onRetry={refetch} />;
 }
 
 return (
   <>
     {!isOnline && <StaleDataBanner label="Offline — showing saved data" />}
-    <CampaignTable rows={data ?? []} isRefreshing={isFetching && isOnline} />
+    <ItemsTable rows={data ?? []} isRefreshing={isFetching && isOnline} />
   </>
 );
 ```
 
 - **Error + cached data** — prefer showing cache with a warning over wiping the UI.
-- **Empty vs offline** — “No campaigns yet” ≠ “You’re offline” (`error-handling.mdc`).
+- **Empty vs offline** — “No items yet” ≠ “You’re offline” (`error-handling.mdc`).
 
 ## Mutations while offline
 

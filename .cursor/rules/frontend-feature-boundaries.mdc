@@ -8,11 +8,13 @@ alwaysApply: false
 
 See also: **`naming-conventions.mdc`**, **`api-layer.mdc`**, **`response-mapping.mdc`**, **`page-composition.mdc`**.
 
-Mirror backend **module boundaries** on the client. Features own their vertical slice; **avoid cross-feature imports** that create spaghetti (`billing` ↔ `campaigns` ↔ `users`).
+Mirror backend **module boundaries** on the client. Features own their vertical slice; **avoid cross-feature imports** that create spaghetti (`orders` ↔ `items` ↔ `users`).
+
+Examples use placeholder domain names (`items`, `invoices`, `<feature>`) — match your product’s modules.
 
 ## Feature = product area
 
-A **feature** is a user-facing domain: `billing`, `campaigns`, `users`, `settings`, `onboarding`, etc. Map features to:
+A **feature** is a user-facing domain: `items`, `orders`, `users`, `settings`, etc. Map features to:
 
 - `src/pages/<feature>/` — routes and page-only components
 - `src/components/<Feature>/` or colocated under pages — feature-specific UI
@@ -39,8 +41,8 @@ Each feature **owns**:
 
 ```typescript
 // Feature page imports its own stack + cross-cutting
-import { useCampaigns } from "@/api/features/campaigns/use-campaigns";
-import { mapCampaignToRow } from "@/lib/campaigns/mapCampaignToRow";
+import { useItems } from "@/api/features/items/use-items";
+import { mapItemToRow } from "@/lib/items/mapItemToRow";
 import { Button } from "@/components/ui/button";
 import { useAuthMe } from "@/api/features/auth/use-auth";
 ```
@@ -48,14 +50,14 @@ import { useAuthMe } from "@/api/features/auth/use-auth";
 ### Avoid
 
 ```typescript
-// Bad — billing page reaches into campaigns internals
-import { CampaignDraftPanel } from "@/pages/campaigns/CampaignDraftPanel";
-import { useCampaignStore } from "@/lib/stores/campaignStore";
+// Bad — invoices page reaches into items internals
+import { ItemDraftPanel } from "@/pages/items/ItemDraftPanel";
+import { useItemStore } from "@/lib/stores/itemStore";
 ```
 
 ```typescript
-// Bad — lib/billing imports lib/campaigns helper
-import { formatCampaignLabel } from "@/lib/campaigns/formatCampaignLabel";
+// Bad — lib/invoices imports lib/items helper
+import { formatItemLabel } from "@/lib/items/formatItemLabel";
 ```
 
 ### When features need each other
@@ -63,13 +65,13 @@ import { formatCampaignLabel } from "@/lib/campaigns/formatCampaignLabel";
 1. **Shared kernel** — Move truly generic helpers to `src/lib/shared/` or root `src/lib/utils/` (sparingly).
 2. **API composition** — Backend aggregates; frontend consumes one query — do not import another feature’s page components.
 3. **Cross-feature UI** — Extract to `src/components/shared/` only when **two or more** features need the same component; keep it dumb (props in, events out).
-4. **Navigation** — Link by route (`/campaigns/:id`), not by importing another feature’s page.
+4. **Navigation** — Link by route (`/items/:id`), not by importing another feature’s page.
 
 ## `src/api/features/` boundaries
 
 - **One folder per backend module** — do not split a domain across `services/`, `queries/`, and `schema/` trees.
-- **No cross-feature imports** between `features/billing/` and `features/campaigns/` — share via `api/types/global.types.ts`, `api/schema/primitives.schema.ts`, or backend aggregation.
-- Surface segments (`features/admin/campaigns/`) follow the same rules within that subtree.
+- **No cross-feature imports** between `features/invoices/` and `features/items/` — share via `api/types/global.types.ts`, `api/schema/primitives.schema.ts`, or backend aggregation.
+- Surface segments (`features/admin/items/`) follow the same rules within that subtree.
 
 ## `src/components/ui/`
 
@@ -77,7 +79,7 @@ shadcn primitives are **global** — any feature may import `@/components/ui/*`.
 
 ## Stores
 
-Prefer **feature-scoped** Zustand files: `campaignDraftStore.ts`, not a monolith with every domain. **Do not** import another feature’s store from a different feature’s pages.
+Prefer **feature-scoped** Zustand files: `itemDraftStore.ts`, not a monolith with every domain. **Do not** import another feature’s store from a different feature’s pages.
 
 ## Refactor trigger
 

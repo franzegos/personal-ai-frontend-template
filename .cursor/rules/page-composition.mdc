@@ -6,9 +6,13 @@ alwaysApply: false
 
 # Page composition
 
-See also: **`naming-conventions.mdc`**, **`frontend-feature-boundaries.mdc`**, **`feature-state.mdc`**, **`forms-and-drafts.mdc`**, **`api-layer.mdc`**.
+See also: **`page-layout.mdc`**, **`naming-conventions.mdc`**, **`frontend-feature-boundaries.mdc`**, **`feature-state.mdc`**, **`forms-and-drafts.mdc`**, **`api-layer.mdc`**.
 
 Large route files are hard to review, test, and reuse. **One flat `FooPage.tsx` per complex route is a smell** — colocate a **folder per URL area** with a thin page shell and focused children.
+
+**Spacing, alignment, and hierarchy** → `page-layout.mdc` (`AppPageShell`, `PageHeader`, zone rhythm).
+
+Examples below use placeholder names (`items`, `<domain>`) — **replace with your product’s routes and modules**.
 
 ## Size limits
 
@@ -26,15 +30,15 @@ Counts are guidelines — a 900-line file with a tracked split PR is OK; a growi
 **One lowercase folder per URL area** under `src/pages/<segment>/`:
 
 ```
-src/pages/brand/campaigns/
-  CampaignsPage.tsx
+src/pages/app/items/
+  ItemsPage.tsx
   new/
-    CreateCampaignPage.tsx       ← route default export (thin)
-    CampaignDetailsStep.tsx
-    CampaignBudgetStep.tsx
-    CampaignReviewStep.tsx
-    CampaignFormDialogs.tsx
-    CreateCampaignWizardContext.tsx   ← thin React provider; hooks in lib/campaigns/
+    CreateItemPage.tsx          ← route default export (thin)
+    ItemDetailsStep.tsx
+    ItemOptionsStep.tsx
+    ItemReviewStep.tsx
+    ItemFormDialogs.tsx
+    CreateItemWizardContext.tsx ← thin React provider; hooks in lib/items/
 ```
 
 Rules:
@@ -42,24 +46,24 @@ Rules:
 - **Page shell** wires layout, route params, and child composition — minimal logic.
 - **Colocate** page-only **components** in the same folder — orchestration hooks belong in `src/lib/<domain>/`.
 - **`index.tsx`** is optional; prefer explicit `*Page.tsx` imports in the router.
-- **Do not** create PascalCase page folders (`pages/CampaignsPage/`).
-- Examples use generic segments (`brand`, `app`, `creator`) — adapt folder names to your product routes.
+- **Do not** create PascalCase page folders (`pages/ItemsPage/`).
+- Folder segments (`app`, `admin`, `public`) are **examples** — match your router.
 
 ## What goes where
 
 | Asset | Location | Example |
 | ----- | -------- | ------- |
-| HTTP + TanStack Query | `src/api/features/<domain>/` | `use-campaigns.ts` |
-| API DTOs, Zod schemas, domain client types | `src/api/features/<domain>/` | `campaigns.schema.ts`, `courses.types.ts` |
-| Mappers, validation, domain orchestration hooks | `src/lib/<domain>/` | `mapCampaign.ts`, `useCampaignWizard.ts`, `validateCampaignWizard.ts` |
-| Wizard / step UI orchestration | `src/lib/<domain>/` (camelCase `use*.ts`) | `useCourseWizard.ts`, `useCourseWizardState.ts` |
-| Step, tab, dialog UI | Page folder `PascalCase.tsx` | `CampaignBudgetStep.tsx` |
-| Route-only React context | Page folder `PascalCase.tsx` | `CreateCampaignWizardContext.tsx` |
+| HTTP + TanStack Query | `src/api/features/<domain>/` | `use-items.ts` |
+| API DTOs, Zod schemas, types | `src/api/features/<domain>/` | `items.schema.ts`, `items.types.ts` |
+| Mappers, validation, orchestration hooks | `src/lib/<domain>/` | `mapItem.ts`, `useItemWizard.ts`, `validateItemWizard.ts` |
+| Multi-step orchestration | `src/lib/<domain>/` (camelCase `use*.ts`) | `useItemWizard.ts`, `useItemWizardState.ts` |
+| Step, tab, dialog UI | Page folder `PascalCase.tsx` | `ItemOptionsStep.tsx` |
+| Route-only React context | Page folder `PascalCase.tsx` | `CreateItemWizardContext.tsx` |
 | Shared across 2+ features | `src/components/shared/` | dumb props-only UI |
 
-**`src/lib/<domain>/`** is not only mappers — it holds **reusable domain logic**: view-model helpers, validation, multi-step orchestration hooks, and context wiring types (`courseWizardCtx.types.ts`).
+**`src/lib/<domain>/`** holds reusable domain logic: mappers, validation, orchestration hooks, context wiring types (`itemWizardCtx.types.ts`).
 
-**Do not** put route **components** (steps, dialogs, tables) in `lib/` to shrink page files — those stay colocated under `src/pages/`.
+**Do not** put route **components** (steps, dialogs, tables) in `lib/` to shrink page files — those stay under `src/pages/`.
 
 ## Split triggers
 
@@ -75,7 +79,7 @@ Split when **any** apply:
 
 1. Create `pages/<segment>/<area>/` folder.
 2. Move orchestration hooks / validation to `src/lib/<domain>/` if missing.
-3. Move domain client types into `src/api/features/<domain>/*.types.ts` if missing.
+3. Move domain types into `src/api/features/<domain>/*.types.ts` if missing.
 4. Move page orchestration → React context provider in the page folder.
 5. Extract **steps / tabs / dialogs / tables** into PascalCase siblings.
 6. Leave `*Page.tsx` as composition + providers only.
@@ -85,7 +89,7 @@ Split when **any** apply:
 ## Context vs prop drilling
 
 - **Few props (< 8)** → pass explicitly.
-- **Wizard / multi-step** → page-local context (`<CreateCampaignWizardProvider>`) in the same folder; **do not** add global providers for one route.
+- **Multi-step flows** → page-local context (`<CreateItemWizardProvider>`) in the same folder; **do not** add global providers for one route.
 - **Never** nest component definitions inside the page shell — hoist to module scope (`naming-conventions.mdc`).
 
 ## Checklist
@@ -93,6 +97,6 @@ Split when **any** apply:
 - [ ] No file under `src/pages/` exceeds **750 lines** (except documented follow-up).
 - [ ] Complex routes live in a **folder**, not a single flat `SegmentPage.tsx`.
 - [ ] API hooks remain in `src/api/features/` — page hooks are UI orchestration only.
-- [ ] Wizard orchestration hooks live in `src/lib/<domain>/`; API hooks in `src/api/features/`.
-- [ ] Domain client types live in `src/api/features/<domain>/`, not `src/pages/`.
+- [ ] Orchestration hooks live in `src/lib/<domain>/`; API hooks in `src/api/features/`.
+- [ ] Domain types live in `src/api/features/<domain>/`, not `src/pages/`.
 - [ ] New work adds to extracted modules, not back into the page shell.

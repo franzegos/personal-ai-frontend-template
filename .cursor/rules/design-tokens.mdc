@@ -6,7 +6,7 @@ alwaysApply: false
 
 # Design tokens
 
-See also: **`shadcn-ui-usage.mdc`**, **`interaction-polish.mdc`**, **`src/index.css`**, shadcn skill [`styling.md`](../skills/shadcn/rules/styling.md).
+See also: **`shadcn-ui-usage.mdc`**, **`theming.mdc`**, **`interaction-polish.mdc`**, **`src/index.css`**, shadcn skill [`styling.md`](../skills/shadcn/rules/styling.md).
 
 **All visual styling must flow through the theme** — semantic Tailwind classes backed by CSS variables in `src/index.css`. This keeps light/dark mode correct and makes rebranding a token change, not a repo-wide find-and-replace.
 
@@ -48,10 +48,35 @@ Colors express **role**, not hue. Status and surfaces use tokens or component va
 | Muted copy | `text-muted-foreground` |
 | Primary action | `Button` default / `bg-primary text-primary-foreground` |
 | Danger | `text-destructive`, `variant="destructive"` |
+| Success | `text-success`, `bg-success/10` (after adding `--success` in `index.css` — `theming.mdc`) |
+| Warning | `text-warning`, `bg-warning/10` (after adding `--warning` in `index.css`) |
 | Borders / inputs | `border-border`, `bg-input`, `ring-ring` |
 | Sidebar | `bg-sidebar text-sidebar-foreground` |
 
-New brand colors → add a **CSS variable** in `src/index.css` (`:root` / `.dark`) and expose via `@theme inline` — not scattered hex in components.
+New brand colors → add a **CSS variable** in `src/index.css` (`:root` / `.dark`) and expose via `@theme inline` — not scattered hex in components (`theming.mdc`).
+
+## Contrast on tinted surfaces
+
+**Do not** put `text-muted-foreground` on strongly tinted backgrounds (`bg-primary/10`, `bg-success/20`, custom brand-muted panels) without checking contrast — muted text on color often fails **WCAG 1.4.3 AA**.
+
+```tsx
+// Bad — washed out on tinted panel
+<div className="bg-primary/10">
+  <p className="text-muted-foreground">Summary text</p>
+</div>
+
+// Good — foreground or emphasis token on colored surface
+<div className="bg-primary/10">
+  <p className="text-sm text-foreground">Summary text</p>
+</div>
+```
+
+On colored panels use `text-foreground`, `text-card-foreground`, or a dedicated **emphasis** token — not default muted.
+
+## Dark mode
+
+- Every new surface must work in **light and dark** without `bg-white` or manual `dark:bg-*` pairs.
+- Smoke-test with theme toggle (`theming.mdc`) before merge.
 
 ## Typography & layout
 
@@ -90,3 +115,5 @@ Never use exceptions for **colors** or **type scale** — add tokens instead.
 - [ ] No manual `dark:` color pairs — semantic tokens only.
 - [ ] New brand/theme needs → `src/index.css` variables, not component hex.
 - [ ] shadcn **variants** and **semantic tokens** before custom `className` styling.
+- [ ] Tinted panels use foreground/emphasis text — not `text-muted-foreground` by default.
+- [ ] Light + dark smoke-tested on changed UI (`theming.mdc`).

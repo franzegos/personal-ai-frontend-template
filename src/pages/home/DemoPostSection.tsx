@@ -16,13 +16,19 @@ import { useOnlineStatus } from "@/lib/hooks/use-online-status";
 function DemoPostSkeleton() {
   return (
     <div
-      className="flex flex-col gap-2"
+      className="flex flex-col gap-4"
       aria-busy="true"
       aria-label="Loading post"
     >
-      <Skeleton className="h-5 w-3/4" />
-      <Skeleton className="h-4 w-full" />
-      <Skeleton className="h-4 w-5/6" />
+      <div className="flex items-center justify-between gap-2">
+        <Skeleton className="h-5 w-32" />
+        <Skeleton className="h-8 w-20" />
+      </div>
+      <div className="flex flex-col gap-2">
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-5/6" />
+        <Skeleton className="h-4 w-4/6" />
+      </div>
     </div>
   );
 }
@@ -31,22 +37,36 @@ type DemoPostErrorProps = {
   message: string;
   offline: boolean;
   onRetry: () => void;
+  isRetrying: boolean;
 };
 
-function DemoPostError({ message, offline, onRetry }: DemoPostErrorProps) {
+function DemoPostError({
+  message,
+  offline,
+  onRetry,
+  isRetrying,
+}: DemoPostErrorProps) {
   return (
     <Alert variant="destructive">
       <AlertTitle>
         {offline ? "You're offline" : "Couldn't load sample post"}
       </AlertTitle>
       <AlertDescription className="flex flex-col gap-3">
-        <p>
+        <p className="text-pretty">
           {offline
             ? "Connect to the internet and try again."
             : message || "Check your connection and try again."}
         </p>
-        <Button type="button" size="sm" variant="outline" onClick={onRetry}>
-          Retry
+        <Button
+          type="button"
+          size="sm"
+          variant="outline"
+          className="w-full sm:w-auto"
+          disabled={isRetrying}
+          aria-busy={isRetrying}
+          onClick={onRetry}
+        >
+          {isRetrying ? "Retrying…" : "Retry"}
         </Button>
       </AlertDescription>
     </Alert>
@@ -55,17 +75,26 @@ function DemoPostError({ message, offline, onRetry }: DemoPostErrorProps) {
 
 type DemoPostEmptyProps = {
   onRetry: () => void;
+  isRetrying: boolean;
 };
 
-function DemoPostEmpty({ onRetry }: DemoPostEmptyProps) {
+function DemoPostEmpty({ onRetry, isRetrying }: DemoPostEmptyProps) {
   return (
-    <div className="flex flex-col gap-3">
-      <p className="text-muted-foreground text-sm">
-        No post data returned. Set <code className="text-xs">VITE_API_URL</code>{" "}
-        to a JSON API (e.g. JSONPlaceholder) and retry.
+    <div className="flex flex-col gap-3 rounded-lg border border-dashed border-border bg-muted/30 p-4">
+      <p className="text-sm text-pretty text-muted-foreground">
+        No post data yet. Set{" "}
+        <code className="text-xs text-foreground">VITE_API_URL</code> to a JSON
+        API (e.g. JSONPlaceholder) and fetch a sample.
       </p>
-      <Button type="button" size="sm" variant="outline" onClick={onRetry}>
-        Retry
+      <Button
+        type="button"
+        size="sm"
+        className="w-full sm:w-auto"
+        disabled={isRetrying}
+        aria-busy={isRetrying}
+        onClick={onRetry}
+      >
+        {isRetrying ? "Retrying…" : "Retry"}
       </Button>
     </div>
   );
@@ -91,20 +120,26 @@ function DemoPostReady({
       {showStaleWarning && (
         <Alert variant="destructive">
           <AlertTitle>Couldn't refresh</AlertTitle>
-          <AlertDescription>
+          <AlertDescription className="text-pretty">
             {refreshErrorMessage ??
               "Showing saved data. Check your connection and try again."}
           </AlertDescription>
         </Alert>
       )}
       {isRefreshing && (
-        <p className="text-muted-foreground text-xs" aria-live="polite">
+        <p
+          className="text-sm text-muted-foreground"
+          role="status"
+          aria-live="polite"
+        >
           Refreshing…
         </p>
       )}
       <div className="flex flex-col gap-2">
-        <p className="text-sm leading-snug font-medium">{headline}</p>
-        <p className="text-muted-foreground text-sm leading-relaxed">
+        <p className="text-sm leading-snug font-medium text-pretty">
+          {headline}
+        </p>
+        <p className="text-sm text-pretty leading-relaxed text-muted-foreground">
           {excerpt}
         </p>
       </div>
@@ -122,7 +157,7 @@ export function DemoPostSection() {
   };
 
   return (
-    <Card size="sm">
+    <Card size="sm" className="shadow-sm">
       <CardHeader>
         <CardTitle>Sample request</CardTitle>
         <CardAction>
@@ -132,6 +167,7 @@ export function DemoPostSection() {
             size="sm"
             className="text-muted-foreground h-8"
             disabled={status === "loading" || query.isFetching}
+            aria-busy={query.isFetching}
             onClick={handleRetry}
           >
             {query.isFetching ? "Refreshing…" : "Refresh"}
@@ -146,9 +182,12 @@ export function DemoPostSection() {
             message={query.error?.message ?? ""}
             offline={!isOnline}
             onRetry={handleRetry}
+            isRetrying={query.isFetching}
           />
         )}
-        {status === "empty" && <DemoPostEmpty onRetry={handleRetry} />}
+        {status === "empty" && (
+          <DemoPostEmpty onRetry={handleRetry} isRetrying={query.isFetching} />
+        )}
         {status === "ready" && query.data && (
           <DemoPostReady
             {...mapDemoPostToCard(query.data)}

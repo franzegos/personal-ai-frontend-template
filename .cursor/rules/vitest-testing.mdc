@@ -13,8 +13,8 @@ Follow this when adding or changing code under `src/lib/`, `src/api/`, or high-r
 Every new/changed module gets a matching test under `src/test/` (same relative path + `.test.ts` or `.test.tsx`):
 
 - `src/lib/orders/formatOrderTotal.ts` → `src/test/lib/orders/formatOrderTotal.test.ts`
-- `src/api/features/campaigns/campaigns.service.ts` → `src/test/api/features/campaigns/campaigns.service.test.ts`
-- `src/api/features/campaigns/use-campaigns.ts` → `src/test/api/features/campaigns/use-campaigns.test.ts`
+- `src/api/features/items/items.service.ts` → `src/test/api/features/items/items.service.test.ts`
+- `src/api/features/items/use-items.ts` → `src/test/api/features/items/use-items.test.ts`
 - `src/api/schema/primitives.schema.ts` → `src/test/api/schema/primitives.schema.test.ts`
 
 **Skip test files** for types-only modules, barrel `index.ts`, and static `src/lib/constants/*`.

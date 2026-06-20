@@ -92,7 +92,16 @@ const user = useStore((s) => s.user);
 ## Bundle & imports
 
 - Prefer **direct imports** for heavy packages (icons, date libs) — see `naming-conventions.mdc`.
-- Lazy-load **routes** and heavy modals when the app grows (`React.lazy` + `Suspense`).
+- **Route-level code splitting** — required once the app has **3+ page modules**:
+
+```tsx
+import { lazy, Suspense } from "react";
+const ItemsPage = lazy(() => import("@/pages/app/items/ItemsPage"));
+
+<Route path="items" element={<Suspense fallback={<ItemsSkeleton />}><ItemsPage /></Suspense>} />
+```
+
+- Lazy-load heavy modals or editors when they are not on the critical path.
 
 ## Images & assets
 
@@ -106,3 +115,4 @@ const user = useStore((s) => s.user);
 - [ ] Long lists use virtualization when rendering hundreds+ DOM nodes.
 - [ ] Memoization added only for measured hotspots — not by default on every component.
 - [ ] Query `select` or narrow hooks used when subscribing to small slices of large cache entries.
+- [ ] Routes use `React.lazy` + `Suspense` when 3+ page modules exist.

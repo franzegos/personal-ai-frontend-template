@@ -31,14 +31,14 @@ Do not add rules for one-off mistakes. Do not add generic architecture rules (CQ
 
 ### 2026-06-10 — Silent blank list
 
-**What happened:** `if (!data) return null` on campaigns page — users saw a white screen while loading and after errors.
+**What happened:** `if (!data) return null` on items list page — users saw a white screen while loading and after errors.
 **Rule (if any):** `error-handling.mdc`
 **Fix:** Skeleton + error + empty components; explicit Query branches.
 **Count:** 1
 
 ### 2026-06-14 — Server list copied into Zustand
 
-**What happened:** `useEffect` synced `useCampaigns()` data into `campaignStore` — stale list after mutation and double source of truth.
+**What happened:** `useEffect` synced `useItems()` data into `itemStore` — stale list after mutation and double source of truth.
 **Rule (if any):** `data-ownership.mdc`
 **Fix:** Removed sync; page reads Query only.
 **Count:** 1
@@ -61,7 +61,7 @@ Do not add rules for one-off mistakes. Do not add generic architecture rules (CQ
 
 **What happened:** Page combined five booleans for save/draft/publish; button disabled state wrong during background refetch.
 **Rule (if any):** `feature-state.mdc`
-**Fix:** `submitStatus` union in `useSubmitCampaign`; `isRefreshing` separate from submit.
+**Fix:** `submitStatus` union in `useSubmitItem`; `isRefreshing` separate from submit.
 **Count:** 1
 
 ### 2026-06-28 — Full reload on `online` event

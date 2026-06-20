@@ -29,7 +29,7 @@ src/api/
     │   ├── demo.schema.ts
     │   ├── demo.types.ts
     │   └── use-demo.ts
-    ├── campaigns/
+    ├── items/
     └── auth/                     # cross-cutting modules use the same shape
 ```
 
@@ -49,7 +49,7 @@ src/api/
 When the backend namespaces by surface, nest under `features/`:
 
 ```
-src/api/features/admin/campaigns/
+src/api/features/admin/items/
 src/api/features/app/orders/
 ```
 
@@ -66,13 +66,13 @@ General UI, stores, and guards stay under `src/lib/`, `src/providers/`, `src/com
 5. **Queries** — Add `use-<domain>.ts` with stable query keys, mutations, cache logic, and toasts.
 6. **UI** — Pages import hooks from `@/api/features/<domain>/use-<domain>`; prefer hooks over calling services directly.
 
-Example: `GET /campaigns`, `POST /campaigns`, `PATCH /campaigns/:id` → all files under `src/api/features/campaigns/`.
+Example: `GET /items`, `POST /items`, `PATCH /items/:id` → all files under `src/api/features/items/`.
 
 ## Feature module files
 
 ### Service (`<domain>.service.ts`)
 
-- **Naming:** `camelCase` functions: `getCampaigns`, `postCampaign`, `patchCampaign`.
+- **Naming:** `camelCase` functions: `getItems`, `postItem`, `patchItem`.
 - **Imports:** `import api from '@/api/client'`.
 - **No React** — framework-agnostic for tests and reuse.
 - **Paths:** Match the backend; forward `AbortSignal` when callers support cancellation (`async-ui.mdc`).
@@ -91,13 +91,13 @@ Example: `GET /campaigns`, `POST /campaigns`, `PATCH /campaigns/:id` → all fil
 
 ### Query hooks (`use-<domain>.ts`)
 
-- **Exports:** camelCase, `use` prefix; name by **intent** (`useCampaigns`, not `useCampaignsQuery`).
+- **Exports:** camelCase, `use` prefix; name by **intent** (`useItems`, not `useItemsQuery`).
 - **Query keys:** Colocate key factories in the hook file; export for invalidation / optimistic updates.
 - **Auth-gated queries:** `enabled: status === 'authenticated'` or shared helper in `src/api/lib/` (`route-protection.mdc`).
 - **Mutations:** Define **`useMutation`** here (not in pages). `useQueryClient`, cache updates, and API toasts belong in this file.
   - Put user-facing copy in **`src/lib/<domain>/`** when messages depend on payload shape.
   - **Toasts:** business and system errors only — **`isApiValidationError`** → no toast; the form maps `fieldErrors` (`api-error-routing.mdc`).
-  - **Orchestration hooks** (e.g. `useSubmitCampaignCreate`) — validation, navigation, `isSubmitting` live in the feature query module.
+  - **Orchestration hooks** (e.g. `useSubmitItemCreate`) — validation, navigation, `isSubmitting` live in the feature query module.
   - Pages may pass **`mutate(..., { onSuccess })`** only for **local UI** — not for API toasts.
   - **Do not** wrap **`mutateAsync`** in try/catch solely for toasts.
 
@@ -115,9 +115,9 @@ When you add codegen:
 
 ```
 src/api/generated/          # types + fetch client from OpenAPI
-src/api/features/campaigns/
-    campaigns.schema.ts     # UI/form Zod where runtime validation matters
-    use-campaigns.ts        # TanStack keys, cache, toasts, enabled: auth
+src/api/features/items/
+    items.schema.ts     # UI/form Zod where runtime validation matters
+    use-items.ts        # TanStack keys, cache, toasts, enabled: auth
 ```
 
 Generated code stays dumb; **feature folders own app behavior** (Query, invalidation, optimistic updates).

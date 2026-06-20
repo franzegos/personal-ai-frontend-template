@@ -1,0 +1,77 @@
+---
+description: Dark mode, ThemeProvider, user toggle, and token validation workflow
+globs: src/**/*.{ts,tsx},src/index.css,src/providers/**/*
+alwaysApply: false
+---
+
+# Theming
+
+See also: **`design-tokens.mdc`**, **`shadcn-ui-usage.mdc`**, shadcn skill [`customization.md`](../skills/shadcn/customization.md).
+
+Dark mode and rebranding are **token workflows** — not per-component color overrides.
+
+## Stack
+
+- **Tokens** — `src/index.css` (`:root`, `.dark`, `@theme inline`)
+- **Runtime** — `ThemeProvider` (`next-themes`) toggles `class="dark"` on `<html>`
+- **Components** — semantic classes only (`bg-background`, `text-foreground`) — **`design-tokens.mdc`**
+
+## ThemeProvider
+
+`AppProviders` should wrap the app with:
+
+```tsx
+<ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+```
+
+## User-facing theme control (required when shipping dark mode)
+
+If `.dark` tokens exist in `index.css`, users must be able to **choose** light / dark / system — not only inherit OS silently.
+
+| Placement | Example |
+| --------- | ------- |
+| Settings page | Radio group or select |
+| App header / user menu | `DropdownMenu` with theme items |
+| Dev-only | OK to defer toggle **only** while dark mode is not user-facing |
+
+**Do not** ship dark CSS variables with zero way to validate or use dark mode in the UI.
+
+## Adding tokens (success, warning, brand accent)
+
+Extend **`src/index.css`** — both `:root` and `.dark` — then `@theme inline`:
+
+```css
+:root {
+  --success: oklch(0.62 0.17 145);
+  --success-foreground: oklch(0.98 0.02 145);
+}
+.dark {
+  --success: oklch(0.7 0.15 145);
+  --success-foreground: oklch(0.2 0.04 145);
+}
+/* @theme inline: --color-success: var(--success); */
+```
+
+Use `bg-success/10 text-success` in components — **not** `emerald-*` / `amber-*` (`design-tokens.mdc`).
+
+## Validation workflow (before merge)
+
+On every PR that touches UI:
+
+1. Toggle **light** and **dark** (and **system** if supported).
+2. Spot-check **2–3 representative routes** (e.g. auth, main app shell, settings) — surfaces are often built at different times.
+3. Confirm no `bg-white`, raw `slate-*`, or manual `dark:` color pairs remain.
+4. Check contrast on **tinted panels** (`text-muted-foreground` on colored backgrounds may fail AA — use `text-foreground` or a dedicated emphasis token).
+
+## Rebrand
+
+1. Apply shadcn preset or edit CSS variables in `index.css`.
+2. Run app in light + dark.
+3. Grep for violations: `slate-`, `gray-`, `bg-white`, `text-[#`, `emerald-`, `amber-`.
+
+## Checklist
+
+- [ ] `ThemeProvider` configured with `attribute="class"`.
+- [ ] Theme toggle exists when dark tokens are used.
+- [ ] New status/brand colors are CSS variables in `index.css`, not Tailwind palette classes.
+- [ ] Changed screens verified in light and dark.

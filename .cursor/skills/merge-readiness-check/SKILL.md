@@ -177,14 +177,30 @@ Cite **N/A** when the diff does not touch relevant flows.
 | `vitest-testing.mdc`      | New/changed `src/lib/` or `src/api/` has matching `src/test/…` tests when logic is non-trivial; no `it.todo` in touched tests                                                                |
 | `naming-conventions.mdc`  | Lowercase `pages/` folders; PascalCase page files; `use-*.ts` hooks; kebab-case asset filenames                                                                                              |
 | `page-composition.mdc`    | Complex routes in folders; no `src/pages/**` file > 750 lines; thin `*Page.tsx` shell; colocate steps/dialogs/hooks                                                                          |
-| `design-tokens.mdc`       | Semantic tokens only — no arbitrary `text-[…]`/`bg-[…]`/hex; no raw palette or manual `dark:` color pairs; rebrand via `index.css`                                                           |
+| `page-layout.mdc`         | `AppPageShell` when used; width matches route (`narrow` / `default` / `full`); aligned chrome; `gap-8` zones; mobile CTAs; flat lists                                                        |
+| `design-tokens.mdc`       | Semantic tokens only — no arbitrary `text-[…]`/`bg-[…]`/hex; no raw palette or manual `dark:` color pairs; contrast on tinted panels; rebrand via `index.css`                                |
+| `theming.mdc`             | ThemeProvider + user theme toggle when dark tokens exist; light/dark smoke on changed UI                                                                                                     |
+| `responsive-design.mdc`   | No horizontal overflow at 320px; nav collapses below `md`; touch targets ≥ 44×44 on custom controls                                                                                          |
+| `accessibility.mdc`       | Skip link + `#main`; labeled inputs (heading ≠ label); `aria-describedby` errors; `aria-live` on generating; named `TabsList`                                                                |
 | `shadcn-ui-usage.mdc`     | UI uses shadcn primitives/semantic tokens before custom controls; new custom UI is product-specific composition, not replacement primitives                                                  |
 | `icons-and-assets.mdc`    | UI icons via `iconLibrary`; brands via thesvg — no hand-rolled inline SVGs                                                                                                                   |
 | `react-state-zustand.mdc` | Server data in TanStack Query; minimal `useEffect` in pages; derived state at render; Zustand only when shared                                                                               |
-| `error-handling.mdc`      | Data surfaces implement loading, empty, error, success — no `if (!data) return null`                                                                                                         |
-| `forms-and-drafts.mdc`    | Long forms: dirty state, navigation blockers, autosave status, draft recovery when applicable                                                                                                |
+| `error-handling.mdc`      | Data surfaces implement loading, empty, error, success — no `if (!data) return null`; generating states use live regions                                                                     |
+| `forms-and-drafts.mdc`    | Long forms: dirty state, navigation blockers, autosave status, draft recovery; form errors wired for a11y                                                                                    |
 | `offline-reconnect.mdc`   | Cached reads offline, reconnect refetch, no `location.reload` on `online`, global online banner                                                                                              |
 | `feature-state.mdc`       | One `status` union per surface — no `isLoading` + `isSubmitting` + `isSaving` spaghetti in pages                                                                                             |
+| `interaction-polish.mdc`  | No uppercase tracking-widest eyebrows on every section; `prefers-reduced-motion` respected                                                                                                   |
+| `performance.mdc`         | `React.lazy` + `Suspense` per route when 3+ page modules                                                                                                                                     |
+
+**UI / Impeccable-style gate (when diff touches `src/pages`, `src/components`, `src/layouts`):**
+
+| Dimension     | Block if                                                                                                                                 |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| Accessibility | Unlabeled inputs, missing skip link, no `aria-live` on generating-only UI, errors without `aria-describedby`                             |
+| Responsive    | App nav overflows at 320px; touch targets &lt; 44px; primary CTAs not `w-full sm:w-auto` on mobile                                       |
+| Layout        | Ad-hoc page padding/width; chrome wider than content; flat stacks without zone hierarchy; landing forced into `max-w-3xl` without intent |
+| Theming       | `slate-*` / `bg-white` / `emerald-*` in components; dark mode broken on changed surfaces                                                 |
+| Anti-patterns | Repeated `uppercase tracking-widest` section kickers                                                                                     |
 
 In the verdict: **Pass** or **Fail** — list each violation with **rule file + path**; treat as **blocking** unless the user explicitly defers.
 

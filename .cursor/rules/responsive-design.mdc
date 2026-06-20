@@ -1,0 +1,93 @@
+---
+description: Mobile reflow, touch targets, and responsive app shell — pass WCAG reflow and tap sizing
+globs: src/**/*.{ts,tsx},src/index.css
+alwaysApply: false
+---
+
+# Responsive design
+
+See also: **`accessibility.mdc`**, **`page-layout.mdc`**, **`design-tokens.mdc`**, **`interaction-polish.mdc`**.
+
+Ship for **320px–375px** first, then scale up. Horizontal overflow on phones is a release blocker.
+
+## Core rule
+
+Every layout and interactive control must **reflow without horizontal scroll** at narrow widths and expose **adequate touch targets** on mobile.
+
+## App shell navigation
+
+**Do not** put unbounded horizontal link rows in the header (`flex` row with 4+ nav items + actions, no wrap, no collapse).
+
+| Viewport | Pattern |
+| -------- | ------- |
+| `< md` | `Sheet` / hamburger menu, bottom tab bar, or scrollable tabs with fade edge — pick one per app |
+| `≥ md` | Full horizontal nav OK |
+
+```tsx
+// Bad — clips or scrolls horizontally on ~320px
+<nav className="flex items-center gap-6">
+  <Link>Home</Link><Link>Items</Link><Link>Settings</Link><Button>Sign out</Button>
+</nav>
+
+// Good — compact shell below md
+<nav className="flex items-center justify-between">
+  <Sheet><!-- mobile links --></Sheet>
+  <div className="hidden md:flex md:gap-6">{/* desktop links */}</div>
+</nav>
+```
+
+Test at **320px and 375px** before merge (`merge-readiness-check`).
+
+## Touch targets (WCAG 2.5.5)
+
+Minimum **44×44 CSS px** hit area for tappable controls on touch devices.
+
+| Control | Pattern |
+| ------- | ------- |
+| Primary actions | shadcn `Button` (`size="default"` / `size="icon"`) |
+| Pager dots, tiny icons | `min-h-11 min-w-11` wrapper with visual dot centered inside — not `size-2` alone |
+| List remove / icon actions | `Button variant="ghost" size="icon"` — not `h-7 w-7` raw `<button>` |
+
+```tsx
+// Bad — 8px dot is untappable
+<button className="size-2 rounded-full bg-muted" />
+
+// Good — 44px hit area, small visual indicator
+<button type="button" className="flex size-11 items-center justify-center" aria-label="Go to slide 2">
+  <span className="size-2 rounded-full bg-primary" aria-hidden />
+</button>
+```
+
+Prefer **`Button`** over hand-rolled `<button className="h-7 w-7">`.
+
+## Primary CTAs on mobile
+
+Main page actions (Save, Generate, Submit) use **`w-full sm:w-auto`** — see `page-layout.mdc` (`PageFooterActions`).
+
+## Layout patterns
+
+- Use **`flex` + `gap-*`** and **`min-w-0`** on flex children that truncate — prevents overflow from long text.
+- Tables on mobile → card list, horizontal scroll **with** visible affordance, or column hiding — not clipped columns.
+- Modals / sheets: `max-h-[calc(100dvh-…)]` for full-height panels is OK (`design-tokens.mdc` layout exception).
+
+## Breakpoints
+
+Use Tailwind defaults (`sm`, `md`, `lg`) consistently. Hide/show chrome with `hidden md:flex` — not JavaScript width checks unless necessary.
+
+## Anti-patterns
+
+```tsx
+// Bad — fixed multi-column grid on all viewports
+<div className="grid grid-cols-4 gap-4">
+
+// Good
+<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+```
+
+## Checklist
+
+- [ ] No horizontal page scroll at 320px on changed routes.
+- [ ] App nav collapses or adapts below `md`.
+- [ ] Custom icon buttons meet 44×44 hit area (or use shadcn `Button size="icon"`).
+- [ ] Pager dots / step indicators are tappable or replaced by Prev/Next on mobile.
+- [ ] Long labels truncate with `truncate` + `title` where helpful.

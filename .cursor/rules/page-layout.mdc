@@ -1,0 +1,135 @@
+---
+description: Page shell rhythm — aligned widths, zone spacing, hierarchy, mobile CTAs
+globs: src/pages/**/*.{ts,tsx},src/layouts/**/*.{ts,tsx},src/components/layout/**/*
+alwaysApply: false
+---
+
+# Page layout
+
+See also: **`page-composition.mdc`**, **`design-tokens.mdc`**, **`responsive-design.mdc`**, **`interaction-polish.mdc`**, **`error-handling.mdc`**, **`accessibility.mdc`**.
+
+**File splitting** → `page-composition.mdc`. This rule owns **spacing rhythm, column alignment, and visual hierarchy** — not which product features your app has.
+
+Golden reference: `src/components/layout/`, `src/pages/home/HomePage.tsx`.
+
+## When to use `AppPageShell`
+
+| Page type | Layout approach |
+| --------- | --------------- |
+| **App / dashboard / settings** | `AppPageShell` + `PageHeader` — consistent padding and zone rhythm |
+| **Marketing / landing** | Often **full-bleed** sections — `width="full"` or a custom layout **without** a global `max-w-3xl` cap |
+| **Auth card** | `width="narrow"` or a centered card outside the shell |
+
+**Pick width per route** — do not force every page through `max-w-3xl`. Adjust presets in `layout.constants.ts` for your product.
+
+## Layout primitives
+
+| Component | Purpose |
+| --------- | ------- |
+| **`AppPageShell`** | Shared page padding, vertical zone rhythm (`gap-8`), optional max-width |
+| **`PageHeader`** | Title + description (`gap-1`) + optional action slot |
+| **`PageSection`** | Major page zones; optional `border-t pt-8` for phase changes |
+
+```tsx
+<AppPageShell width="default">
+  <PageHeader title="Items" description="Manage your workspace." action={<Actions />} />
+  <PageSection>{/* status / alerts */}</PageSection>
+  <PageSection bordered>{/* primary workspace — tabs, tables, cards */}</PageSection>
+</AppPageShell>
+```
+
+When a route needs full width (e.g. landing hero + feature grid):
+
+```tsx
+<AppPageShell width="full">
+  <section className="…">{/* hero */}</section>
+  <section className="mx-auto max-w-5xl …">{/* optional inner cap per section */}</section>
+</AppPageShell>
+```
+
+**Do not** hand-roll `py-8` + `max-w-*` on every **app** page — use `AppPageShell` or a deliberate alternative documented in the route.
+
+### Width presets (`AppPageShell`)
+
+Template defaults in `layout.constants.ts` — **rename or change values** to fit your app:
+
+| `width` | Default class | Typical intent (examples only) |
+| ------- | ------------- | ------------------------------ |
+| `default` | `max-w-3xl` | Standard app content column |
+| `profile` | `max-w-2xl` | Focused forms, account settings |
+| `narrow` | `max-w-lg` | Auth, compact panels |
+| `full` | `max-w-none` | Landing pages, wide layouts |
+
+When app chrome (top nav) and page body share a column, use the **same** `appContentWidthClass` + `appContentPaddingClass` from `@/components/layout`.
+
+## Spacing rhythm
+
+| Level | Gap | Use |
+| ----- | --- | --- |
+| Page zones | `gap-8` | Between header, alerts, main workspace — `AppPageShell` |
+| Section interior | `gap-4`–`gap-6` | Tabs → toolbar → card |
+| Status / alerts stack | `gap-3` | Multiple alerts — lighter than primary workspace |
+| Title block | `gap-1` | `PageHeader` title + description |
+| Dense lists | `gap-2` | Rows, metadata lines |
+
+```tsx
+// Bad — flat gap-6; alerts, tabs, and card compete equally
+<div className="flex flex-col gap-6">...</div>
+
+// Good — phased zones
+<PageSection className="gap-3">{alerts}</PageSection>
+<PageSection bordered className="gap-6">{workspace}</PageSection>
+```
+
+## Shell alignment
+
+- **`RootLayout` `<main>`** — `pb-10` bottom breathing room; skip link + `#main` (`accessibility.mdc`).
+- **Chrome vs body** — when both are constrained, use the **same** max-width — never wider nav over narrower content.
+- **Padding** — `px-4 sm:px-6`, `py-8 sm:py-10` on app pages via `AppPageShell` (or match intentionally if full-bleed).
+
+## Visual hierarchy
+
+| Element | Weight |
+| ------- | ------ |
+| Page title | `PageHeader` `h1` |
+| Status / alerts | `Alert` — above workspace, `gap-3` stack |
+| Primary workspace | `border-t pt-8` separation |
+| Secondary lists | Flat rows — `gap-2`; avoid nested `CardContent` for one metadata line |
+
+```tsx
+// Bad — CardContent for a single timestamp
+<Card><CardContent><p className="text-xs">3:42 PM</p></CardContent></Card>
+
+// Good — metadata inline
+<li className="text-sm">
+  <span className="text-muted-foreground">Mar 4, 3:42 PM</span> — Item title
+</li>
+```
+
+- **Long copy** — `text-pretty` on descriptions.
+- **Tinted panels** — semantic tokens, not `text-muted-foreground` on strong washes (`design-tokens.mdc`).
+
+## Mobile
+
+- **Primary CTAs** — `w-full sm:w-auto` on main actions (submit, save, create).
+- **Footer actions** — `PageFooterActions` or `border-t pt-6` + stacked buttons below `sm`.
+- **Icon controls** — `min-h-11 min-w-11` (`responsive-design.mdc`).
+
+## Loading & empty
+
+- Skeleton **mirrors final structure** — not one gray block (`error-handling.mdc`).
+- Empty states **teach** — dashed border + hint; not bare alert text.
+
+## Interaction on actions
+
+- Async buttons: `aria-busy`, disabled while pending, label changes (`Saving…`, `Loading…`).
+- Disable when preconditions fail (empty required field, etc.).
+
+## Checklist
+
+- [ ] App routes use `AppPageShell` + `PageHeader` **or** a documented full-bleed layout — no ad-hoc padding drift.
+- [ ] Width preset matches route intent (`narrow` / `default` / `full`); landing pages not forced into `max-w-3xl`.
+- [ ] Chrome and body columns align when both are constrained.
+- [ ] Major phases separated (`gap-8`, `border-t pt-8`).
+- [ ] Primary mobile CTAs full-width where it matters.
+- [ ] Lists stay flat; skeletons and empty states match structure.

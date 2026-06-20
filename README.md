@@ -63,11 +63,11 @@ Same pipeline as CI: Prettier, ESLint, `tsc`, Vitest, production build.
 Create a module under `src/api/features/<domain>/`:
 
 ```
-src/api/features/campaigns/
-├── campaigns.service.ts
-├── campaigns.schema.ts
-├── campaigns.types.ts
-└── use-campaigns.ts
+src/api/features/items/
+├── items.service.ts
+├── items.schema.ts
+├── items.types.ts
+└── use-items.ts
 ```
 
 Add pages under `src/pages/<domain>/`, mappers under `src/lib/<domain>/`. Follow [api-layer](.cursor/rules/api-layer.mdc) and [frontend-feature-boundaries](.cursor/rules/frontend-feature-boundaries.mdc).
@@ -98,7 +98,12 @@ Mirror tests under `src/test/api/features/<domain>/` — see [vitest-testing](.c
 | [Frontend security](.cursor/rules/frontend-security.mdc)            | Permissions are UX only; backend is source of truth                                               |
 | [Data ownership](.cursor/rules/data-ownership.mdc)                  | Query vs RHF vs useState vs Zustand                                                               |
 | [Interaction polish](.cursor/rules/interaction-polish.mdc)          | Motion, feedback, keyboard, perceived performance                                                 |
+| [Page composition](.cursor/rules/page-composition.mdc)              | Split large routes; colocate steps and dialogs                                                    |
+| [Page layout](.cursor/rules/page-layout.mdc)                        | Optional `AppPageShell`; width preset per route; aligned chrome; zone hierarchy; mobile CTAs      |
 | [Design tokens](.cursor/rules/design-tokens.mdc)                    | Semantic colors and Tailwind scale only — no arbitrary values; safe dark mode and rebranding      |
+| [Responsive design](.cursor/rules/responsive-design.mdc)            | Mobile reflow, collapsible nav, 44×44 touch targets                                               |
+| [Theming](.cursor/rules/theming.mdc)                                | ThemeProvider, dark-mode toggle, token validation workflow                                        |
+| [Accessibility](.cursor/rules/accessibility.mdc)                    | Labels, skip link, live regions, form error wiring, keyboard                                      |
 | [Incident log](docs/incident-log.md)                                | Track AI mistakes; promote to rules after 3×                                                      |
 | [Theming](#theming)                                                 | shadcn Create presets                                                                             |
 | [Cursor rules](.cursor/rules/)                                      | Full ruleset — `repo-agent-skills` explains skills; start with `naming-conventions` + `api-layer` |
@@ -115,7 +120,7 @@ PR body uses `.github/PULL_REQUEST_TEMPLATE.md` (not Cursor's global PR format).
 
 ### Cursor rules (file-scoped)
 
-`accessibility`, `api-layer`, `async-ui`, `data-ownership`, `design-tokens`, `error-handling`, `feature-state`, `forms-and-drafts`, `frontend-feature-boundaries`, `frontend-security`, `icons-and-assets`, `interaction-polish`, `offline-reconnect`, `performance`, `react-state-zustand`, `response-mapping`, `route-protection`, `shadcn-ui-usage`, `vitest-testing`, `zod-validation`
+`accessibility`, `api-layer`, `async-ui`, `data-ownership`, `design-tokens`, `error-handling`, `feature-state`, `forms-and-drafts`, `frontend-feature-boundaries`, `frontend-security`, `icons-and-assets`, `interaction-polish`, `offline-reconnect`, `page-layout`, `performance`, `react-state-zustand`, `response-mapping`, `responsive-design`, `route-protection`, `shadcn-ui-usage`, `theming`, `vitest-testing`, `zod-validation`
 
 **Always apply:** `naming-conventions`, `repo-agent-skills`
 

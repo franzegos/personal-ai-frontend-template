@@ -6,11 +6,11 @@ alwaysApply: false
 
 # Interaction Polish
 
-See also: **`accessibility.mdc`**, **`async-ui.mdc`**, **`error-handling.mdc`**.
+See also: **`accessibility.mdc`**, **`async-ui.mdc`**, **`error-handling.mdc`**, **`responsive-design.mdc`**, **`design-tokens.mdc`**.
 
 Premium UIs feel alive because **every action is acknowledged as close to immediate as technically possible** (target: under 100ms) — focus move, loading state, optimistic update, state change, or visual response. This rule covers that layer.
 
-**Not visual theming.** Colors, radius, depth, shadows, and primitive styling come from the shadcn preset and semantic tokens — see **`design-tokens.mdc`**, `shadcn-ui-usage.mdc`, and `src/index.css`. Do not duplicate a parallel visual system here.
+**Not visual theming.** Colors, radius, depth, shadows, and primitive styling come from the shadcn preset and semantic tokens — see **`design-tokens.mdc`**, **`theming.mdc`**, `shadcn-ui-usage.mdc`, and `src/index.css`. Do not duplicate a parallel visual system here.
 
 ## Two layers
 
@@ -346,13 +346,29 @@ Density is interaction polish: less scrolling, faster scanning, more context per
 
 ## 22. Accessibility and reduced motion
 
+**Global:** `src/index.css` includes `@media (prefers-reduced-motion: reduce)` — do not bypass with inline `animation-*` on large surfaces without checking reduced motion.
+
 Respect `prefers-reduced-motion`:
 
 - Disable decorative animation
 - Remove looping effects
 - Reduce transitions to near-instant
 
-Keyboard and screen-reader support are part of polish, not optional (see §24–§25).
+Keyboard and screen-reader support are part of polish, not optional (see §24–§25, **`accessibility.mdc`**).
+
+## 22b. Typography anti-patterns (AI slop)
+
+Avoid repeated **uppercase tracked micro-labels** as section scaffolding — common AI landing-page grammar:
+
+```tsx
+// Bad — noisy "eyebrow" kickers on every card/section
+<p className="text-xs font-medium uppercase tracking-widest text-muted-foreground">Why this works</p>
+
+// Good — sentence-case label, or rely on heading hierarchy
+<p className="text-sm font-medium text-foreground">Why this works</p>
+```
+
+Use **sentence case** for UI labels. Reserve uppercase tracking for rare, intentional chrome (e.g. table column headers in dense admin UIs) — not every card and wizard step.
 
 ---
 
@@ -475,7 +491,8 @@ Review composed / product UI:
 - [ ] Motion has intent (what / why / where)
 - [ ] Desktop dashboards are dense and scannable — not oversized card stacks
 - [ ] Critical features are discoverable — not shortcut-only
-- [ ] `prefers-reduced-motion` respected
+- [ ] `prefers-reduced-motion` respected (global CSS + no decorative loops)
+- [ ] No uppercase tracking-widest eyebrows on every section/card
 - [ ] Keyboard path exists; focus moves sensibly after actions
 - [ ] Reversible deletes use undo where appropriate
 - [ ] Optimistic updates where safe; rollback on failure

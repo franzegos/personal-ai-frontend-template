@@ -7,6 +7,8 @@ alwaysApply: true
 
 Follow these conventions for all new and renamed files and constants.
 
+**Placeholder names** (`items`, `orders`, `<domain>`) illustrate patterns — use your product’s module names.
+
 ## Pages, Layouts & Components (`.tsx`)
 
 - **Convention:** PascalCase
@@ -19,9 +21,9 @@ Follow these conventions for all new and renamed files and constants.
 
 ### Domain modules (`src/lib/<domain>/`)
 
-- **File name:** camelCase — `mapCourse.ts`, `validateCourseWizard.ts`, `useCourseWizard.ts`, `courseWizardCtx.types.ts`
+- **File name:** camelCase — `mapItem.ts`, `validateItemWizard.ts`, `useItemWizard.ts`, `itemWizardCtx.types.ts`
 - **Purpose:** Mappers, pure validation, multi-step orchestration hooks, and domain-specific wiring types shared across pages.
-- **Exported hooks:** camelCase with `use` prefix — `useCourseWizard`, `useCourseWizardState`
+- **Exported hooks:** camelCase with `use` prefix — `useItemWizard`, `useItemWizardState`
 - **Do not** use kebab-case `use-*.ts` here — that pattern is for **`src/api/features/`** and **`src/lib/hooks/`** only.
 
 ### Page-local hooks (`src/pages/**`)
@@ -40,21 +42,21 @@ Each backend domain gets one folder with **prefixed filenames**:
 
 | File | Purpose | Example |
 | ---- | ------- | ------- |
-| `<domain>.service.ts` | HTTP functions (no React) | `campaigns.service.ts` → `getCampaigns` |
-| `<domain>.schema.ts` | Zod + `z.infer` types | `campaigns.schema.ts` |
-| `<domain>.types.ts` | Optional DTO re-exports | `campaigns.types.ts` |
-| `use-<domain>.ts` | TanStack Query hooks | `use-campaigns.ts` → `useCampaigns` |
+| `<domain>.service.ts` | HTTP functions (no React) | `items.service.ts` → `getItems` |
+| `<domain>.schema.ts` | Zod + `z.infer` types | `items.schema.ts` |
+| `<domain>.types.ts` | Optional DTO re-exports | `items.types.ts` |
+| `use-<domain>.ts` | TanStack Query hooks | `use-items.ts` → `useItems` |
 
 | Scope | Folder | Example |
 | ----- | ------ | ------- |
-| **Domain module** | `features/<domain>/` | `features/campaigns/` |
+| **Domain module** | `features/<domain>/` | `features/items/` |
 | **Surface + domain** | `features/<segment>/<domain>/` | `features/admin/reports/` |
 | **Cross-cutting** | `features/auth/` (same file set) | `auth.service.ts`, `use-auth.ts` |
 
 Rules:
 
-- **Folder name:** lowercase / kebab-case — `campaigns`, `payment-methods`.
-- **Query hook file:** `use-<kebab-domain>.ts`; **exported hook:** camelCase with `use` prefix (`useCampaigns`, `useAuthMe`).
+- **Folder name:** lowercase / kebab-case — `items`, `payment-methods`.
+- **Query hook file:** `use-<kebab-domain>.ts`; **exported hook:** camelCase with `use` prefix (`useItems`, `useAuthMe`).
 - Include **surface or domain** in the exported hook name when ambiguity would hurt (`useAdminOrders` vs `useStorefrontOrders`).
 - Do **not** suffix with `Mutation` or `Query` — name by intent.
 - **Do not** repeat the segment in the filename when the file already lives under `features/<segment>/` (same rule as before for nested segments).
@@ -109,7 +111,7 @@ See **`page-composition.mdc`** for size limits, folder layout, and split trigger
 
 - Use **lowercase** for single words: `admin`, `app`, `utils`, `hooks`
 - Use **kebab-case** for multi-word folders when helpful (`payment-methods`, `mock-data`)
-- Under `src/api/`, **feature folder names** match backend modules (`features/campaigns/`, `features/billing/`). Optional surface segments: `features/admin/…`.
+- Under `src/api/`, **feature folder names** match backend modules (`features/items/`, `features/billing/`). Optional surface segments: `features/admin/…`.
 - **Static asset file names** under `src/assets/` — kebab-case (e.g. `logo-dark.svg`). Icon and SVG *usage* — see `icons-and-assets.mdc`.
 
 ## Quick Reference
@@ -118,11 +120,11 @@ See **`page-composition.mdc`** for size limits, folder layout, and split trigger
 | ---------------------------------------------------------- | ------------------------------------------------- | -------------------------- |
 | Page folders (`src/pages/`)                                | lowercase / kebab-case                            | `home`, `creator/account`  |
 | Page component files                                       | PascalCase                                        | `HomePage.tsx`             |
-| Domain orchestration hook (`src/lib/<domain>/`)              | camelCase `use*.ts`                               | `useCourseWizard.ts`       |
+| Domain orchestration hook (`src/lib/<domain>/`)              | camelCase `use*.ts`                               | `useItemWizard.ts`         |
 | Layout / component (`.tsx`, except `components/ui`)        | PascalCase                                        | `AppSidebar.tsx`           |
-| API feature folder                                         | `features/<domain>/`                              | `features/campaigns/`      |
-| API service / schema / types (in feature)                  | `<domain>.service.ts`, `.schema.ts`, `.types.ts`  | `campaigns.service.ts`     |
-| API query hook (in feature)                                | `use-<domain>.ts` under `features/<domain>/`      | `use-campaigns.ts`         |
+| API feature folder                                         | `features/<domain>/`                              | `features/items/`          |
+| API service / schema / types (in feature)                  | `<domain>.service.ts`, `.schema.ts`, `.types.ts`  | `items.service.ts`         |
+| API query hook (in feature)                                | `use-<domain>.ts` under `features/<domain>/`      | `use-items.ts`             |
 | Shared API schema / types                                  | `api/schema/`, `api/types/` at root               | `primitives.schema.ts`     |
 | Hook files (`src/lib/hooks`)                               | `use-<kebab>.ts`                                  | `use-debounce.ts`          |
 | Type modules                                               | `<name>.types.ts`                                 | `auth.types.ts`            |
