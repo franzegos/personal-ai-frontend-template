@@ -155,6 +155,8 @@ Never bare “No data”. Include (`interaction-polish.mdc` §15):
 - Why it might be empty (first time, filters, permissions)
 - Primary action (create, clear filters, upgrade)
 
+Optional personality on **applicable** positive moments (milestone, first item) → **`delight-ux.mdc`** — still teach first; delight is extra.
+
 ## Partial / multi-region pages
 
 Do not gate the **entire page** on the slowest query (`interaction-polish.mdc` §11). Each region owns its own loading / empty / error / success.

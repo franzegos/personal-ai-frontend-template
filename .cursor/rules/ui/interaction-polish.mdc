@@ -6,7 +6,7 @@ alwaysApply: false
 
 # Interaction Polish
 
-See also: **`accessibility.mdc`**, **`async-ui.mdc`**, **`error-handling.mdc`**, **`responsive-design.mdc`**, **`design-tokens.mdc`**.
+See also: **`accessibility.mdc`**, **`async-ui.mdc`**, **`error-handling.mdc`**, **`responsive-design.mdc`**, **`design-tokens.mdc`**, **`delight-ux.mdc`** (optional milestones / celebrations).
 
 Premium UIs feel alive because **every action is acknowledged as close to immediate as technically possible** (target: under 100ms) — focus move, loading state, optimistic update, state change, or visual response. This rule covers that layer.
 
@@ -263,7 +263,7 @@ Explain:
 - Why it is empty
 - What to do next (primary action)
 
-Empty states are part of the product, not an afterthought.
+Empty states are part of the product, not an afterthought. Optional warmth on **first win** or milestones → **`delight-ux.mdc`** (never on errors or bare failures).
 
 ---
 

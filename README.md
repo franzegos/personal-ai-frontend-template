@@ -122,16 +122,16 @@ PR body uses `.github/PULL_REQUEST_TEMPLATE.md` (not Cursor's global PR format).
 
 ### Cursor rules (by folder)
 
-| Folder      | Rules                                                                                                       |
-| ----------- | ----------------------------------------------------------------------------------------------------------- |
-| `core/`     | `naming-conventions`, `repo-agent-skills` (always apply)                                                    |
-| `api/`      | `api-layer`, `api-error-routing`, `zod-validation`, `response-mapping`, `frontend-feature-boundaries`       |
-| `state/`    | `feature-state`, `data-ownership`, `react-state-zustand`, `error-handling`, `async-ui`, `offline-reconnect` |
-| `pages/`    | `page-composition`, `page-layout`, `responsive-design`                                                      |
-| `ui/`       | `design-tokens`, `theming`, `shadcn-ui-usage`, `icons-and-assets`, `interaction-polish`, `performance`      |
-| `forms/`    | `forms-and-drafts`, `accessibility`                                                                         |
-| `security/` | `route-protection`, `frontend-security`                                                                     |
-| `testing/`  | `vitest-testing`                                                                                            |
+| Folder      | Rules                                                                                                                |
+| ----------- | -------------------------------------------------------------------------------------------------------------------- |
+| `core/`     | `naming-conventions`, `repo-agent-skills` (always apply)                                                             |
+| `api/`      | `api-layer`, `api-error-routing`, `zod-validation`, `response-mapping`, `frontend-feature-boundaries`                |
+| `state/`    | `feature-state`, `data-ownership`, `react-state-zustand`, `error-handling`, `async-ui`, `offline-reconnect`          |
+| `pages/`    | `page-composition`, `page-layout`, `responsive-design`                                                               |
+| `ui/`       | `design-tokens`, `theming`, `shadcn-ui-usage`, `icons-and-assets`, `interaction-polish`, `delight-ux`, `performance` |
+| `forms/`    | `forms-and-drafts`, `accessibility`                                                                                  |
+| `security/` | `route-protection`, `frontend-security`                                                                              |
+| `testing/`  | `vitest-testing`                                                                                                     |
 
 Full map: [`.cursor/skills/SKILL.md`](.cursor/skills/SKILL.md).
 

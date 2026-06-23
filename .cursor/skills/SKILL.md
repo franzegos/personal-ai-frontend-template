@@ -81,6 +81,7 @@ Golden paths in `src/`:
 | shadcn primitives first  | [`shadcn-ui-usage.mdc`](../rules/ui/shadcn-ui-usage.mdc)       |
 | Icons & assets           | [`icons-and-assets.mdc`](../rules/ui/icons-and-assets.mdc)     |
 | Motion, feedback         | [`interaction-polish.mdc`](../rules/ui/interaction-polish.mdc) |
+| Delight (optional)       | [`delight-ux.mdc`](../rules/ui/delight-ux.mdc)                 |
 | Route lazy loading       | [`performance.mdc`](../rules/ui/performance.mdc)               |
 
 ### `forms/`
