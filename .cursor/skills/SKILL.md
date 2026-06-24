@@ -32,6 +32,7 @@ Golden paths in `src/`:
 | New feature spanning API + page + forms | This index → open the linked rules below                                                     |
 | "Which rule covers X?"                  | This index                                                                                   |
 | UI / merge review                       | [`merge-readiness-check`](./merge-readiness-check/SKILL.md) § Cursor rules + Impeccable gate |
+| AI slop / generic UI tells              | [`ai-slop-check`](./ai-slop-check/SKILL.md)                                                  |
 | shadcn components / CLI                 | [`shadcn`](./shadcn/SKILL.md)                                                                |
 
 ## Rule map (canonical links)
@@ -118,9 +119,10 @@ Golden paths in `src/`:
 
 ## Related skills
 
-| Task         | Skill                                                       |
-| ------------ | ----------------------------------------------------------- |
-| Commit       | [`commit-changes`](./commit-changes/SKILL.md)               |
-| PR           | [`create-pull-request`](./create-pull-request/SKILL.md)     |
-| Merge ready? | [`merge-readiness-check`](./merge-readiness-check/SKILL.md) |
-| shadcn UI    | [`shadcn`](./shadcn/SKILL.md)                               |
+| Task          | Skill                                                       |
+| ------------- | ----------------------------------------------------------- |
+| Commit        | [`commit-changes`](./commit-changes/SKILL.md)               |
+| PR            | [`create-pull-request`](./create-pull-request/SKILL.md)     |
+| Merge ready?  | [`merge-readiness-check`](./merge-readiness-check/SKILL.md) |
+| AI slop check | [`ai-slop-check`](./ai-slop-check/SKILL.md)                 |
+| shadcn UI     | [`shadcn`](./shadcn/SKILL.md)                               |

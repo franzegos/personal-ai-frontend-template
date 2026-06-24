@@ -12,6 +12,7 @@ For **commits**, **pull requests**, and **merge readiness**, always **read and f
 | Commit / stage | [`.cursor/skills/commit-changes/SKILL.md`](../../skills/commit-changes/SKILL.md) |
 | Open / create PR | [`.cursor/skills/create-pull-request/SKILL.md`](../../skills/create-pull-request/SKILL.md) |
 | Ready to merge? | [`.cursor/skills/merge-readiness-check/SKILL.md`](../../skills/merge-readiness-check/SKILL.md) |
+| AI slop / generic UI tells | [`.cursor/skills/ai-slop-check/SKILL.md`](../../skills/ai-slop-check/SKILL.md) |
 | Rule index / onboarding | [`.cursor/skills/SKILL.md`](../../skills/SKILL.md) |
 
 ## Requirements
@@ -20,7 +21,7 @@ For **commits**, **pull requests**, and **merge readiness**, always **read and f
 2. **Read the full SKILL.md** before acting (PR body uses `.github/PULL_REQUEST_TEMPLATE.md`, tests to paste, preview steps).
 3. Global git safety still applies (no secrets, no force-push to `main`, HEREDOC messages); **workflow and format** come from the skill.
 4. **Multi-repo** work: run the matching skill **once per repo** from that repo’s `.cursor/skills/`.
-5. Triggers include `@commit-changes`, `@create-pull-request`, `@merge-readiness-check`, or phrases like “commit”, “open PR”, “ready to merge?”, “which rule”, “page layout”, “design tokens”.
+5. Triggers include `@commit-changes`, `@create-pull-request`, `@merge-readiness-check`, `@ai-slop-check`, or phrases like “commit”, “open PR”, “ready to merge?”, “AI slop check”, “which rule”, “page layout”, “design tokens”.
 
 `create-pull-request` may auto-commit via `commit-changes` — follow both skills in order when that applies.
 
