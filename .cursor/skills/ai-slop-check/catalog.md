@@ -93,22 +93,22 @@ In-app strings: labels, placeholders, toasts, dialogs, empty states, inline erro
 
 **Authoring rules:** [`.cursor/rules/copy/ui-microcopy.mdc`](../../rules/copy/ui-microcopy.mdc) · **Marketing:** [`.cursor/rules/copy/marketing-copy.mdc`](../../rules/copy/marketing-copy.mdc)
 
-| ID                       | Type    | Pattern                 | Detection                                                                 | Fix                                              |
-| ------------------------ | ------- | ----------------------- | ------------------------------------------------------------------------- | ------------------------------------------------ |
-| `slop-em-dash-ui`        | slop    | Em dash in UI           | `—` in button, label, toast, breadcrumb, or short helper                  | Period, colon, or rewrite as two sentences       |
-| `slop-hype-verb`         | slop    | Hype verb in UI         | seamless, leverage, unlock, supercharge, dive into, empower in app chrome | Plain verb + object (`Connect Stripe`)           |
-| `slop-filler-cta`        | slop    | Generic CTA             | Get started, Explore, Discover, Learn more without naming the action      | Verb + object (`Create project`, `View invoice`) |
-| `slop-click-here`        | slop    | Click-here phrasing     | Click here, Tap below, Press here to…                                     | Button text = the action                         |
-| `slop-vague-error`       | slop    | Vague error             | Oops, Something went wrong, An error occurred — no cause or next step     | What failed + what to do                         |
-| `slop-empty-poetry`      | slop    | Poetic empty state      | Metaphor, pep talk, or joke instead of next action                        | State + primary action                           |
-| `slop-sorry-wall`        | slop    | Apologetic filler       | We're sorry, Unfortunately on routine validation or 404                   | Direct statement of fact                         |
-| `slop-ellipsis-ui`       | slop    | Ellipsis on static UI   | Save…, Submit…, Loading… when not in pending/loading state              | Plain label; spinner for loading only            |
-| `slop-exclamation-ui`    | slop    | Exclamation overuse     | Multiple `!` in labels, toasts, empty states                              | Period; one exclamation max in success toast     |
-| `slop-title-case-ui`     | slop    | Title Case helpers      | Title Case on descriptions, helpers, placeholders (not product names)       | Sentence case for UI chrome                      |
-| `slop-anthropomorphic`   | slop    | Anthropomorphic copy    | Your data is happy; friendly bot voice on errors                          | Neutral, operational tone                        |
-| `slop-label-echo`        | slop    | Label echoes placeholder| Placeholder repeats label verbatim                                        | Example value or format hint only                |
-| `slop-please-note`       | slop    | Please / kindly filler  | Please note, Kindly, At your convenience in system UI                     | Drop filler; state requirement                   |
-| `slop-wall-of-text-help` | quality | Over-long helper        | >2 lines under a simple field explaining obvious behavior                 | One line or link to docs                         |
+| ID                       | Type    | Pattern                  | Detection                                                                 | Fix                                              |
+| ------------------------ | ------- | ------------------------ | ------------------------------------------------------------------------- | ------------------------------------------------ |
+| `slop-em-dash-ui`        | slop    | Em dash in UI            | `—` in button, label, toast, breadcrumb, or short helper                  | Period, colon, or rewrite as two sentences       |
+| `slop-hype-verb`         | slop    | Hype verb in UI          | seamless, leverage, unlock, supercharge, dive into, empower in app chrome | Plain verb + object (`Connect Stripe`)           |
+| `slop-filler-cta`        | slop    | Generic CTA              | Get started, Explore, Discover, Learn more without naming the action      | Verb + object (`Create project`, `View invoice`) |
+| `slop-click-here`        | slop    | Click-here phrasing      | Click here, Tap below, Press here to…                                     | Button text = the action                         |
+| `slop-vague-error`       | slop    | Vague error              | Oops, Something went wrong, An error occurred — no cause or next step     | What failed + what to do                         |
+| `slop-empty-poetry`      | slop    | Poetic empty state       | Metaphor, pep talk, or joke instead of next action                        | State + primary action                           |
+| `slop-sorry-wall`        | slop    | Apologetic filler        | We're sorry, Unfortunately on routine validation or 404                   | Direct statement of fact                         |
+| `slop-ellipsis-ui`       | slop    | Ellipsis on static UI    | Save…, Submit…, Loading… when not in pending/loading state                | Plain label; spinner for loading only            |
+| `slop-exclamation-ui`    | slop    | Exclamation overuse      | Multiple `!` in labels, toasts, empty states                              | Period; one exclamation max in success toast     |
+| `slop-title-case-ui`     | slop    | Title Case helpers       | Title Case on descriptions, helpers, placeholders (not product names)     | Sentence case for UI chrome                      |
+| `slop-anthropomorphic`   | slop    | Anthropomorphic copy     | Your data is happy; friendly bot voice on errors                          | Neutral, operational tone                        |
+| `slop-label-echo`        | slop    | Label echoes placeholder | Placeholder repeats label verbatim                                        | Example value or format hint only                |
+| `slop-please-note`       | slop    | Please / kindly filler   | Please note, Kindly, At your convenience in system UI                     | Drop filler; state requirement                   |
+| `slop-wall-of-text-help` | quality | Over-long helper         | >2 lines under a simple field explaining obvious behavior                 | One line or link to docs                         |
 
 ---
 

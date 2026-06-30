@@ -100,20 +100,20 @@ Use this structure every time:
 
 Eleven common “synthetic slop” page archetypes → catalog IDs:
 
-| Specimen                    | Catalog focus                                                            |
-| --------------------------- | ------------------------------------------------------------------------ |
-| Purple Gradients Everywhere | `slop-ai-palette`, `slop-gradient-text`, `slop-dark-glow`                |
-| Lazy "Cool"                 | `slop-glassmorphism`, `slop-dark-glow`, `slop-hairline-wide-shadow`      |
-| Lazy "Impact"               | `slop-bounce-easing`, `slop-gradient-text`, `slop-image-hover-transform` |
-| Side-Tab Cards              | `slop-side-tab-border`, `slop-border-accent-rounded`                     |
-| Cardocalypse                | `slop-nested-cards`                                                      |
-| Copy-Paste Layouts          | `slop-identical-card-grid`, `slop-hero-metrics`, `slop-section-kicker`   |
-| Inter Everywhere            | `slop-overused-font`, `slop-single-font`, `slop-flat-type-hierarchy`     |
-| Massive Icons               | `slop-icon-tile-above-heading`                                           |
-| Bad Contrast Choices        | `quality-gray-on-color`, `quality-low-contrast`                          |
-| Redundant UX Writing        | `quality-redundant-ux-copy`, `slop-label-echo`                   |
+| Specimen                    | Catalog focus                                                                                |
+| --------------------------- | -------------------------------------------------------------------------------------------- |
+| Purple Gradients Everywhere | `slop-ai-palette`, `slop-gradient-text`, `slop-dark-glow`                                    |
+| Lazy "Cool"                 | `slop-glassmorphism`, `slop-dark-glow`, `slop-hairline-wide-shadow`                          |
+| Lazy "Impact"               | `slop-bounce-easing`, `slop-gradient-text`, `slop-image-hover-transform`                     |
+| Side-Tab Cards              | `slop-side-tab-border`, `slop-border-accent-rounded`                                         |
+| Cardocalypse                | `slop-nested-cards`                                                                          |
+| Copy-Paste Layouts          | `slop-identical-card-grid`, `slop-hero-metrics`, `slop-section-kicker`                       |
+| Inter Everywhere            | `slop-overused-font`, `slop-single-font`, `slop-flat-type-hierarchy`                         |
+| Massive Icons               | `slop-icon-tile-above-heading`                                                               |
+| Bad Contrast Choices        | `quality-gray-on-color`, `quality-low-contrast`                                              |
+| Redundant UX Writing        | `quality-redundant-ux-copy`, `slop-label-echo`                                               |
 | AI UI copy (microcopy)      | `slop-em-dash-ui`, `slop-filler-cta`, `slop-vague-error`, … — see [UI copy](#ui-copy-checks) |
-| Modal Abuse                 | Flag in review — complex multi-column settings in `Dialog`       |
+| Modal Abuse                 | Flag in review — complex multi-column settings in `Dialog`                                   |
 
 Full rules: [catalog.md](catalog.md). Sample output: [examples.md](examples.md).
 
@@ -139,21 +139,21 @@ When scanning TSX/Tailwind/CSS, grep and inspect for:
 
 Scan **strings in TSX** (labels, placeholders, toasts, empty states, errors, button text) — not just marketing pages. Full catalog IDs in [catalog.md](catalog.md) § UI copy.
 
-| Pattern | Rule ID | Flag when |
-| ------- | ------- | --------- |
-| Em dash in UI | `slop-em-dash-ui` | Any em dash (`—`) in button, label, toast, or short helper (marketing: >2 per screen → `slop-em-dash`) |
-| Buzzword / hype verb | `slop-buzzword`, `slop-hype-verb` | streamline, empower, seamless, leverage, unlock, dive into, supercharge |
-| Filler CTA | `slop-filler-cta` | "Get started", "Explore", "Discover", "Learn more" with no specific object |
-| Click-here phrasing | `slop-click-here` | "Click here to…", "Tap below to…" |
-| Vague error | `slop-vague-error` | "Oops!", "Something went wrong" with no next step or error code |
-| Cheerleading empty state | `slop-empty-poetry` | Metaphor or pep talk instead of what to do next |
-| Apologetic tone | `slop-sorry-wall` | "We're sorry", "Unfortunately" on routine validation |
-| Ellipsis abuse | `slop-ellipsis-ui` | "Save…" / "Loading…" on buttons that are not pending |
-| Exclamation spam | `slop-exclamation-ui` | Multiple `!` in labels, toasts, or empty states |
-| Title Case Everything | `slop-title-case-ui` | Sentence case violated on body helpers and descriptions |
-| Anthropomorphism | `slop-anthropomorphic` | "Your data is happy", "We couldn't find your friend" |
-| Redundant label echo | `slop-label-echo`, `quality-redundant-ux-copy` | Label + description + placeholder repeat the same words |
-| Aphorism / theater | `slop-aphorism`, `slop-theater` | "Not X. Y." cadence; dismissive "theater" framing |
+| Pattern                  | Rule ID                                        | Flag when                                                                                              |
+| ------------------------ | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Em dash in UI            | `slop-em-dash-ui`                              | Any em dash (`—`) in button, label, toast, or short helper (marketing: >2 per screen → `slop-em-dash`) |
+| Buzzword / hype verb     | `slop-buzzword`, `slop-hype-verb`              | streamline, empower, seamless, leverage, unlock, dive into, supercharge                                |
+| Filler CTA               | `slop-filler-cta`                              | "Get started", "Explore", "Discover", "Learn more" with no specific object                             |
+| Click-here phrasing      | `slop-click-here`                              | "Click here to…", "Tap below to…"                                                                      |
+| Vague error              | `slop-vague-error`                             | "Oops!", "Something went wrong" with no next step or error code                                        |
+| Cheerleading empty state | `slop-empty-poetry`                            | Metaphor or pep talk instead of what to do next                                                        |
+| Apologetic tone          | `slop-sorry-wall`                              | "We're sorry", "Unfortunately" on routine validation                                                   |
+| Ellipsis abuse           | `slop-ellipsis-ui`                             | "Save…" / "Loading…" on buttons that are not pending                                                   |
+| Exclamation spam         | `slop-exclamation-ui`                          | Multiple `!` in labels, toasts, or empty states                                                        |
+| Title Case Everything    | `slop-title-case-ui`                           | Sentence case violated on body helpers and descriptions                                                |
+| Anthropomorphism         | `slop-anthropomorphic`                         | "Your data is happy", "We couldn't find your friend"                                                   |
+| Redundant label echo     | `slop-label-echo`, `quality-redundant-ux-copy` | Label + description + placeholder repeat the same words                                                |
+| Aphorism / theater       | `slop-aphorism`, `slop-theater`                | "Not X. Y." cadence; dismissive "theater" framing                                                      |
 
 **Prefer:** sentence case, verb-first buttons (`Save draft`, `Upload file`), concrete errors (`Couldn't save. Check your connection.`), one idea per control.
 

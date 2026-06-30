@@ -8,12 +8,12 @@ See [SKILL.md](SKILL.md).
 
 ## Example finding row
 
-| Pri | Rule ID                | Pattern         | Location           | Problem                                                            | Recommended fix                                      |
-| --- | ---------------------- | --------------- | ------------------ | ------------------------------------------------------------------ | ---------------------------------------------------- |
-| P0  | `slop-side-tab-border` | Side-tab accent | `StatBlock.tsx:42` | `border-l-4 border-primary` on `rounded-lg` card                   | Use `border border-border bg-card` per design system |
-| P1  | `slop-em-dash-ui`      | Em dash in UI   | `SaveDialog.tsx:28` | Button label `Save changes — confirm`                             | `Save changes` or split into title + body            |
-| P1  | `slop-vague-error`     | Vague error     | `api-error-toast.ts:12` | Toast: "Oops! Something went wrong"                          | `Couldn’t save draft. Retry or copy error ID.`         |
-| P2  | `slop-filler-cta`      | Generic CTA     | `EmptyProjects.tsx:9` | Primary button "Get started" on empty list                        | `Create project`                                     |
+| Pri | Rule ID                | Pattern         | Location                | Problem                                          | Recommended fix                                      |
+| --- | ---------------------- | --------------- | ----------------------- | ------------------------------------------------ | ---------------------------------------------------- |
+| P0  | `slop-side-tab-border` | Side-tab accent | `StatBlock.tsx:42`      | `border-l-4 border-primary` on `rounded-lg` card | Use `border border-border bg-card` per design system |
+| P1  | `slop-em-dash-ui`      | Em dash in UI   | `SaveDialog.tsx:28`     | Button label `Save changes — confirm`            | `Save changes` or split into title + body            |
+| P1  | `slop-vague-error`     | Vague error     | `api-error-toast.ts:12` | Toast: "Oops! Something went wrong"              | `Couldn’t save draft. Retry or copy error ID.`       |
+| P2  | `slop-filler-cta`      | Generic CTA     | `EmptyProjects.tsx:9`   | Primary button "Get started" on empty list       | `Create project`                                     |
 
 ## Example todo list
 
