@@ -100,9 +100,10 @@ Mirror tests under `src/test/api/features/<domain>/` — see [vitest-testing](.c
 | [Interaction polish](.cursor/rules/ui/interaction-polish.mdc)           | Motion, feedback, keyboard, perceived performance                                                                 |
 | [Page composition](.cursor/rules/pages/page-composition.mdc)            | Split large routes; colocate steps and dialogs                                                                    |
 | [Page layout](.cursor/rules/pages/page-layout.mdc)                      | `AppPageShell`; responsive reflow; touch targets; zone hierarchy; mobile CTAs                                     |
-| [Design tokens](.cursor/rules/ui/design-tokens.mdc)                     | Semantic tokens, shadcn primitives, ThemeProvider, dark mode — no arbitrary values                              |
+| [Design tokens](.cursor/rules/ui/design-tokens.mdc)                     | Semantic tokens, shadcn primitives, ThemeProvider, dark mode — no arbitrary values                                |
 | [Accessibility](.cursor/rules/forms/accessibility.mdc)                  | Labels, skip link, live regions, form error wiring, keyboard                                                      |
 | [Incident log](docs/incident-log.md)                                    | Track AI mistakes; promote to rules after 3×                                                                      |
+| [API response samples](docs/api-response-samples.md)                    | Success/error envelopes, interceptor unwrapping, form vs toast routing                                            |
 | [Theming](#theming)                                                     | shadcn Create presets                                                                                             |
 | [Cursor rules](.cursor/rules/)                                          | Categorized rules — start with [SKILL.md](.cursor/skills/SKILL.md) or `core/naming-conventions` + `api/api-layer` |
 
@@ -119,17 +120,17 @@ PR body uses `.github/PULL_REQUEST_TEMPLATE.md` (not Cursor's global PR format).
 
 ### Cursor rules (by folder)
 
-| Folder      | Rules                                                                                                                |
-| ----------- | -------------------------------------------------------------------------------------------------------------------- |
-| `core/`     | `ponytail-rules`, `naming-conventions`, `repo-agent-skills` (always apply)                                           |
-| `api/`      | `api-layer`, `api-error-routing`, `zod-validation`, `response-mapping`, `frontend-feature-boundaries`                |
-| `state/`    | `error-handling`, `data-ownership`, `async-ui`, `offline-reconnect`                                                  |
-| `pages/`    | `page-composition`, `page-layout`                                                                                    |
-| `ui/`       | `design-tokens`, `icons-and-assets`, `interaction-polish`, `delight-ux`, `performance`                               |
-| `forms/`    | `forms-and-drafts`, `accessibility`                                                                                  |
-| `copy/`     | `ui-microcopy`, `marketing-copy`                                                                                     |
-| `security/` | `route-protection`, `frontend-security`                                                                              |
-| `testing/`  | `vitest-testing`                                                                                                     |
+| Folder      | Rules                                                                                                 |
+| ----------- | ----------------------------------------------------------------------------------------------------- |
+| `core/`     | `ponytail-rules`, `naming-conventions`, `repo-agent-skills` (always apply)                            |
+| `api/`      | `api-layer`, `api-error-routing`, `zod-validation`, `response-mapping`, `frontend-feature-boundaries` |
+| `state/`    | `error-handling`, `data-ownership`, `async-ui`, `offline-reconnect`                                   |
+| `pages/`    | `page-composition`, `page-layout`                                                                     |
+| `ui/`       | `design-tokens`, `icons-and-assets`, `interaction-polish`, `delight-ux`, `performance`                |
+| `forms/`    | `forms-and-drafts`, `accessibility`                                                                   |
+| `copy/`     | `ui-microcopy`, `marketing-copy`                                                                      |
+| `security/` | `route-protection`, `frontend-security`                                                               |
+| `testing/`  | `vitest-testing`                                                                                      |
 
 Full map: [`.cursor/skills/SKILL.md`](.cursor/skills/SKILL.md).
 

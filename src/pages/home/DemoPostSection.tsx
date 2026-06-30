@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getDemoPostStatus } from "@/lib/demo/demoPostStatus";
+import { getUserFacingApiErrorMessage } from "@/api/lib/api-error-message";
 import { mapDemoPostToCard } from "@/lib/demo/mapDemoPostToCard";
 import { useOnlineStatus } from "@/lib/hooks/use-online-status";
 
@@ -186,7 +187,7 @@ export function DemoPostSection() {
         {status === "loading" && <DemoPostSkeleton />}
         {status === "error" && (
           <DemoPostError
-            message={error?.message ?? ""}
+            message={getUserFacingApiErrorMessage(error)}
             offline={!isOnline}
             onRetry={handleRetry}
             isRetrying={isFetching}

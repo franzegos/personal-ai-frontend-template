@@ -70,30 +70,36 @@ For validation, **never** put field text in `message`. Map `fieldErrors` only.
 
 ## Frontend patterns
 
-Use `@/api/lib/apply-field-errors-to-form.ts`:
+Use `@/api/lib/apply-field-errors-to-form.ts` and `@/api/lib/api-error-message.ts`:
 
 ```ts
 import {
   applyFieldErrorsToForm,
   isApiValidationError,
 } from "@/api/lib/apply-field-errors-to-form";
-import { ApiRequestError } from "@/api/client";
+import {
+  getUserFacingApiErrorMessage,
+  handleApiMutationError,
+} from "@/api/lib/api-error-message";
 
-// Form submit (page or orchestration hook)
+// Form submit — prefer handleApiMutationError (validation → fields, no toast)
 onError: (error) => {
-  if (isApiValidationError(error)) {
-    applyFieldErrorsToForm(error.errors, setError);
-    return;
-  }
-  toast.error(error instanceof ApiRequestError ? error.message : "Request failed");
+  handleApiMutationError(error, { setError, toastError: toast.error });
 };
 ```
+
+```ts
+// Inline / read surfaces (no form)
+getUserFacingApiErrorMessage(error); // never raw ZodError JSON
+```
+
+Nested server keys use dot paths (`identitySummary.builds`) — pass through to RHF `setError` unchanged.
 
 ```ts
 // Mutation hook — no form context
 onError: (error) => {
   if (isApiValidationError(error)) return; // page maps fieldErrors
-  toast.error(error.message);
+  toast.error(getUserFacingApiErrorMessage(error));
 };
 ```
 
@@ -112,8 +118,11 @@ Client-side Zod failures (resolver): inline on fields via RHF — no toast, no `
 ## Anti-patterns
 
 ```ts
-// Bad — toasts field-level validation
-onError: (e) => toast.error(e.message); // "Validation failed" helps nobody
+// Bad — toasts field-level validation or raw Zod dump
+onError: (e) => toast.error(e.message);
+
+// Bad — raw error.message on non-form surfaces
+<Alert>{error?.message}</Alert>
 
 // Bad — maps infra errors to a random field
 setError("email", { message: "Database unavailable" });
@@ -127,6 +136,6 @@ throw new ValidationError("Number must be greater than 0");
 - [ ] Forms use `zodResolver` + domain schema — client validates before `mutate`.
 - [ ] `VALIDATION_ERROR` → `applyFieldErrorsToForm`; no toast.
 - [ ] Business / system errors → toast (or inline alert on non-form surfaces).
-- [ ] Mutation hooks skip toast when `isApiValidationError`.
+- [ ] Mutation hooks skip toast when `isApiValidationError`; use `getUserFacingApiErrorMessage` for toasts and inline alerts.
 - [ ] Server field errors set `aria-describedby` / `aria-invalid` on affected fields.
 - [ ] Backend keeps `message: "Validation failed"` separate from `fieldErrors`.

@@ -1,5 +1,6 @@
 import axios, { type AxiosError } from "axios";
 import { getApiBaseUrl } from "@/api/config";
+import { sanitizeApiErrorMessage } from "@/api/lib/api-error-message";
 import type { ApiErrorBody } from "@/api/types/global.types";
 
 export class ApiRequestError extends Error {
@@ -48,7 +49,7 @@ api.interceptors.response.use(
   },
   (error: AxiosError<ApiErrorBody>) => {
     const data = error.response?.data;
-    const message =
+    const rawMessage =
       data && typeof data === "object" && typeof data.message === "string"
         ? data.message
         : error.message;
@@ -56,6 +57,11 @@ api.interceptors.response.use(
       data && typeof data === "object" && typeof data.code === "string"
         ? data.code
         : undefined;
+    const message = sanitizeApiErrorMessage(
+      rawMessage,
+      code,
+      error.response?.status,
+    );
     const errors =
       data && typeof data === "object" && "errors" in data
         ? data.errors
