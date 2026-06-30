@@ -1,6 +1,6 @@
 ---
 description: Route API errors to form fields or toasts — validation, business, and system
-globs: src/api/**/*,src/pages/**/*.{ts,tsx},src/components/**/*.{ts,tsx}
+globs: src/api/**/*
 alwaysApply: false
 ---
 

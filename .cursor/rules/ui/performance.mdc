@@ -1,12 +1,12 @@
 ---
 description: Performance boundaries — Query vs Zustand, list scale, memoization discipline
-globs: src/**/*.{ts,tsx}
+globs: src/App.tsx,src/main.tsx,src/layouts/**/*.{ts,tsx}
 alwaysApply: false
 ---
 
 # Performance boundaries
 
-See also: **`data-ownership.mdc`**, **`react-state-zustand.mdc`**, **`async-ui.mdc`**, **`api-layer.mdc`**.
+See also: **`data-ownership.mdc`**, **`async-ui.mdc`**, **`api-layer.mdc`**.
 
 AI often over-memoizes, mirrors huge server lists into Zustand, or renders unbounded tables. Prefer **correct ownership** and **bounded rendering** over premature optimization.
 

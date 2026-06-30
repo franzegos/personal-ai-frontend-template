@@ -14,7 +14,7 @@ My personal production-ready Vite + React starter. Cursor rules, skills, and an 
 - **React Router** — layout shell, `ProtectedRoute` ready for your auth layer
 - **Vitest** — API, lib, and page tests with `renderWithProviders`
 - **Cursor rules & skills** — commit, PR, merge-readiness, shadcn MCP
-- **Golden-path demo** — `DemoPostSection` models `feature-state`, `error-handling`, `response-mapping`, `async-ui`; `OfflineBanner` for `offline-reconnect`
+- **Golden-path demo** — `DemoPostSection` models `error-handling`, `response-mapping`, `async-ui`; `OfflineBanner` for `offline-reconnect`
 - **`pnpm verify`** — format, lint, typecheck, test, build (same gates as CI)
 
 ## Pre-requisites
@@ -92,18 +92,15 @@ Mirror tests under `src/test/api/features/<domain>/` — see [vitest-testing](.c
 | [Rule index](.cursor/skills/SKILL.md)                                   | Map of all rules by category (`core/`, `api/`, `state/`, `pages/`, `ui/`, …)                                      |
 | [API layer](.cursor/rules/api/api-layer.mdc)                            | Feature modules, services, Query hooks, OpenAPI-ready layout                                                      |
 | [Feature boundaries](.cursor/rules/api/frontend-feature-boundaries.mdc) | Pages, API, lib ownership; no cross-feature imports                                                               |
-| [Error handling](.cursor/rules/state/error-handling.mdc)                | Loading, empty, error, success — no silent blank UI                                                               |
+| [Error handling](.cursor/rules/state/error-handling.mdc)                | Status unions; loading, empty, error, success — no silent blank UI                                                |
 | [Forms & drafts](.cursor/rules/forms/forms-and-drafts.mdc)              | Unsaved changes, blockers, autosave, draft recovery                                                               |
 | [Offline & reconnect](.cursor/rules/state/offline-reconnect.mdc)        | Sleep, tab resume, reconnect — cached data + retry                                                                |
-| [Feature state](.cursor/rules/state/feature-state.mdc)                  | One derived `status` per surface — no boolean spaghetti                                                           |
 | [Frontend security](.cursor/rules/security/frontend-security.mdc)       | Permissions are UX only; backend is source of truth                                                               |
-| [Data ownership](.cursor/rules/state/data-ownership.mdc)                | Query vs RHF vs useState vs Zustand                                                                               |
+| [Data ownership](.cursor/rules/state/data-ownership.mdc)                | Query vs RHF vs useState vs Zustand; minimal effects                                                              |
 | [Interaction polish](.cursor/rules/ui/interaction-polish.mdc)           | Motion, feedback, keyboard, perceived performance                                                                 |
 | [Page composition](.cursor/rules/pages/page-composition.mdc)            | Split large routes; colocate steps and dialogs                                                                    |
-| [Page layout](.cursor/rules/pages/page-layout.mdc)                      | Optional `AppPageShell`; width preset per route; aligned chrome; zone hierarchy; mobile CTAs                      |
-| [Design tokens](.cursor/rules/ui/design-tokens.mdc)                     | Semantic colors and Tailwind scale only — no arbitrary values; safe dark mode and rebranding                      |
-| [Responsive design](.cursor/rules/pages/responsive-design.mdc)          | Mobile reflow, collapsible nav, 44×44 touch targets                                                               |
-| [Theming](.cursor/rules/ui/theming.mdc)                                 | ThemeProvider, dark-mode toggle, token validation workflow                                                        |
+| [Page layout](.cursor/rules/pages/page-layout.mdc)                      | `AppPageShell`; responsive reflow; touch targets; zone hierarchy; mobile CTAs                                     |
+| [Design tokens](.cursor/rules/ui/design-tokens.mdc)                     | Semantic tokens, shadcn primitives, ThemeProvider, dark mode — no arbitrary values                              |
 | [Accessibility](.cursor/rules/forms/accessibility.mdc)                  | Labels, skip link, live regions, form error wiring, keyboard                                                      |
 | [Incident log](docs/incident-log.md)                                    | Track AI mistakes; promote to rules after 3×                                                                      |
 | [Theming](#theming)                                                     | shadcn Create presets                                                                                             |
@@ -124,12 +121,13 @@ PR body uses `.github/PULL_REQUEST_TEMPLATE.md` (not Cursor's global PR format).
 
 | Folder      | Rules                                                                                                                |
 | ----------- | -------------------------------------------------------------------------------------------------------------------- |
-| `core/`     | `naming-conventions`, `repo-agent-skills` (always apply)                                                             |
+| `core/`     | `ponytail-rules`, `naming-conventions`, `repo-agent-skills` (always apply)                                           |
 | `api/`      | `api-layer`, `api-error-routing`, `zod-validation`, `response-mapping`, `frontend-feature-boundaries`                |
-| `state/`    | `feature-state`, `data-ownership`, `react-state-zustand`, `error-handling`, `async-ui`, `offline-reconnect`          |
-| `pages/`    | `page-composition`, `page-layout`, `responsive-design`                                                               |
-| `ui/`       | `design-tokens`, `theming`, `shadcn-ui-usage`, `icons-and-assets`, `interaction-polish`, `delight-ux`, `performance` |
+| `state/`    | `error-handling`, `data-ownership`, `async-ui`, `offline-reconnect`                                                  |
+| `pages/`    | `page-composition`, `page-layout`                                                                                    |
+| `ui/`       | `design-tokens`, `icons-and-assets`, `interaction-polish`, `delight-ux`, `performance`                               |
 | `forms/`    | `forms-and-drafts`, `accessibility`                                                                                  |
+| `copy/`     | `ui-microcopy`, `marketing-copy`                                                                                     |
 | `security/` | `route-protection`, `frontend-security`                                                                              |
 | `testing/`  | `vitest-testing`                                                                                                     |
 

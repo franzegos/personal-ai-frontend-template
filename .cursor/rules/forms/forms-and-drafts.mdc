@@ -1,12 +1,12 @@
 ---
 description: Forms — unsaved changes, navigation blocking, draft recovery, autosave
-globs: src/pages/**/*.{ts,tsx},src/components/**/*.{ts,tsx},src/lib/**/*
+globs: src/**/*Form*.{ts,tsx},src/**/*Wizard*.{ts,tsx},src/**/forms/**/*.{ts,tsx}
 alwaysApply: false
 ---
 
 # Forms & drafts
 
-See also: **`data-ownership.mdc`**, **`api-error-routing.mdc`**, **`accessibility.mdc`**, **`error-handling.mdc`**, **`react-state-zustand.mdc`**, **`api-layer.mdc`**, **`interaction-polish.mdc`** §17.
+See also: **`data-ownership.mdc`**, **`api-error-routing.mdc`**, **`accessibility.mdc`**, **`error-handling.mdc`**, **`api-layer.mdc`**, **`interaction-polish.mdc`**, **`offline-reconnect.mdc`**.
 
 Long-lived forms (editors, multi-step flows, settings) must not **lose work** on navigation, refresh, or transient network failure.
 
@@ -100,7 +100,7 @@ When drafts must survive refresh or navigation:
 3. **Recovery prompt** — on mount, if stored draft ≠ server snapshot, offer “Restore draft” / “Discard”.
 
 ```tsx
-// Zustand — namespaced by entity (react-state-zustand.mdc)
+// Zustand — namespaced by entity (data-ownership.mdc)
 // itemDraftStore: Record<string, ItemDraft>
 ```
 

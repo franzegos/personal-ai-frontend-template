@@ -125,7 +125,7 @@ Read the diff like a **code review focused on defects**. For each changed functi
 
 - **Wrong or inverted logic** — `!` mistakes, swapped branches, `&&` vs `||`, early `return` skipping cleanup
 - **Stale or wrong state** — missing deps in `useEffect` / `useMemo` / `useCallback`; state synced from props/query in effects; Zustand + Query fighting
-- **Effect-heavy pages** — many `useEffect`s in one page component (see `react-state-zustand.mdc`); flag for refactor
+- **Effect-heavy pages** — many `useEffect`s in one page component (see `data-ownership.mdc`); flag for refactor
 - **Async mistakes** — missing `await`, fire-and-forget mutations without error handling, double-submit not guarded
 - **Null / undefined** — optional chaining omitted where data can be missing; `array[0]` without length check
 - **Types vs runtime** — unsafe casts (`as`), assuming API shape without parse when data is untrusted
@@ -177,19 +177,19 @@ Cite **N/A** when the diff does not touch relevant flows.
 | `testing/vitest-testing.mdc`    | New/changed `src/lib/` or `src/api/` has matching `src/test/…` tests when logic is non-trivial; no `it.todo` in touched tests                                                                |
 | `core/naming-conventions.mdc`   | Lowercase `pages/` folders; PascalCase page files; `use-*.ts` hooks; kebab-case asset filenames                                                                                              |
 | `pages/page-composition.mdc`    | Complex routes in folders; no `src/pages/**` file > 750 lines; thin `*Page.tsx` shell; colocate steps/dialogs/hooks                                                                          |
-| `pages/page-layout.mdc`         | `AppPageShell` when used; width matches route (`narrow` / `default` / `full`); aligned chrome; `gap-8` zones; mobile CTAs; flat lists                                                        |
-| `ui/design-tokens.mdc`          | Semantic tokens only — no arbitrary `text-[…]`/`bg-[…]`/hex; no raw palette or manual `dark:` color pairs; contrast on tinted panels; rebrand via `index.css`                                |
-| `ui/theming.mdc`                | ThemeProvider + user theme toggle when dark tokens exist; light/dark smoke on changed UI                                                                                                     |
-| `pages/responsive-design.mdc`   | No horizontal overflow at 320px; nav collapses below `md`; touch targets ≥ 44×44 on custom controls                                                                                          |
-| `forms/accessibility.mdc`       | Skip link + `#main`; labeled inputs (heading ≠ label); `aria-describedby` errors; `aria-live` on generating; named `TabsList`                                                                |
-| `ui/shadcn-ui-usage.mdc`        | UI uses shadcn primitives/semantic tokens before custom controls; new custom UI is product-specific composition, not replacement primitives                                                  |
-| `ui/icons-and-assets.mdc`       | UI icons via `iconLibrary`; brands via thesvg — no hand-rolled inline SVGs                                                                                                                   |
-| `state/react-state-zustand.mdc` | Server data in TanStack Query; minimal `useEffect` in pages; derived state at render; Zustand only when shared                                                                               |
-| `state/error-handling.mdc`      | Data surfaces implement loading, empty, error, success — no `if (!data) return null`; generating states use live regions                                                                     |
+| `pages/page-layout.mdc`         | `AppPageShell` when used; width matches route; aligned chrome; `gap-8` zones; mobile CTAs; 320px reflow; touch targets ≥ 44×44; flat lists |
+| `ui/design-tokens.mdc`          | Semantic tokens; shadcn primitives first; ThemeProvider + dark toggle when `.dark` exists; no arbitrary hex/palette; light/dark smoke |
+| `forms/accessibility.mdc`       | Skip link + `#main`; labeled inputs (heading ≠ label); `aria-describedby` errors; `aria-live` on generating; named `TabsList` |
+| `ui/icons-and-assets.mdc`       | UI icons via `iconLibrary`; brands via thesvg — no hand-rolled inline SVGs |
+| `state/data-ownership.mdc`      | Query vs RHF vs useState vs Zustand; no server data in Zustand; minimal `useEffect` in pages; derived state at render |
+| `state/error-handling.mdc`      | One `status` union per surface; loading, empty, error, success — no `if (!data) return null`; generating states use live regions |
 | `forms/forms-and-drafts.mdc`    | Long forms: dirty state, navigation blockers, autosave status, draft recovery; form errors wired for a11y                                                                                    |
-| `state/offline-reconnect.mdc`   | Cached reads offline, reconnect refetch, no `location.reload` on `online`, global online banner                                                                                              |
-| `state/feature-state.mdc`       | One `status` union per surface — no `isLoading` + `isSubmitting` + `isSaving` spaghetti in pages                                                                                             |
-| `ui/interaction-polish.mdc`     | No uppercase tracking-widest eyebrows on every section; `prefers-reduced-motion` respected                                                                                                   |
+| `copy/ui-microcopy.mdc`         | Sentence case; verb+object buttons; no em dashes in chrome; concrete errors/empty states; no label/placeholder echo; no vague "Oops" toasts                                                  |
+| `copy/marketing-copy.mdc`       | Landing/hero: specific CTAs; ≤2 em dashes per screen; no buzzword clusters; real metrics; kickers/aphorisms only if intentional                                                              |
+| `api/frontend-feature-boundaries.mdc` | One folder per feature in `api/features/`; no cross-feature page/lib imports; shared code in `components/ui/` or explicit shared modules |
+| `security/frontend-security.mdc`      | Client role/permission checks are UX only; API enforces `401`/`403`; no secrets in `src/`; mutations handle auth errors — when diff touches guards, stores, or privileged API/UI |
+| `state/offline-reconnect.mdc`   | Cached reads offline, reconnect refetch, no `location.reload` on `online`, global online banner |
+| `ui/interaction-polish.mdc`     | Acknowledge actions; no uppercase tracking-widest eyebrows on every section; `prefers-reduced-motion` respected |
 | `ui/performance.mdc`            | `React.lazy` + `Suspense` per route when 3+ page modules                                                                                                                                     |
 
 **UI / Impeccable-style gate (when diff touches `src/pages`, `src/components`, `src/layouts`):**

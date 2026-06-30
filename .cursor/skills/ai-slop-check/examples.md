@@ -11,7 +11,9 @@ See [SKILL.md](SKILL.md).
 | Pri | Rule ID                | Pattern         | Location           | Problem                                                            | Recommended fix                                      |
 | --- | ---------------------- | --------------- | ------------------ | ------------------------------------------------------------------ | ---------------------------------------------------- |
 | P0  | `slop-side-tab-border` | Side-tab accent | `StatBlock.tsx:42` | `border-l-4 border-primary` on `rounded-lg` card                   | Use `border border-border bg-card` per design system |
-| P1  | `slop-section-kicker`  | Section kicker  | `HomePage.tsx:88`  | `text-xs uppercase tracking-widest` "Overview" above every section | Remove eyebrow; rely on page title in `AppPageShell` |
+| P1  | `slop-em-dash-ui`      | Em dash in UI   | `SaveDialog.tsx:28` | Button label `Save changes — confirm`                             | `Save changes` or split into title + body            |
+| P1  | `slop-vague-error`     | Vague error     | `api-error-toast.ts:12` | Toast: "Oops! Something went wrong"                          | `Couldn’t save draft. Retry or copy error ID.`         |
+| P2  | `slop-filler-cta`      | Generic CTA     | `EmptyProjects.tsx:9` | Primary button "Get started" on empty list                        | `Create project`                                     |
 
 ## Example todo list
 
@@ -19,6 +21,8 @@ See [SKILL.md](SKILL.md).
 - [ ] **P0** — Remove side-tab `border-l-4` from stat cards; use uniform border (`src/components/StatBlock.tsx`)
 - [ ] **P1** — Replace 3-column icon feature grid with a table or single summary row (`HomePage.tsx`)
 - [ ] **P1** — Shorten hero-style `text-5xl` page title to `text-2xl` semibold (`ProjectsPage.tsx`)
+- [ ] **P1** — Replace vague error toast with action + cause (`src/lib/api-error-toast.ts`)
+- [ ] **P2** — Remove em dash from dialog primary button (`SaveDialog.tsx`)
 - [ ] **P2** — Reduce em dashes in onboarding copy (`WelcomeStep.tsx`)
 ```
 

@@ -1,45 +1,43 @@
 ---
-description: Tailwind and shadcn design tokens only — no arbitrary values or hard-coded colors
-globs: src/**/*.{ts,tsx},src/index.css,components.json
+description: Design tokens, shadcn primitives, ThemeProvider, and dark-mode workflow
+globs: src/**/*.tsx,src/index.css,components.json,src/providers/**/*
 alwaysApply: false
 ---
 
-# Design tokens
+# Design tokens & visual system
 
-See also: **`shadcn-ui-usage.mdc`**, **`theming.mdc`**, **`interaction-polish.mdc`**, **`src/index.css`**, shadcn skill [`styling.md`](../../skills/shadcn/rules/styling.md). Index: [`skills/SKILL.md`](../../skills/SKILL.md).
+See also: **`interaction-polish.mdc`**, **`src/index.css`**, shadcn skill [`styling.md`](../../skills/shadcn/rules/styling.md), [`customization.md`](../../skills/shadcn/customization.md). Index: [`skills/SKILL.md`](../../skills/SKILL.md).
 
-**All visual styling must flow through the theme** — semantic Tailwind classes backed by CSS variables in `src/index.css`. This keeps light/dark mode correct and makes rebranding a token change, not a repo-wide find-and-replace.
+**All visual styling flows through the theme** — semantic Tailwind classes backed by CSS variables in `src/index.css`. Use **shadcn/ui** as the default UI layer.
 
 ## Core rule
 
-**No arbitrary Tailwind values** (`text-[13px]`, `bg-[#1a1a1a]`, `p-[18px]`, `rounded-[10px]`) and **no hard-coded colors** (hex, `rgb()`, raw palette like `text-gray-600`, `bg-blue-500`, inline `style={{ color: … }}`).
+**No arbitrary Tailwind values** (`text-[13px]`, `bg-[#1a1a1a]`, `p-[18px]`) and **no hard-coded colors** (hex, `rgb()`, raw palette like `text-gray-600`, inline `style={{ color: … }}`).
 
 Use the **scale** and **semantic tokens** instead.
 
 | Concern | Use | Not |
 | ------- | --- | --- |
-| **Text size** | `text-xs`, `text-sm`, `text-base`, `text-lg`, `text-xl` | `text-[13px]`, `text-[0.8125rem]` |
-| **Spacing** | `gap-2`, `p-4`, `mt-6`, `space` scale (`0`–`96`) | `p-[18px]`, `gap-[11px]` |
-| **Radius** | `rounded-sm`, `rounded-md`, `rounded-lg`, `rounded-xl` (from `--radius`) | `rounded-[10px]` |
-| **Colors** | `bg-background`, `text-foreground`, `bg-primary`, `text-muted-foreground`, `border-border`, `text-destructive`, `bg-card`, `bg-accent` | `#fff`, `bg-[#…]`, `text-gray-500`, `bg-zinc-900` |
-| **Shadow / ring** | `shadow-sm`, `ring`, `ring-ring` | `shadow-[0_2px_8px_…]` |
-| **Dark mode** | Semantic tokens (auto via `.dark` in `index.css`) | `bg-white dark:bg-gray-950`, manual `dark:text-gray-400` on colors |
+| **Text size** | `text-xs`, `text-sm`, `text-base`, `text-lg`, `text-xl` | `text-[13px]` |
+| **Spacing** | `gap-2`, `p-4`, `mt-6` | `p-[18px]` |
+| **Radius** | `rounded-sm`, `rounded-md`, `rounded-lg`, `rounded-xl` | `rounded-[10px]` |
+| **Colors** | `bg-background`, `text-foreground`, `bg-primary`, `text-muted-foreground`, `border-border`, `text-destructive`, `bg-card` | `#fff`, `bg-zinc-900`, `text-gray-500` |
+| **Dark mode** | Semantic tokens (auto via `.dark`) | `bg-white dark:bg-gray-950` |
 
-Pick the **nearest scale step** when a design spec falls between tokens — do not invent a one-off arbitrary class.
+## shadcn/ui usage
 
-## Semantic colors (required)
+1. **Use installed shadcn components first** — `Button`, `Card`, `Dialog`, `Input`, `Select`, `Tabs`, `Table`, `DropdownMenu`, `Sheet`, `Alert`, `Badge`, `Form`, etc.
+2. **Install from shadcn before building custom primitives** when a standard pattern is missing.
+3. **Compose product UI from shadcn primitives** — custom `ItemCard` / `RowActionsMenu` still use `@/components/ui/...` for controls.
+4. **Avoid** recreating standard controls with raw `<button>`, modal markup, or ad-hoc card styles when shadcn has the primitive.
 
-Colors express **role**, not hue. Status and surfaces use tokens or component variants:
+**Discovery:** read `components.json`; use shadcn Skill/MCP (`pnpm dlx shadcn@latest search`, `add`). Community registries — suggest command, wait for approval before install.
 
-```tsx
-// Bad — bypasses theme; breaks dark mode and rebrand
-<p className="text-[#6b7280]">Secondary</p>
-<div className="bg-white dark:bg-zinc-900 border-gray-200">...</div>
+**`className` on primitives** — layout only (`max-w-md`, `flex-1`, `mt-4`). Do not override primitive colors or font sizes the component already encodes.
 
-// Good
-<p className="text-sm text-muted-foreground">Secondary</p>
-<div className="bg-card text-card-foreground border-border">...</div>
-```
+Interaction completeness (states, keyboard, motion) → **`interaction-polish.mdc`**, **`error-handling.mdc`** — not a second visual theme.
+
+## Semantic colors
 
 | Need | Token / pattern |
 | ---- | ---------------- |
@@ -48,72 +46,49 @@ Colors express **role**, not hue. Status and surfaces use tokens or component va
 | Muted copy | `text-muted-foreground` |
 | Primary action | `Button` default / `bg-primary text-primary-foreground` |
 | Danger | `text-destructive`, `variant="destructive"` |
-| Success | `text-success`, `bg-success/10` (after adding `--success` in `index.css` — `theming.mdc`) |
-| Warning | `text-warning`, `bg-warning/10` (after adding `--warning` in `index.css`) |
+| Success | `text-success`, `bg-success/10` (after adding `--success` in `index.css`) |
+| Warning | `text-warning`, `bg-warning/10` |
 | Borders / inputs | `border-border`, `bg-input`, `ring-ring` |
-| Sidebar | `bg-sidebar text-sidebar-foreground` |
 
-New brand colors → add a **CSS variable** in `src/index.css` (`:root` / `.dark`) and expose via `@theme inline` — not scattered hex in components (`theming.mdc`).
+New brand colors → **CSS variable** in `src/index.css` (`:root` / `.dark`) + `@theme inline` — not scattered hex.
 
 ## Contrast on tinted surfaces
 
-**Do not** put `text-muted-foreground` on strongly tinted backgrounds (`bg-primary/10`, `bg-success/20`, custom brand-muted panels) without checking contrast — muted text on color often fails **WCAG 1.4.3 AA**.
+**Do not** put `text-muted-foreground` on strongly tinted backgrounds without checking contrast — use `text-foreground` or emphasis tokens.
+
+## Theming & dark mode
+
+- **Tokens** — `src/index.css` (`:root`, `.dark`, `@theme inline`)
+- **Runtime** — `ThemeProvider` (`next-themes`) toggles `class="dark"` on `<html>`
 
 ```tsx
-// Bad — washed out on tinted panel
-<div className="bg-primary/10">
-  <p className="text-muted-foreground">Summary text</p>
-</div>
-
-// Good — foreground or emphasis token on colored surface
-<div className="bg-primary/10">
-  <p className="text-sm text-foreground">Summary text</p>
-</div>
+<ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
 ```
 
-On colored panels use `text-foreground`, `text-card-foreground`, or a dedicated **emphasis** token — not default muted.
+If `.dark` tokens exist, users must be able to choose **light / dark / system** (settings, header menu, or dev-only until user-facing).
 
-## Dark mode
+### Validation workflow (before merge)
 
-- Every new surface must work in **light and dark** without `bg-white` or manual `dark:bg-*` pairs.
-- Smoke-test with theme toggle (`theming.mdc`) before merge.
+1. Toggle light, dark, and system.
+2. Spot-check 2–3 routes (auth, app shell, settings).
+3. Grep violations: `slate-`, `gray-`, `bg-white`, `text-[#`, `emerald-`, `amber-`.
+4. Check contrast on tinted panels.
 
-## Typography & layout
+### Rebrand
 
-- **Body default** — `text-base` (or inherit from `body` in `index.css`); labels often `text-sm`, captions `text-xs`.
-- **`className` on shadcn primitives** — layout only (`max-w-md`, `flex-1`, `mt-4`). Do not override primitive colors or font sizes that the component already encodes (`shadcn-ui-usage.mdc`).
-- **Font** — `font-sans` / theme `--font-sans`; no ad-hoc `font-['Inter']` unless added to theme.
+1. Apply shadcn preset or edit CSS variables in `index.css`.
+2. Run app in light + dark.
 
-## When arbitrary values are OK
+## Typography & layout exceptions
 
-Rare exceptions — document in PR if non-obvious:
-
-- **Layout math** unrelated to the design system (e.g. `max-h-[calc(100vh-4rem)]` for a full-height shell)
-- **Third-party embeds** you do not control
-- **One-off animation** durations — prefer theme-aligned values from `interaction-polish.mdc`
-
-Never use exceptions for **colors** or **type scale** — add tokens instead.
-
-## Anti-patterns
-
-```tsx
-// Bad
-<span className="text-[13px] text-gray-500">Label</span>
-<div className="rounded-[10px] bg-[#f4f4f5] p-[14px]">...</div>
-<Card className="bg-blue-50 text-blue-900 shadow-[0_1px_3px_rgba(0,0,0,0.1)]">...</Card>
-
-// Good
-<span className="text-sm text-muted-foreground">Label</span>
-<div className="rounded-lg bg-muted p-4">...</div>
-<Card className="max-w-md">...</Card>
-```
+- **Body default** — `text-base`; labels often `text-sm`, captions `text-xs`.
+- **Font** — `font-sans` / theme `--font-sans`; no ad-hoc `font-['Inter']` unless in theme.
+- **Arbitrary OK rarely** — layout math (`max-h-[calc(100dvh-…)]`), third-party embeds, one-off animation durations aligned with `interaction-polish.mdc`. Never for colors or type scale.
 
 ## Checklist
 
-- [ ] No `text-[…]`, `bg-[…]`, `p-[…]`, `rounded-[…]` for colors, type, spacing, or radius.
-- [ ] No raw Tailwind palette (`gray-*`, `blue-*`, `zinc-*`) for UI surfaces or text.
-- [ ] No manual `dark:` color pairs — semantic tokens only.
-- [ ] New brand/theme needs → `src/index.css` variables, not component hex.
-- [ ] shadcn **variants** and **semantic tokens** before custom `className` styling.
-- [ ] Tinted panels use foreground/emphasis text — not `text-muted-foreground` by default.
-- [ ] Light + dark smoke-tested on changed UI (`theming.mdc`).
+- [ ] No arbitrary `text-[…]`, `bg-[…]`, raw palette classes for UI surfaces.
+- [ ] shadcn primitives before custom controls; semantic tokens on composed UI.
+- [ ] New status/brand colors are CSS variables in `index.css`.
+- [ ] `ThemeProvider` with `attribute="class"` when dark tokens exist; user toggle when shipping dark mode.
+- [ ] Light + dark smoke-tested on changed UI.

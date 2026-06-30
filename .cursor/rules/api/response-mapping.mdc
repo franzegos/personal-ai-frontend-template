@@ -1,6 +1,6 @@
 ---
 description: Map API DTOs to UI models — never render backend shapes directly in components
-globs: src/api/**/*,src/pages/**/*.{ts,tsx},src/lib/**/*.{ts,tsx},src/components/**/*.{ts,tsx}
+globs: src/api/**/*,src/lib/**/*.{ts,tsx}
 alwaysApply: false
 ---
 

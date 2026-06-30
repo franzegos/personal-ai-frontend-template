@@ -1,12 +1,14 @@
 ---
 description: Frontend security boundaries — permissions are UX only; backend is source of truth
-globs: src/**/*.{ts,tsx}
+globs: src/components/guards/**/*.{ts,tsx},src/providers/**/*.{ts,tsx},src/lib/stores/**/*.{ts,tsx},src/api/features/**/*.{ts,tsx}
 alwaysApply: false
 ---
 
 # Frontend security
 
 See also: **`route-protection.mdc`**, **`zod-validation.mdc`**, **`api-layer.mdc`**.
+
+**Loads on:** guards, providers, client stores, and `src/api/features/**` (auth, mutations, privileged endpoints). For role-gated UI in pages, read this when adding `role`, `permission`, or admin-only actions — even if the rule did not auto-load.
 
 ## Core rule
 

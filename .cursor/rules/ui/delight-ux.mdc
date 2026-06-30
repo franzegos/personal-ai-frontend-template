@@ -90,7 +90,7 @@ Do not add animation libraries for delight alone; CSS transitions or existing pr
 | `error-handling.mdc` | Empty/error **must** teach and recover — delight may soften **positive** empty-to-first-win only |
 | `interaction-polish.mdc` | All interactions acknowledged; delight is **extra**, not a substitute for loading/error UX |
 | `page-layout.mdc` | Delight panels follow zone rhythm — do not break shell alignment for a one-off |
-| `feature-state.mdc` | Derive `showMilestone` from data + one-time flag — no extra boolean soup in JSX |
+| `error-handling.mdc` | Derive `showMilestone` from data + one-time flag — no extra boolean soup in JSX |
 
 ## Checklist (when adding delight)
 

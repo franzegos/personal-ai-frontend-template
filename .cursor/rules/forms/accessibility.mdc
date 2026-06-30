@@ -1,12 +1,12 @@
 ---
 description: Accessibility — keyboard, focus, ARIA, labels, live regions, touch targets
-globs: src/**/*.{ts,tsx},src/index.css
+globs: src/pages/**/*.{ts,tsx},src/components/**/*.{ts,tsx},src/layouts/**/*.{ts,tsx},src/index.css
 alwaysApply: false
 ---
 
 # Accessibility
 
-See also: **`interaction-polish.mdc`**, **`responsive-design.mdc`**, **`shadcn-ui-usage.mdc`**, **`design-tokens.mdc`**, **`theming.mdc`**, **`forms-and-drafts.mdc`**. Index: [`skills/SKILL.md`](../../skills/SKILL.md).
+See also: **`interaction-polish.mdc`**, **`page-layout.mdc`**, **`design-tokens.mdc`**, **`forms-and-drafts.mdc`**. Index: [`skills/SKILL.md`](../../skills/SKILL.md).
 
 Polish without accessibility is incomplete. AI-generated UIs often look fine but fail keyboard, screen reader, and focus management.
 
@@ -102,7 +102,7 @@ With shadcn `FormField`, use `FormMessage` — it wires describedby when using t
 
 ## Touch targets
 
-Custom tappable elements must meet **44×44px** — see **`responsive-design.mdc`**.
+Custom tappable elements must meet **44×44px** — see **`page-layout.mdc`**.
 
 ## Color & motion
 

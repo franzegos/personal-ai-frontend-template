@@ -2,7 +2,8 @@
 name: ai-slop-check
 description: >-
   Audits UI and marketing pages for AI-generated design tells (gradients,
-  side-tab cards, glassmorphism, hero eyebrows, nested cards, buzzword copy).
+  side-tab cards, glassmorphism, hero eyebrows, nested cards) and AI slop in
+  UI copy (em dashes, buzzwords, filler CTAs, vague errors, redundant labels).
   Use when the user says "AI slop check", "check for AI slop", "review pages
   for AI slop elements", or wants a todo list to de-genericize frontend UI.
 disable-model-invocation: true
@@ -11,6 +12,8 @@ disable-model-invocation: true
 # AI slop check
 
 Find **AI slop** (recognizable generated-UI tells) and **general quality** issues (contrast, spacing, a11y). Produce a **findings report** and a **prioritized todo list**. Do not auto-fix unless the user asks.
+
+**Authoring vs audit:** When **writing** new strings, follow [`.cursor/rules/copy/ui-microcopy.mdc`](../../rules/copy/ui-microcopy.mdc) and [`.cursor/rules/copy/marketing-copy.mdc`](../../rules/copy/marketing-copy.mdc). This skill is for **review** — catalog IDs, severity, and todo output.
 
 **Canonical home:** this folder in `personal-ai-frontend-template`. Copy `.cursor/skills/ai-slop-check/` into other frontend repos; add project-specific `exceptions.md` (or a named override like `burn-radar.md`). Do **not** install under `~/.cursor/skills/`.
 
@@ -41,6 +44,7 @@ Ask once if scope is ambiguous. Default: **files the user has open** or **most r
 1. **Read project context** (if present):
    - [exceptions.md](exceptions.md) in this skill folder (edit per project after copying)
    - `docs/design.md`, `DESIGN.md`, design tokens, `tailwind.config`, brand guidelines
+   - [`.cursor/rules/copy/`](../../rules/copy/) when reviewing in-app or marketing strings
 2. **Read the rule catalog:** [catalog.md](catalog.md) — AI slop + quality rules
 3. **Inspect UI** — TSX/CSS, class names, copy strings, motion, typography, layout
 4. **Apply [exceptions.md](exceptions.md)** — do not flag intentional product choices
@@ -107,8 +111,9 @@ Eleven common “synthetic slop” page archetypes → catalog IDs:
 | Inter Everywhere            | `slop-overused-font`, `slop-single-font`, `slop-flat-type-hierarchy`     |
 | Massive Icons               | `slop-icon-tile-above-heading`                                           |
 | Bad Contrast Choices        | `quality-gray-on-color`, `quality-low-contrast`                          |
-| Redundant UX Writing        | Flag in review — redundant label + helper + hint                         |
-| Modal Abuse                 | Flag in review — complex multi-column settings in `Dialog`               |
+| Redundant UX Writing        | `quality-redundant-ux-copy`, `slop-label-echo`                   |
+| AI UI copy (microcopy)      | `slop-em-dash-ui`, `slop-filler-cta`, `slop-vague-error`, … — see [UI copy](#ui-copy-checks) |
+| Modal Abuse                 | Flag in review — complex multi-column settings in `Dialog`       |
 
 Full rules: [catalog.md](catalog.md). Sample output: [examples.md](examples.md).
 
@@ -127,14 +132,34 @@ When scanning TSX/Tailwind/CSS, grep and inspect for:
 - Icon in `rounded-lg` box stacked above feature title (grid of 3–6 identical cards)
 - `Inter`, `Geist`, `Space Grotesk`, `Instrument Serif` without design-system justification
 - Marketing strings: _streamline_, _empower_, _supercharge_, _world-class_, _enterprise-grade_
-- Em dashes — more than 2 per screen of body copy
+- UI microcopy: em dashes (`—`), ellipses on static buttons, _Oops_, _Something went wrong_, _Get started_, _Learn more_, _Simply_, _Seamlessly_
 - Settings / multi-step flows crammed into `Dialog` with scroll
 
-## Copy checks
+## UI copy checks
 
-Flag **redundant UX writing** when the same idea appears in label + description + helper + placeholder.
+Scan **strings in TSX** (labels, placeholders, toasts, empty states, errors, button text) — not just marketing pages. Full catalog IDs in [catalog.md](catalog.md) § UI copy.
 
-Flag **marketing slop** per `slop-buzzword`, `slop-em-dash`, `slop-aphorism`, `slop-theater` in [catalog.md](catalog.md).
+| Pattern | Rule ID | Flag when |
+| ------- | ------- | --------- |
+| Em dash in UI | `slop-em-dash-ui` | Any em dash (`—`) in button, label, toast, or short helper (marketing: >2 per screen → `slop-em-dash`) |
+| Buzzword / hype verb | `slop-buzzword`, `slop-hype-verb` | streamline, empower, seamless, leverage, unlock, dive into, supercharge |
+| Filler CTA | `slop-filler-cta` | "Get started", "Explore", "Discover", "Learn more" with no specific object |
+| Click-here phrasing | `slop-click-here` | "Click here to…", "Tap below to…" |
+| Vague error | `slop-vague-error` | "Oops!", "Something went wrong" with no next step or error code |
+| Cheerleading empty state | `slop-empty-poetry` | Metaphor or pep talk instead of what to do next |
+| Apologetic tone | `slop-sorry-wall` | "We're sorry", "Unfortunately" on routine validation |
+| Ellipsis abuse | `slop-ellipsis-ui` | "Save…" / "Loading…" on buttons that are not pending |
+| Exclamation spam | `slop-exclamation-ui` | Multiple `!` in labels, toasts, or empty states |
+| Title Case Everything | `slop-title-case-ui` | Sentence case violated on body helpers and descriptions |
+| Anthropomorphism | `slop-anthropomorphic` | "Your data is happy", "We couldn't find your friend" |
+| Redundant label echo | `slop-label-echo`, `quality-redundant-ux-copy` | Label + description + placeholder repeat the same words |
+| Aphorism / theater | `slop-aphorism`, `slop-theater` | "Not X. Y." cadence; dismissive "theater" framing |
+
+**Prefer:** sentence case, verb-first buttons (`Save draft`, `Upload file`), concrete errors (`Couldn't save. Check your connection.`), one idea per control.
+
+Day-to-day authoring rules: [`.cursor/rules/copy/ui-microcopy.mdc`](../../rules/copy/ui-microcopy.mdc), [`.cursor/rules/copy/marketing-copy.mdc`](../../rules/copy/marketing-copy.mdc).
+
+Flag **marketing slop** on landing pages per `slop-buzzword`, `slop-em-dash`, `slop-aphorism`, `slop-theater` in [catalog.md](catalog.md).
 
 Prefer **specific, operational copy** over generic SaaS marketing.
 

@@ -6,7 +6,7 @@ alwaysApply: false
 
 # Async UI & race conditions
 
-See also: **`api-layer.mdc`**, **`data-ownership.mdc`**, **`interaction-polish.mdc`** (§14 optimistic UI), **`performance.mdc`**, **`feature-state.mdc`**, **`offline-reconnect.mdc`**.
+See also: **`api-layer.mdc`**, **`data-ownership.mdc`**, **`interaction-polish.mdc`**, **`performance.mdc`**, **`error-handling.mdc`**, **`offline-reconnect.mdc`**.
 
 Race conditions and stale responses are among the most common AI-generated frontend bugs — especially search, autocomplete, filters, pagination, and tab switches.
 

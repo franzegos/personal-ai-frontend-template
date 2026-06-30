@@ -60,7 +60,7 @@ Do not add rules for one-off mistakes. Do not add generic architecture rules (CQ
 ### 2026-06-25 — isLoading + isSubmitting + isSaving on one form
 
 **What happened:** Page combined five booleans for save/draft/publish; button disabled state wrong during background refetch.
-**Rule (if any):** `feature-state.mdc`
+**Rule (if any):** `error-handling.mdc`
 **Fix:** `submitStatus` union in `useSubmitItem`; `isRefreshing` separate from submit.
 **Count:** 1
 

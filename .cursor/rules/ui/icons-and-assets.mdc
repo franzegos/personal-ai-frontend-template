@@ -1,6 +1,6 @@
 ---
 description: Icon libraries, brand logos, static assets, and avoiding custom inline SVGs
-globs: src/**/*.{ts,tsx},src/assets/**/*,components.json
+globs: src/pages/**/*.{ts,tsx},src/components/**/*.{ts,tsx},src/assets/**/*,components.json
 alwaysApply: false
 ---
 

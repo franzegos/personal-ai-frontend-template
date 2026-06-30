@@ -1,12 +1,12 @@
 ---
 description: Offline, sleep, reconnect, and tab resume — never assume the network is always on
-globs: src/**/*.{ts,tsx},src/providers/**/*
+globs: src/providers/**/*.{ts,tsx},src/components/OfflineBanner.tsx,src/lib/hooks/use-online-status.ts,src/api/**/*
 alwaysApply: false
 ---
 
 # Offline & reconnect
 
-See also: **`error-handling.mdc`**, **`async-ui.mdc`**, **`interaction-polish.mdc`** §17, **`feature-state.mdc`**, **`forms-and-drafts.mdc`**.
+See also: **`error-handling.mdc`**, **`async-ui.mdc`**, **`interaction-polish.mdc`**, **`forms-and-drafts.mdc`**.
 
 Browsers suspend tabs, laptops sleep, Wi‑Fi drops, and VPNs flap. **Do not assume the internet always works.** Design for **cached reads**, **visible offline state**, and **safe recovery on reconnect**.
 

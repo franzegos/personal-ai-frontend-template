@@ -1,6 +1,6 @@
 ---
 description: Vitest tests for API, lib, and high-risk UI changes
-globs: src/api/**/*,src/lib/**/*,src/pages/**/*,src/components/**/*,src/test/**/*
+globs: src/test/**/*
 alwaysApply: false
 ---
 

@@ -1,6 +1,6 @@
 ---
 description: API services, schemas, query hooks, and frontend/backend integration patterns
-globs: src/api/**/*,src/pages/**/*.{ts,tsx},src/components/**/*.{ts,tsx}
+globs: src/api/**/*
 alwaysApply: false
 ---
 
@@ -165,7 +165,7 @@ const {
 } = useProfile();
 ```
 
-Branching on read flags (loading / error / empty / success) → **`error-handling.mdc`**. Status unions from slices → **`feature-state.mdc`**.
+Branching on read flags (loading / error / empty / success) → **`error-handling.mdc`**. Status unions from slices → **`error-handling.mdc`**.
 
 ### Mutation hooks (writes)
 
@@ -232,7 +232,7 @@ const submitStatus: SubmitStatus = isPending
 return { submit: mutate, submitStatus, isPending, isError };
 ```
 
-Form submit + server `fieldErrors` → **`api-error-routing.mdc`**. One `submitStatus` per surface → **`feature-state.mdc`**.
+Form submit + server `fieldErrors` → **`api-error-routing.mdc`**. One `submitStatus` per surface → **`error-handling.mdc`**.
 
 - **Do not** call **`useQueryClient()`** in **`src/pages/`** or **`src/components/`** — cache logic lives in **`src/api/features/**`**.
 - Client-side validation toasts (Zod before submit) may stay in the page.
@@ -241,7 +241,7 @@ Form submit + server `fieldErrors` → **`api-error-routing.mdc`**. One `submitS
 ## Exceptions
 
 - Mock services during early UI work live in **`features/<domain>/<domain>.service.ts`**; switch to real HTTP without changing hook exports when possible.
-- **Zustand** — client state only; do not mirror server lists — see `react-state-zustand.mdc`, `data-ownership.mdc`.
+- **Zustand** — client state only; do not mirror server lists — see `data-ownership.mdc`.
 
 ## Checklist before opening a PR
 

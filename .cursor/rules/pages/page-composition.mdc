@@ -6,9 +6,11 @@ alwaysApply: false
 
 # Page composition
 
-See also: **`page-layout.mdc`**, **`naming-conventions.mdc`**, **`frontend-feature-boundaries.mdc`**, **`feature-state.mdc`**, **`forms-and-drafts.mdc`**, **`api-layer.mdc`**.
+See also: **`page-layout.mdc`**, **`naming-conventions.mdc`**, **`frontend-feature-boundaries.mdc`**, **`error-handling.mdc`**, **`forms-and-drafts.mdc`**, **`api-layer.mdc`**.
 
 Large route files are hard to review, test, and reuse. **One flat `FooPage.tsx` per complex route is a smell** — colocate a **folder per URL area** with a thin page shell and focused children.
+
+New `src/pages/<feature>/` folders: follow **`frontend-feature-boundaries.mdc`** (one feature per folder; no cross-imports from other features’ pages).
 
 **Spacing, alignment, and hierarchy** → `page-layout.mdc` (`AppPageShell`, `PageHeader`, zone rhythm).
 
@@ -72,7 +74,7 @@ Split when **any** apply:
 1. File **> 750 lines**
 2. **Multiple steps, tabs, or wizards** on one route
 3. **3+ modals / drawers** owned by the page
-4. **Distinct regions** each needing their own `feature-state` status
+4. **Distinct regions** each needing their own status union (`error-handling.mdc`)
 5. Second engineer (or agent) cannot orient in **< 5 minutes**
 
 ## Split recipe

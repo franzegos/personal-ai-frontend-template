@@ -1,6 +1,6 @@
 ---
 description: Zod schemas and runtime validation boundaries for forms, env, and API data
-globs: src/api/schema/**/*,src/api/features/**/*.schema.ts,src/api/config.ts,src/pages/**/*.{ts,tsx},src/components/**/*.{ts,tsx},src/lib/**/*.{ts,tsx}
+globs: src/api/schema/**/*,src/api/features/**/*.schema.ts,src/api/config.ts,src/lib/**/*.{ts,tsx}
 alwaysApply: false
 ---
 

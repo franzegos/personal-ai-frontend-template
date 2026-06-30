@@ -1,6 +1,6 @@
 ---
 description: Feature boundaries — pages, components, hooks, mappers stay inside their feature
-globs: src/pages/**/*,src/components/**/*,src/lib/**/*.{ts,tsx},src/api/**/*
+globs: src/api/**/*,src/lib/**/*.{ts,tsx}
 alwaysApply: false
 ---
 
@@ -9,6 +9,8 @@ alwaysApply: false
 See also: **`naming-conventions.mdc`**, **`api-layer.mdc`**, **`response-mapping.mdc`**, **`page-composition.mdc`**.
 
 Mirror backend **module boundaries** on the client. Features own their vertical slice; **avoid cross-feature imports** that create spaghetti (`orders` ↔ `items` ↔ `users`).
+
+**Loads on:** `src/api/**`, `src/lib/**` edits. For new routes/pages, read this when creating `src/pages/<feature>/` or colocated components — see **`page-composition.mdc`**.
 
 Examples use placeholder domain names (`items`, `invoices`, `<feature>`) — match your product’s modules.
 
