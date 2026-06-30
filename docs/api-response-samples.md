@@ -280,7 +280,7 @@ getUserFacingApiErrorMessage(error);
 // 5xx → "Something went wrong. Try again."
 ```
 
-Used in `DemoPostSection` and similar non-form error panels.
+Used in `ExamplesSection` and similar non-form error panels.
 
 ### Mutation hooks (no form context)
 

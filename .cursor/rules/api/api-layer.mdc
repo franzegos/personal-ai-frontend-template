@@ -24,11 +24,11 @@ src/api/
 │   └── global.types.ts           # ApiSuccess, pagination, shared wrappers
 ├── lib/                          # optional: useAuthenticatedQuery, query helpers
 └── features/
-    ├── demo/
-    │   ├── demo.service.ts
-    │   ├── demo.schema.ts
-    │   ├── demo.types.ts
-    │   └── use-demo.ts
+    ├── examples/
+    │   ├── examples.service.ts
+    │   ├── examples.schema.ts
+    │   ├── examples.types.ts
+    │   └── use-examples.ts
     ├── items/
     └── auth/                     # cross-cutting modules use the same shape
 ```

@@ -23,8 +23,8 @@ Every new/changed module gets a matching test under `src/test/` (same relative p
 
 1. Types (no test file)
 2. **Schema** — Zod parse tests, no mocks
-3. **Service** — `vi.mock('@/api/client')`, assert URL/method/body; see `src/test/api/features/demo/demo.service.test.ts`
-4. **Query** — `vi.mock` service + `makeQueryWrapper()` from `src/test/helpers/queryWrapper.ts`; see `src/test/api/features/demo/use-demo.test.ts`
+3. **Service** — `vi.mock('@/api/client')`, assert URL/method/body; see `src/test/api/features/examples/examples.service.test.ts`
+4. **Query** — `vi.mock` service + `makeQueryWrapper()` from `src/test/helpers/queryWrapper.ts`; add `use-examples.test.ts` when hooks grow
 5. **Lib** — pure mappers/messages, no mocks
 6. **High-risk UI** (auth, checkout, onboarding, multi-step wizards) — `src/test/components/`, `src/test/pages/`, or `src/test/providers/` with mocked queries; use `renderWithProviders()` from `src/test/helpers/renderWithProviders.tsx`
 
@@ -32,13 +32,11 @@ Every new/changed module gets a matching test under `src/test/` (same relative p
 
 End-to-end golden example — **every service function + every hook**:
 
-- Service: `src/test/api/features/demo/demo.service.test.ts` → `src/api/features/demo/demo.service.ts`
-- Query: `src/test/api/features/demo/use-demo.test.ts` → `src/api/features/demo/use-demo.ts`
-- Schema: `src/test/api/features/demo/demo.schema.test.ts` → `src/api/features/demo/demo.schema.ts`
+- Service: `src/test/api/features/examples/examples.service.test.ts` → `src/api/features/examples/examples.service.ts`
+- Schema: `src/test/api/features/examples/examples.schema.test.ts` → `src/api/features/examples/examples.schema.ts`
 - Shared primitives: `src/test/api/schema/primitives.schema.test.ts` → `src/api/schema/primitives.schema.ts`
-- Status helper: `src/test/lib/demo/demoPostStatus.test.ts` → `src/lib/demo/demoPostStatus.ts`
-- UI mapper: `src/test/lib/demo/mapDemoPostToCard.test.ts` → `src/lib/demo/mapDemoPostToCard.ts`
-- Page region: `src/pages/home/DemoPostSection.tsx` — copy for Query-driven surfaces
+- Status helper: `src/test/lib/examples/exampleListStatus.test.ts` → `src/lib/examples/exampleListStatus.ts`
+- Page region: `src/pages/home/ExamplesSection.tsx` — copy for Query-driven surfaces
 
 Per export, include at minimum:
 

@@ -4,10 +4,12 @@ import { HomePage } from "@/pages/home/HomePage";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import { renderWithProviders } from "@/test/helpers/renderWithProviders";
 
-const mockUseDemoPost = vi.fn();
+const mockUseExamplesList = vi.fn();
+const mockUseCreateExample = vi.fn();
 
-vi.mock("@/api/features/demo/use-demo", () => ({
-  useDemoPost: () => mockUseDemoPost(),
+vi.mock("@/api/features/examples/use-examples", () => ({
+  useExamplesList: () => mockUseExamplesList(),
+  useCreateExample: () => mockUseCreateExample(),
 }));
 
 function renderHome() {
@@ -19,14 +21,27 @@ function renderHome() {
 }
 
 describe("HomePage", () => {
-  it("renders ready state with mapped post content", () => {
-    mockUseDemoPost.mockReturnValue({
-      data: { userId: 1, id: 1, title: "Demo title", body: "Demo body" },
+  it("renders examples list when ready", () => {
+    mockUseExamplesList.mockReturnValue({
+      data: {
+        items: [
+          {
+            id: "ex-1",
+            label: "Demo label",
+            createdAt: "2026-01-01T00:00:00.000Z",
+          },
+        ],
+      },
       isPending: false,
       isError: false,
-      error: null,
-      refetch: vi.fn(),
       isFetching: false,
+      refetch: vi.fn(),
+      error: null,
+    });
+    mockUseCreateExample.mockReturnValue({
+      createExample: vi.fn(),
+      isCreatingExample: false,
+      createSucceeded: false,
     });
 
     renderHome();
@@ -34,38 +49,47 @@ describe("HomePage", () => {
     expect(
       screen.getByRole("heading", { name: "personal-ai-frontend-template" }),
     ).toBeInTheDocument();
-    expect(screen.getByText("Demo title")).toBeInTheDocument();
-    expect(screen.getByText("Demo body")).toBeInTheDocument();
+    expect(screen.getByText("Demo label")).toBeInTheDocument();
   });
 
-  it("renders loading skeleton for sample request", () => {
-    mockUseDemoPost.mockReturnValue({
+  it("renders loading skeleton for examples", () => {
+    mockUseExamplesList.mockReturnValue({
       data: undefined,
       isPending: true,
       isError: false,
-      error: null,
-      refetch: vi.fn(),
       isFetching: false,
+      refetch: vi.fn(),
+      error: null,
+    });
+    mockUseCreateExample.mockReturnValue({
+      createExample: vi.fn(),
+      isCreatingExample: false,
+      createSucceeded: false,
     });
 
     renderHome();
 
-    expect(screen.getByLabelText("Loading post")).toBeInTheDocument();
+    expect(screen.getByLabelText("Loading examples")).toBeInTheDocument();
   });
 
   it("renders error state with retry", () => {
-    mockUseDemoPost.mockReturnValue({
+    mockUseExamplesList.mockReturnValue({
       data: undefined,
       isPending: false,
       isError: true,
-      error: new Error("Network error"),
-      refetch: vi.fn(),
       isFetching: false,
+      refetch: vi.fn(),
+      error: new Error("Network error"),
+    });
+    mockUseCreateExample.mockReturnValue({
+      createExample: vi.fn(),
+      isCreatingExample: false,
+      createSucceeded: false,
     });
 
     renderHome();
 
-    expect(screen.getByText("Couldn't load sample post")).toBeInTheDocument();
+    expect(screen.getByText("Couldn't load examples")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Retry" })).toBeInTheDocument();
   });
 });

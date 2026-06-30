@@ -9,12 +9,12 @@ My personal production-ready Vite + React starter. Cursor rules, skills, and an 
 - **Vite 7 + React 19 + TypeScript** — fast dev, strict typecheck in CI
 - **Feature-first API layer** — `src/api/features/<domain>/` (service, schema, types, hooks)
 - **TanStack Query** — server state, cache, mutations; Zustand for client-only state
-- **Zod** — shared primitives + per-feature schemas; env parsing in `config.ts`
+- **React Hook Form + Zod** — `useZodForm`, shadcn `Field`, server `fieldErrors` via `mapMutationErrorToForm`
 - **shadcn/ui** — Radix primitives, semantic tokens, interaction-polish rules
 - **React Router** — layout shell, `ProtectedRoute` ready for your auth layer
 - **Vitest** — API, lib, and page tests with `renderWithProviders`
 - **Cursor rules & skills** — commit, PR, merge-readiness, shadcn MCP
-- **Golden-path demo** — `DemoPostSection` models `error-handling`, `response-mapping`, `async-ui`; `OfflineBanner` for `offline-reconnect`
+- **Golden-path demo** — `ExamplesSection` (`GET/POST /examples`, RHF form, async list states), `OfflineBanner`
 - **`pnpm verify`** — format, lint, typecheck, test, build (same gates as CI)
 
 ## Pre-requisites
@@ -38,7 +38,7 @@ pnpm install
 cp .env.example .env
 ```
 
-Set `VITE_API_URL` to your backend (or a mock API for the demo).
+Set `VITE_API_URL` to your backend (`http://localhost:3000` by default).
 
 ### 3. Run the dev server
 

@@ -13,8 +13,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { useCounterStore } from "@/lib/stores/counterStore";
+import { ExamplesSection } from "./ExamplesSection";
 import { DemoErrorTrigger } from "./DemoErrorTrigger";
-import { DemoPostSection } from "./DemoPostSection";
 
 const themeOptions = [
   { value: "light", label: "Light", icon: Sun },
@@ -143,7 +143,7 @@ export function HomePage() {
       </PageSection>
 
       <PageSection bordered>
-        <DemoPostSection />
+        <ExamplesSection />
       </PageSection>
 
       <PageSection bordered>

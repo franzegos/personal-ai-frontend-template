@@ -23,7 +23,7 @@ Always-on in `core/`: `repo-agent-skills`, `naming-conventions`, `ponytail-rules
 Golden paths in `src/`:
 
 - Layout: `src/components/layout/`, `src/pages/home/HomePage.tsx`
-- Async demo: `src/pages/home/DemoPostSection.tsx`
+- Async demo: `src/pages/home/ExamplesSection.tsx`
 - API field errors: `src/api/lib/apply-field-errors-to-form.ts`
 
 ## When to use this index vs a rule
